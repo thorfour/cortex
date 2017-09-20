@@ -4,8 +4,8 @@ import (
 	"sort"
 
 	"github.com/prometheus/common/model"
-	"github.com/prometheus/prometheus/storage/local"
-	"github.com/prometheus/prometheus/storage/metric"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/metric"
 )
 
 // MergeSeriesIterator combines SampleStreamIterator. Based off mergeIterator

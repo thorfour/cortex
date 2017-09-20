@@ -20,9 +20,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/go-kit/kit/log"
+	"github.com/go-kit/kit/log/level"
 	"github.com/miekg/dns"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/model"
 	"golang.org/x/net/context"
 
@@ -66,10 +67,15 @@ type Discovery struct {
 	interval time.Duration
 	port     int
 	qtype    uint16
+	logger   log.Logger
 }
 
 // NewDiscovery returns a new Discovery which periodically refreshes its targets.
-func NewDiscovery(conf *config.DNSSDConfig) *Discovery {
+func NewDiscovery(conf *config.DNSSDConfig, logger log.Logger) *Discovery {
+	if logger == nil {
+		logger = log.NewNopLogger()
+	}
+
 	qtype := dns.TypeSRV
 	switch strings.ToUpper(conf.Type) {
 	case "A":
@@ -84,6 +90,7 @@ func NewDiscovery(conf *config.DNSSDConfig) *Discovery {
 		interval: time.Duration(conf.RefreshInterval),
 		qtype:    qtype,
 		port:     conf.Port,
+		logger:   logger,
 	}
 }
 
@@ -112,7 +119,7 @@ func (d *Discovery) refreshAll(ctx context.Context, ch chan<- []*config.TargetGr
 	for _, name := range d.names {
 		go func(n string) {
 			if err := d.refresh(ctx, n, ch); err != nil {
-				log.Errorf("Error refreshing DNS targets: %s", err)
+				level.Error(d.logger).Log("msg", "Error refreshing DNS targets", "err", err)
 			}
 			wg.Done()
 		}(name)
@@ -122,7 +129,7 @@ func (d *Discovery) refreshAll(ctx context.Context, ch chan<- []*config.TargetGr
 }
 
 func (d *Discovery) refresh(ctx context.Context, name string, ch chan<- []*config.TargetGroup) error {
-	response, err := lookupAll(name, d.qtype)
+	response, err := lookupAll(name, d.qtype, d.logger)
 	dnsSDLookupsCount.Inc()
 	if err != nil {
 		dnsSDLookupFailuresCount.Inc()
@@ -147,7 +154,7 @@ func (d *Discovery) refresh(ctx context.Context, name string, ch chan<- []*confi
 		case *dns.AAAA:
 			target = hostPort(addr.AAAA.String(), d.port)
 		default:
-			log.Warnf("%q is not a valid SRV record", record)
+			level.Warn(d.logger).Log("msg", "Invalid SRV record", "record", record)
 			continue
 
 		}
@@ -167,7 +174,7 @@ func (d *Discovery) refresh(ctx context.Context, name string, ch chan<- []*confi
 	return nil
 }
 
-func lookupAll(name string, qtype uint16) (*dns.Msg, error) {
+func lookupAll(name string, qtype uint16, logger log.Logger) (*dns.Msg, error) {
 	conf, err := dns.ClientConfigFromFile(resolvConf)
 	if err != nil {
 		return nil, fmt.Errorf("could not load resolv.conf: %s", err)
@@ -181,11 +188,7 @@ func lookupAll(name string, qtype uint16) (*dns.Msg, error) {
 		for _, lname := range conf.NameList(name) {
 			response, err = lookup(lname, qtype, client, servAddr, false)
 			if err != nil {
-				log.
-					With("server", server).
-					With("name", name).
-					With("reason", err).
-					Warn("DNS resolution failed.")
+				level.Warn(logger).Log("msg", "DNS resolution failed", "server", server, "name", name, "err", err)
 				continue
 			}
 			if len(response.Answer) > 0 {

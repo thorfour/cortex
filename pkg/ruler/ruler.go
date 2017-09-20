@@ -9,6 +9,7 @@ import (
 	"sync"
 	"time"
 
+	gklog "github.com/go-kit/kit/log"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/model"
@@ -180,7 +181,7 @@ func buildNotifierConfig(rulerConfig *Config) (*config.Config, error) {
 		}
 
 		if password, isSet := u.User.Password(); isSet {
-			amConfig.HTTPClientConfig.BasicAuth.Password = password
+			amConfig.HTTPClientConfig.BasicAuth.Password = config.Secret(password)
 		}
 	}
 
@@ -198,11 +199,12 @@ func (r *Ruler) newGroup(ctx context.Context, rs []rules.Rule) (*rules.Group, er
 		return nil, err
 	}
 	opts := &rules.ManagerOptions{
-		SampleAppender: appender,
-		QueryEngine:    r.engine,
-		Context:        ctx,
-		ExternalURL:    r.alertURL,
-		Notifier:       notifier,
+		Appendable:  appender,
+		QueryEngine: r.engine,
+		Context:     ctx,
+		ExternalURL: r.alertURL,
+		Notifier:    notifier,
+		Logger:      gklog.NewNopLogger(),
 	}
 	delay := 0 * time.Second // Unused, so 0 value is fine.
 	return rules.NewGroup("default", delay, rs, opts), nil

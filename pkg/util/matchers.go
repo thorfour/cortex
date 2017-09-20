@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/prometheus/common/model"
-	"github.com/prometheus/prometheus/storage/metric"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/metric"
 )
 
 // SplitFiltersAndMatchers splits empty matchers off, which are treated as filters, see #220

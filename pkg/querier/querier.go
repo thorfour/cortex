@@ -6,9 +6,11 @@ import (
 	"time"
 
 	"github.com/prometheus/common/model"
+	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/prometheus/prometheus/promql"
-	"github.com/prometheus/prometheus/storage/local"
-	"github.com/prometheus/prometheus/storage/metric"
+	"github.com/prometheus/prometheus/storage"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/metric"
 	"golang.org/x/net/context"
 
 	"github.com/weaveworks/cortex/pkg/ingester/client"
@@ -82,7 +84,7 @@ type Queryable struct {
 }
 
 // Querier implements Queryable
-func (q Queryable) Querier() (local.Querier, error) {
+func (q Queryable) Querier(mint, maxt int64) (storage.Querier, error) {
 	return q.Q, nil
 }
 
@@ -145,6 +147,17 @@ func (qm MergeQuerier) MetricsForLabelMatchers(ctx context.Context, from, throug
 		result = append(result, m)
 	}
 	return result, nil
+}
+
+// LabelValues implements storage.Querier.
+func (qm MergeQuerier) Select(...*labels.Matcher) storage.SeriesSet {
+	return nil
+}
+
+// LabelValues implements storage.Querier.
+func (qm MergeQuerier) LabelValues(name string) ([]string, error) {
+	// TODO: Implement.
+	return nil, nil
 }
 
 // LastSampleForLabelMatchers implements local.Querier.

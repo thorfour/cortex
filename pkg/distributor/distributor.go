@@ -17,9 +17,9 @@ import (
 	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/promql"
-	"github.com/prometheus/prometheus/storage/metric"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/metric"
 
-	"github.com/prometheus/prometheus/storage/local"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
 	billing "github.com/weaveworks/billing-client"
 	"github.com/weaveworks/common/instrument"
 	"github.com/weaveworks/common/user"

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/prometheus/common/model"
-	"github.com/prometheus/prometheus/storage/metric"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/metric"
 	"golang.org/x/net/context"
 
 	"github.com/weaveworks/common/httpgrpc"

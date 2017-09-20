@@ -58,7 +58,7 @@ Prometheus will now be reachable at http://localhost:9090/.
 ### Building from source
 
 To build Prometheus from the source code yourself you need to have a working
-Go environment with [version 1.5 or greater installed](http://golang.org/doc/install).
+Go environment with [version 1.8 or greater installed](http://golang.org/doc/install).
 
 You can directly use the `go` tool to download and install the `prometheus`
 and `promtool` binaries into your `GOPATH`. We use Go 1.5's experimental
@@ -66,7 +66,7 @@ vendoring feature, so you will also need to set the `GO15VENDOREXPERIMENT=1`
 environment variable in this case:
 
     $ GO15VENDOREXPERIMENT=1 go get github.com/prometheus/prometheus/cmd/...
-    $ prometheus -config.file=your_config.yml
+    $ prometheus --config.file=your_config.yml
 
 You can also clone the repository yourself and build using `make`:
 
@@ -75,7 +75,7 @@ You can also clone the repository yourself and build using `make`:
     $ git clone https://github.com/prometheus/prometheus.git
     $ cd prometheus
     $ make build
-    $ ./prometheus -config.file=your_config.yml
+    $ ./prometheus --config.file=your_config.yml
 
 The Makefile provides several targets:
 

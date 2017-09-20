@@ -7,8 +7,8 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/prometheus/common/model"
-	"github.com/prometheus/prometheus/storage/local"
-	"github.com/prometheus/prometheus/storage/local/chunk"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/local/chunk"
 	"github.com/stretchr/testify/require"
 	"github.com/weaveworks/cortex/pkg/util"
 )

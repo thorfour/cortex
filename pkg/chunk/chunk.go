@@ -13,8 +13,8 @@ import (
 	"github.com/golang/snappy"
 	"github.com/pkg/errors"
 	"github.com/prometheus/common/model"
-	"github.com/prometheus/prometheus/storage/local"
-	prom_chunk "github.com/prometheus/prometheus/storage/local/chunk"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
+	prom_chunk "github.com/weaveworks/cortex/pkg/prom1/storage/local/chunk"
 
 	errs "github.com/weaveworks/common/errors"
 	"github.com/weaveworks/cortex/pkg/util"
