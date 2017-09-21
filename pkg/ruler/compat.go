@@ -2,6 +2,7 @@ package ruler
 
 import (
 	"github.com/prometheus/common/model"
+	"github.com/prometheus/prometheus/storage"
 	"golang.org/x/net/context"
 
 	"github.com/weaveworks/cortex/pkg/ingester/client"
@@ -27,6 +28,11 @@ type appenderAdapter struct {
 func (a appenderAdapter) Append(sample *model.Sample) error {
 	_, err := a.pusher.Push(a.ctx, util.ToWriteRequest([]model.Sample{*sample}))
 	return err
+}
+
+func (a appenderAdapter) Appender() (storage.Appender, error) {
+	// TODO: Implement.
+	return nil, nil
 }
 
 func (a appenderAdapter) NeedsThrottling() bool {

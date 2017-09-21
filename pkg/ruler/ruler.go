@@ -207,7 +207,7 @@ func (r *Ruler) newGroup(ctx context.Context, rs []rules.Rule) (*rules.Group, er
 		Logger:      gklog.NewNopLogger(),
 	}
 	delay := 0 * time.Second // Unused, so 0 value is fine.
-	return rules.NewGroup("default", delay, rs, opts), nil
+	return rules.NewGroup("default", "none", delay, rs, opts), nil
 }
 
 func (r *Ruler) getOrCreateNotifier(userID string) (*notifier.Notifier, error) {
@@ -231,7 +231,7 @@ func (r *Ruler) getOrCreateNotifier(userID string) (*notifier.Notifier, error) {
 			}
 			return ctxhttp.Do(ctx, client, req)
 		},
-	})
+	}, gklog.NewNopLogger())
 
 	// This should never fail, unless there's a programming mistake.
 	if err := n.ApplyConfig(r.notifierCfg); err != nil {
@@ -254,7 +254,7 @@ func (r *Ruler) Evaluate(ctx context.Context, rs []rules.Rule) {
 		logger.Errorf("Failed to create rule group: %v", err)
 		return
 	}
-	g.Eval()
+	g.Eval(start)
 
 	// The prometheus routines we're calling have their own instrumentation
 	// but, a) it's rule-based, not group-based, b) it's a summary, not a
