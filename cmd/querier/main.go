@@ -10,6 +10,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/route"
+	"github.com/prometheus/prometheus/config"
 	"github.com/prometheus/prometheus/promql"
 	"github.com/prometheus/prometheus/web/api/v1"
 
@@ -77,8 +78,13 @@ func main() {
 
 	queryable := querier.NewQueryable(dist, chunkStore)
 	engine := promql.NewEngine(queryable, nil)
-	api := v1.NewAPI(engine, querier.DummyStorage{Queryable: queryable},
-		querier.DummyTargetRetriever{}, querier.DummyAlertmanagerRetriever{})
+	api := v1.NewAPI(
+		engine,
+		queryable,
+		querier.DummyTargetRetriever{},
+		querier.DummyAlertmanagerRetriever{},
+		func() config.Config { return config.Config{} },
+	)
 	promRouter := route.New(func(r *http.Request) (context.Context, error) {
 		return r.Context(), nil
 	}).WithPrefix("/api/prom/api/v1")
