@@ -10,17 +10,17 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/golang/snappy"
 	"github.com/prometheus/common/model"
-	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
-	"github.com/weaveworks/cortex/pkg/prom1/storage/metric"
 	"github.com/stretchr/testify/require"
 	"github.com/weaveworks/cortex/pkg/ingester/client"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/metric"
 	"github.com/weaveworks/cortex/pkg/util"
 	"github.com/weaveworks/cortex/pkg/util/wire"
 	"golang.org/x/net/context"
 )
 
 func TestRemoteReadHandler(t *testing.T) {
-	mq := MergeQuerier{
+	q := Queryable{
 		Queriers: []Querier{
 			mockQuerier{
 				iters: []local.SeriesIterator{
@@ -47,7 +47,7 @@ func TestRemoteReadHandler(t *testing.T) {
 	request.Header.Set("X-Prometheus-Remote-Read-Version", "0.1.0")
 
 	recorder := httptest.NewRecorder()
-	mq.RemoteReadHandler(recorder, request)
+	q.RemoteReadHandler(recorder, request)
 
 	require.Equal(t, 200, recorder.Result().StatusCode)
 	responseBody, err := ioutil.ReadAll(recorder.Result().Body)

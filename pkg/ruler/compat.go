@@ -39,7 +39,7 @@ func (a *appendableAppender) Add(l labels.Labels, t int64, v float64) (uint64, e
 	}
 	a.samples = append(a.samples, model.Sample{
 		Metric:    m,
-		Timestamp: model.TimeFromUnixNano(t * 1000),
+		Timestamp: model.Time(t),
 		Value:     model.SampleValue(v),
 	})
 	return 0, nil

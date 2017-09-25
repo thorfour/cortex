@@ -3,7 +3,6 @@ package querier
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/pkg/labels"
@@ -31,12 +30,10 @@ func NewEngine(distributor Querier, chunkStore ChunkStore) *promql.Engine {
 // NewQueryable creates a new Queryable for cortex.
 func NewQueryable(distributor Querier, chunkStore ChunkStore) Queryable {
 	return Queryable{
-		Q: MergeQuerier{
-			Queriers: []Querier{
-				distributor,
-				&ChunkQuerier{
-					Store: chunkStore,
-				},
+		Queriers: []Querier{
+			distributor,
+			&ChunkQuerier{
+				Store: chunkStore,
 			},
 		},
 	}
@@ -80,20 +77,102 @@ func (q *ChunkQuerier) MetricsForLabelMatchers(ctx context.Context, from, throug
 
 // Queryable is an adapter between Prometheus' Queryable and Querier.
 type Queryable struct {
-	Q MergeQuerier
+	Queriers []Querier
 }
 
 // Querier implements Queryable
 func (q Queryable) Querier(mint, maxt int64) (storage.Querier, error) {
-	return q.Q, nil
+	return MergeQuerier{
+		Queriers: q.Queriers,
+		mint:     mint,
+		maxt:     maxt,
+	}, nil
+}
+
+// RemoteReadHandler handles Prometheus remote read requests.
+func (q Queryable) RemoteReadHandler(w http.ResponseWriter, r *http.Request) {
+	compressionType := util.CompressionTypeFor(r.Header.Get("X-Prometheus-Remote-Read-Version"))
+
+	ctx := r.Context()
+	var req client.ReadRequest
+	logger := util.WithContext(r.Context())
+	if _, err := util.ParseProtoRequest(ctx, r, &req, compressionType); err != nil {
+		logger.Errorf(err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Fetch samples for all queries in parallel.
+	resp := client.ReadResponse{
+		Results: make([]*client.QueryResponse, len(req.Queries)),
+	}
+	errors := make(chan error)
+	for i, qr := range req.Queries {
+		go func(i int, qr *client.QueryRequest) {
+			from, to, matchers, err := util.FromQueryRequest(qr)
+			if err != nil {
+				errors <- err
+				return
+			}
+
+			querier, err := q.Querier(int64(from), int64(to))
+			if err != nil {
+				errors <- err
+				return
+			}
+
+			iterators, err := querier.(MergeQuerier).QueryRange(ctx, from, to, matchers...)
+			if err != nil {
+				errors <- err
+				return
+			}
+
+			in := metric.Interval{
+				OldestInclusive: from,
+				NewestInclusive: to,
+			}
+
+			// Convert iterators to matrix
+			matrix := make(model.Matrix, 0, len(iterators))
+			for _, it := range iterators {
+				ss := &model.SampleStream{
+					Metric: it.Metric().Metric,
+					Values: it.RangeValues(in),
+				}
+				matrix = append(matrix, ss)
+			}
+
+			resp.Results[i] = util.ToQueryResponse(matrix)
+			errors <- nil
+		}(i, qr)
+	}
+
+	var lastErr error
+	for range req.Queries {
+		err := <-errors
+		if err != nil {
+			lastErr = err
+		}
+	}
+	if lastErr != nil {
+		http.Error(w, lastErr.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if err := util.SerializeProtoResponse(w, &resp, compressionType); err != nil {
+		logger.Errorf("error sending remote read response: %v", err)
+	}
 }
 
 // A MergeQuerier is a promql.Querier that merges the results of multiple
 // cortex.Queriers for the same query.
 type MergeQuerier struct {
-	Queriers []Querier
+	Queriers   []Querier
+	mint, maxt int64
 }
 
+// TODO(prom2): Replace last usage of this method with Select()?
+//
 // QueryRange fetches series for a given time range and label matchers from multiple
 // promql.Queriers and returns the merged results as a map of series iterators.
 func (qm MergeQuerier) QueryRange(ctx context.Context, from, to model.Time, matchers ...*metric.LabelMatcher) ([]local.SeriesIterator, error) {
@@ -118,36 +197,36 @@ func (qm MergeQuerier) QueryRange(ctx context.Context, from, to model.Time, matc
 	return mergeIterators, err
 }
 
-// QueryInstant fetches series for a given instant and label matchers from multiple
-// promql.Queriers and returns the merged results as a map of series iterators.
-func (qm MergeQuerier) QueryInstant(ctx context.Context, ts model.Time, stalenessDelta time.Duration, matchers ...*metric.LabelMatcher) ([]local.SeriesIterator, error) {
-	// For now, just fall back to QueryRange, as QueryInstant is merely allows
-	// for instant-specific optimization.
-	return qm.QueryRange(ctx, ts.Add(-stalenessDelta), ts, matchers...)
-}
+// // QueryInstant fetches series for a given instant and label matchers from multiple
+// // promql.Queriers and returns the merged results as a map of series iterators.
+// func (qm MergeQuerier) QueryInstant(ctx context.Context, ts model.Time, stalenessDelta time.Duration, matchers ...*metric.LabelMatcher) ([]local.SeriesIterator, error) {
+// 	// For now, just fall back to QueryRange, as QueryInstant is merely allows
+// 	// for instant-specific optimization.
+// 	return qm.QueryRange(ctx, ts.Add(-stalenessDelta), ts, matchers...)
+// }
 
-// MetricsForLabelMatchers Implements local.Querier.
-func (qm MergeQuerier) MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matcherSets ...metric.LabelMatchers) ([]metric.Metric, error) {
-	// NB we don't do this in parallel, as in practice we only have 2 queriers,
-	// one of which is the chunk store which doesn't implement this.
+// // MetricsForLabelMatchers Implements local.Querier.
+// func (qm MergeQuerier) MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matcherSets ...metric.LabelMatchers) ([]metric.Metric, error) {
+// 	// NB we don't do this in parallel, as in practice we only have 2 queriers,
+// 	// one of which is the chunk store which doesn't implement this.
 
-	metrics := map[model.Fingerprint]metric.Metric{}
-	for _, q := range qm.Queriers {
-		ms, err := q.MetricsForLabelMatchers(ctx, from, through, matcherSets...)
-		if err != nil {
-			return nil, err
-		}
-		for _, m := range ms {
-			metrics[m.Metric.Fingerprint()] = m
-		}
-	}
+// 	metrics := map[model.Fingerprint]metric.Metric{}
+// 	for _, q := range qm.Queriers {
+// 		ms, err := q.MetricsForLabelMatchers(ctx, from, through, matcherSets...)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		for _, m := range ms {
+// 			metrics[m.Metric.Fingerprint()] = m
+// 		}
+// 	}
 
-	result := make([]metric.Metric, 0, len(metrics))
-	for _, m := range metrics {
-		result = append(result, m)
-	}
-	return result, nil
-}
+// 	result := make([]metric.Metric, 0, len(metrics))
+// 	for _, m := range metrics {
+// 		result = append(result, m)
+// 	}
+// 	return result, nil
+// }
 
 // LabelValues implements storage.Querier.
 func (qm MergeQuerier) Select(...*labels.Matcher) storage.SeriesSet {
@@ -189,75 +268,6 @@ func (qm MergeQuerier) LabelValuesForLabelName(ctx context.Context, name model.L
 // Close is a noop
 func (qm MergeQuerier) Close() error {
 	return nil
-}
-
-// RemoteReadHandler handles Prometheus remote read requests.
-func (qm MergeQuerier) RemoteReadHandler(w http.ResponseWriter, r *http.Request) {
-	compressionType := util.CompressionTypeFor(r.Header.Get("X-Prometheus-Remote-Read-Version"))
-
-	ctx := r.Context()
-	var req client.ReadRequest
-	logger := util.WithContext(r.Context())
-	if _, err := util.ParseProtoRequest(ctx, r, &req, compressionType); err != nil {
-		logger.Errorf(err.Error())
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	// Fetch samples for all queries in parallel.
-	resp := client.ReadResponse{
-		Results: make([]*client.QueryResponse, len(req.Queries)),
-	}
-	errors := make(chan error)
-	for i, q := range req.Queries {
-		go func(i int, q *client.QueryRequest) {
-			from, to, matchers, err := util.FromQueryRequest(q)
-			if err != nil {
-				errors <- err
-				return
-			}
-
-			iterators, err := qm.QueryRange(ctx, from, to, matchers...)
-			if err != nil {
-				errors <- err
-				return
-			}
-
-			in := metric.Interval{
-				OldestInclusive: from,
-				NewestInclusive: to,
-			}
-
-			// Convert iterators to matrix
-			matrix := make(model.Matrix, 0, len(iterators))
-			for _, it := range iterators {
-				ss := &model.SampleStream{
-					Metric: it.Metric().Metric,
-					Values: it.RangeValues(in),
-				}
-				matrix = append(matrix, ss)
-			}
-
-			resp.Results[i] = util.ToQueryResponse(matrix)
-			errors <- nil
-		}(i, q)
-	}
-
-	var lastErr error
-	for range req.Queries {
-		err := <-errors
-		if err != nil {
-			lastErr = err
-		}
-	}
-	if lastErr != nil {
-		http.Error(w, lastErr.Error(), http.StatusBadRequest)
-		return
-	}
-
-	if err := util.SerializeProtoResponse(w, &resp, compressionType); err != nil {
-		logger.Errorf("error sending remote read response: %v", err)
-	}
 }
 
 func createMergeIterators(incomingIterators chan []local.SeriesIterator, incomingErrors chan error, n int) ([]local.SeriesIterator, error) {
