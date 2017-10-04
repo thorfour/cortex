@@ -7,9 +7,10 @@ import (
 	"sync"
 
 	"github.com/prometheus/common/model"
+	"github.com/prometheus/prometheus/pkg/labels"
+	"github.com/weaveworks/common/user"
 	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
 	"github.com/weaveworks/cortex/pkg/prom1/storage/metric"
-	"github.com/weaveworks/common/user"
 )
 
 // LazySeriesIterator is a struct and not just a renamed type because otherwise the Metric
@@ -17,10 +18,10 @@ import (
 type LazySeriesIterator struct {
 	// The metric corresponding to the iterator.
 	metric     model.Metric
-	metricName model.LabelValue
+	metricName string
 	from       model.Time
 	through    model.Time
-	matchers   []*metric.LabelMatcher
+	matchers   []*labels.Matcher
 
 	// The store used to fetch chunks and samples.
 	chunkStore *Store
@@ -32,7 +33,7 @@ type LazySeriesIterator struct {
 	orgID                string
 }
 
-type byMatcherLabel metric.LabelMatchers
+type byMatcherLabel []*labels.Matcher
 
 func (lms byMatcherLabel) Len() int           { return len(lms) }
 func (lms byMatcherLabel) Swap(i, j int)      { lms[i], lms[j] = lms[j], lms[i] }
@@ -45,13 +46,13 @@ func NewLazySeriesIterator(chunkStore *Store, seriesMetric model.Metric, from mo
 		return nil, fmt.Errorf("series does not have a metric name")
 	}
 
-	var matchers metric.LabelMatchers
+	var matchers []*labels.Matcher
 	for labelName, labelValue := range seriesMetric {
 		if labelName == "__name__" {
 			continue
 		}
 
-		matcher, err := metric.NewLabelMatcher(metric.Equal, labelName, labelValue)
+		matcher, err := labels.NewMatcher(labels.MatchEqual, string(labelName), string(labelValue))
 		if err != nil {
 			return nil, err
 		}
@@ -62,7 +63,7 @@ func NewLazySeriesIterator(chunkStore *Store, seriesMetric model.Metric, from mo
 	return &LazySeriesIterator{
 		chunkStore: chunkStore,
 		metric:     seriesMetric,
-		metricName: metricName,
+		metricName: string(metricName),
 		from:       from,
 		through:    through,
 		matchers:   matchers,

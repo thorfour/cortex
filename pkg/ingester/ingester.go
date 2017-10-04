@@ -13,8 +13,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/model"
+	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/weaveworks/cortex/pkg/prom1/storage/local/chunk"
-	"github.com/weaveworks/cortex/pkg/prom1/storage/metric"
 
 	"github.com/weaveworks/common/httpgrpc"
 	cortex_chunk "github.com/weaveworks/cortex/pkg/chunk"
@@ -371,7 +371,7 @@ func (i *Ingester) Query(ctx context.Context, req *client.QueryRequest) (*client
 	return util.ToQueryResponse(matrix), nil
 }
 
-func (i *Ingester) query(ctx context.Context, from, through model.Time, matchers []*metric.LabelMatcher) (model.Matrix, error) {
+func (i *Ingester) query(ctx context.Context, from, through model.Time, matchers []*labels.Matcher) (model.Matrix, error) {
 	i.queries.Inc()
 
 	i.userStatesMtx.RLock()

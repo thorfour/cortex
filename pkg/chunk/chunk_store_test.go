@@ -10,11 +10,11 @@ import (
 
 	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/model"
-	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
-	"github.com/weaveworks/cortex/pkg/prom1/storage/local/chunk"
-	"github.com/weaveworks/cortex/pkg/prom1/storage/metric"
+	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
+	"github.com/weaveworks/cortex/pkg/prom1/storage/local/chunk"
 	"golang.org/x/net/context"
 
 	"github.com/weaveworks/common/test"
@@ -99,56 +99,56 @@ func TestChunkStore_Get_concrete(t *testing.T) {
 		{"v8 schema", v8Schema},
 	}
 
-	nameMatcher := mustNewLabelMatcher(metric.Equal, model.MetricNameLabel, "foo1")
+	nameMatcher := mustNewLabelMatcher(labels.MatchEqual, model.MetricNameLabel, "foo1")
 
 	for _, tc := range []struct {
 		query    string
 		expect   []local.SeriesIterator
-		matchers []*metric.LabelMatcher
+		matchers []*labels.Matcher
 	}{
 		{
 			`foo1`,
 			[]local.SeriesIterator{foo1Iterator1, foo1Iterator2},
-			[]*metric.LabelMatcher{nameMatcher},
+			[]*labels.Matcher{nameMatcher},
 		},
 		{
 			`foo1{flip=""}`,
 			[]local.SeriesIterator{foo1Iterator2},
-			[]*metric.LabelMatcher{nameMatcher, mustNewLabelMatcher(metric.Equal, "flip", "")},
+			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchEqual, "flip", "")},
 		},
 		{
 			`foo1{bar="baz"}`,
 			[]local.SeriesIterator{foo1Iterator1},
-			[]*metric.LabelMatcher{nameMatcher, mustNewLabelMatcher(metric.Equal, "bar", "baz")},
+			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchEqual, "bar", "baz")},
 		},
 		{
 			`foo1{bar="beep"}`,
 			[]local.SeriesIterator{foo1Iterator2},
-			[]*metric.LabelMatcher{nameMatcher, mustNewLabelMatcher(metric.Equal, "bar", "beep")},
+			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchEqual, "bar", "beep")},
 		},
 		{
 			`foo1{toms="code"}`,
 			[]local.SeriesIterator{foo1Iterator1, foo1Iterator2},
-			[]*metric.LabelMatcher{nameMatcher, mustNewLabelMatcher(metric.Equal, "toms", "code")},
+			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchEqual, "toms", "code")},
 		},
 		{
 			`foo1{bar!="baz"}`,
 			[]local.SeriesIterator{foo1Iterator2},
-			[]*metric.LabelMatcher{nameMatcher, mustNewLabelMatcher(metric.NotEqual, "bar", "baz")},
+			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchNotEqual, "bar", "baz")},
 		},
 		{
 			`foo1{bar=~"beep|baz"}`,
 			[]local.SeriesIterator{foo1Iterator1, foo1Iterator2},
-			[]*metric.LabelMatcher{nameMatcher, mustNewLabelMatcher(metric.RegexMatch, "bar", "beep|baz")},
+			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchRegexp, "bar", "beep|baz")},
 		},
 		{
 			`foo1{toms="code", bar=~"beep|baz"}`,
 			[]local.SeriesIterator{foo1Iterator1, foo1Iterator2},
-			[]*metric.LabelMatcher{nameMatcher, mustNewLabelMatcher(metric.Equal, "toms", "code"), mustNewLabelMatcher(metric.RegexMatch, "bar", "beep|baz")},
+			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchEqual, "toms", "code"), mustNewLabelMatcher(labels.MatchRegexp, "bar", "beep|baz")},
 		},
 		{
 			`foo1{toms="code", bar="baz"}`,
-			[]local.SeriesIterator{foo1Iterator1}, []*metric.LabelMatcher{nameMatcher, mustNewLabelMatcher(metric.Equal, "toms", "code"), mustNewLabelMatcher(metric.Equal, "bar", "baz")},
+			[]local.SeriesIterator{foo1Iterator1}, []*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchEqual, "toms", "code"), mustNewLabelMatcher(labels.MatchEqual, "bar", "baz")},
 		},
 	} {
 		for _, schema := range schemas {
@@ -235,59 +235,59 @@ func TestChunkStore_Get_lazy(t *testing.T) {
 		{"v8 schema", v8Schema},
 	}
 
-	regexMatcher := mustNewLabelMatcher(metric.RegexMatch, "bar", "beep|baz")
+	regexMatcher := mustNewLabelMatcher(labels.MatchRegexp, "bar", "beep|baz")
 
 	for _, tc := range []struct {
 		query                   string
-		matchers                []*metric.LabelMatcher
+		matchers                []*labels.Matcher
 		expectedIteratorMetrics []model.Metric
 	}{
 		// When name matcher is used without Equal, start matching all metric names
 		// however still filter out metric names which do not match query
 		{
 			`{__name__!="foo1"}`,
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.NotEqual, model.MetricNameLabel, "foo1")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchNotEqual, model.MetricNameLabel, "foo1")},
 			[]model.Metric{foo3Metric, foo2Metric},
 		},
 		{
 			`{__name__=~"foo1|foo2"}`,
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.RegexMatch, model.MetricNameLabel, "foo1|foo2")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchRegexp, model.MetricNameLabel, "foo1|foo2")},
 			[]model.Metric{foo1Metric1, foo2Metric, foo1Metric2},
 		},
 		// No metric names
 		{
 			`{bar="baz"}`,
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.Equal, "bar", "baz")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "bar", "baz")},
 			[]model.Metric{foo1Metric1},
 		},
 		{
 			`{bar="beep"}`,
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.Equal, "bar", "beep")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "bar", "beep")},
 			[]model.Metric{foo3Metric, foo2Metric, foo1Metric2}, // doesn't match foo1 metric 1
 		},
 		{
 			`{flip=""}`,
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.Equal, "flip", "")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "flip", "")},
 			[]model.Metric{foo3Metric, foo2Metric, foo1Metric2}, // doesn't match foo1 chunk1 as it has a flip value
 		},
 		{
 			`{bar!="beep"}`,
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.NotEqual, "bar", "beep")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchNotEqual, "bar", "beep")},
 			[]model.Metric{foo1Metric1},
 		},
 		{
 			`{bar=~"beep|baz"}`,
-			[]*metric.LabelMatcher{regexMatcher},
+			[]*labels.Matcher{regexMatcher},
 			[]model.Metric{foo3Metric, foo1Metric1, foo2Metric, foo1Metric2},
 		},
 		{
 			`{toms="code", bar=~"beep|baz"}`,
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.Equal, "toms", "code"), regexMatcher},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "toms", "code"), regexMatcher},
 			[]model.Metric{foo3Metric, foo1Metric1, foo2Metric, foo1Metric2},
 		},
 		{
 			`{toms="code", bar="baz"}`,
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.Equal, "toms", "code"), mustNewLabelMatcher(metric.Equal, "bar", "baz")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "toms", "code"), mustNewLabelMatcher(labels.MatchEqual, "bar", "baz")},
 			[]model.Metric{foo1Metric1},
 		},
 	} {
@@ -337,7 +337,7 @@ func TestChunkStore_Get_lazy(t *testing.T) {
 func TestChunkStore_getMetricNameChunks(t *testing.T) {
 	ctx := user.InjectOrgID(context.Background(), userID)
 	now := model.Now()
-	metricName := model.LabelValue("foo")
+	metricName := "foo"
 	chunk1 := dummyChunkFor(model.Metric{
 		model.MetricNameLabel: "foo",
 		"bar":  "baz",
@@ -367,51 +367,51 @@ func TestChunkStore_getMetricNameChunks(t *testing.T) {
 	for _, tc := range []struct {
 		query    string
 		expect   []Chunk
-		matchers []*metric.LabelMatcher
+		matchers []*labels.Matcher
 	}{
 		{
 			`foo`,
 			[]Chunk{chunk1, chunk2},
-			[]*metric.LabelMatcher{},
+			[]*labels.Matcher{},
 		},
 		{
 			`foo{flip=""}`,
 			[]Chunk{chunk2},
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.Equal, "flip", "")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "flip", "")},
 		},
 		{
 			`foo{bar="baz"}`,
 			[]Chunk{chunk1},
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.Equal, "bar", "baz")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "bar", "baz")},
 		},
 		{
 			`foo{bar="beep"}`,
 			[]Chunk{chunk2},
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.Equal, "bar", "beep")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "bar", "beep")},
 		},
 		{
 			`foo{toms="code"}`,
 			[]Chunk{chunk1, chunk2},
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.Equal, "toms", "code")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "toms", "code")},
 		},
 		{
 			`foo{bar!="baz"}`,
 			[]Chunk{chunk2},
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.NotEqual, "bar", "baz")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchNotEqual, "bar", "baz")},
 		},
 		{
 			`foo{bar=~"beep|baz"}`,
 			[]Chunk{chunk1, chunk2},
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.RegexMatch, "bar", "beep|baz")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchRegexp, "bar", "beep|baz")},
 		},
 		{
 			`foo{toms="code", bar=~"beep|baz"}`,
 			[]Chunk{chunk1, chunk2},
-			[]*metric.LabelMatcher{mustNewLabelMatcher(metric.Equal, "toms", "code"), mustNewLabelMatcher(metric.RegexMatch, "bar", "beep|baz")},
+			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "toms", "code"), mustNewLabelMatcher(labels.MatchRegexp, "bar", "beep|baz")},
 		},
 		{
 			`foo{toms="code", bar="baz"}`,
-			[]Chunk{chunk1}, []*metric.LabelMatcher{mustNewLabelMatcher(metric.Equal, "toms", "code"), mustNewLabelMatcher(metric.Equal, "bar", "baz")},
+			[]Chunk{chunk1}, []*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "toms", "code"), mustNewLabelMatcher(labels.MatchEqual, "bar", "baz")},
 		},
 	} {
 		for _, schema := range schemas {
@@ -436,8 +436,8 @@ func TestChunkStore_getMetricNameChunks(t *testing.T) {
 	}
 }
 
-func mustNewLabelMatcher(matchType metric.MatchType, name model.LabelName, value model.LabelValue) *metric.LabelMatcher {
-	matcher, err := metric.NewLabelMatcher(matchType, name, value)
+func mustNewLabelMatcher(matchType labels.MatchType, name string, value string) *labels.Matcher {
+	matcher, err := labels.NewMatcher(matchType, name, value)
 	if err != nil {
 		panic(err)
 	}
@@ -501,8 +501,8 @@ func TestChunkStoreRandom(t *testing.T) {
 		startTime := model.TimeFromUnix(start)
 		endTime := model.TimeFromUnix(end)
 
-		metricNameLabel := mustNewLabelMatcher(metric.Equal, model.MetricNameLabel, "foo")
-		matchers := []*metric.LabelMatcher{mustNewLabelMatcher(metric.Equal, "bar", "baz")}
+		metricNameLabel := mustNewLabelMatcher(labels.MatchEqual, model.MetricNameLabel, "foo")
+		matchers := []*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "bar", "baz")}
 
 		for _, s := range schemas {
 			chunks, err := s.store.getMetricNameChunks(ctx, startTime, endTime,
@@ -568,8 +568,8 @@ func TestChunkStoreLeastRead(t *testing.T) {
 		startTime := model.TimeFromUnix(start)
 		endTime := model.TimeFromUnix(end)
 
-		metricNameLabel := mustNewLabelMatcher(metric.Equal, model.MetricNameLabel, "foo")
-		matchers := []*metric.LabelMatcher{mustNewLabelMatcher(metric.Equal, "bar", "baz")}
+		metricNameLabel := mustNewLabelMatcher(labels.MatchEqual, model.MetricNameLabel, "foo")
+		matchers := []*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "bar", "baz")}
 
 		chunks, err := store.getMetricNameChunks(ctx, startTime, endTime,
 			matchers,

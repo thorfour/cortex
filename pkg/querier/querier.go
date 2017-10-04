@@ -1,6 +1,7 @@
 package querier
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
@@ -10,7 +11,6 @@ import (
 	"github.com/prometheus/prometheus/storage"
 	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
 	"github.com/weaveworks/cortex/pkg/prom1/storage/metric"
-	"golang.org/x/net/context"
 
 	"github.com/weaveworks/cortex/pkg/ingester/client"
 	"github.com/weaveworks/cortex/pkg/util"
@@ -18,7 +18,7 @@ import (
 
 // ChunkStore is the interface we need to get chunks
 type ChunkStore interface {
-	Get(ctx context.Context, from, through model.Time, matchers ...*metric.LabelMatcher) ([]local.SeriesIterator, error)
+	Get(ctx context.Context, from, through model.Time, matchers ...*labels.Matcher) ([]local.SeriesIterator, error)
 }
 
 // NewEngine creates a new promql.Engine for cortex.
@@ -42,9 +42,9 @@ func NewQueryable(distributor Querier, chunkStore ChunkStore) Queryable {
 // A Querier allows querying all samples in a given time range that match a set
 // of label matchers.
 type Querier interface {
-	Query(ctx context.Context, from, to model.Time, matchers ...*metric.LabelMatcher) ([]local.SeriesIterator, error)
+	Query(ctx context.Context, from, to model.Time, matchers ...*labels.Matcher) ([]local.SeriesIterator, error)
 	LabelValuesForLabelName(context.Context, model.LabelName) (model.LabelValues, error)
-	MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matcherSets ...metric.LabelMatchers) ([]metric.Metric, error)
+	MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matcherSets ...[]*labels.Matcher) ([]metric.Metric, error)
 }
 
 // A ChunkQuerier is a Querier that fetches samples from a ChunkStore.
@@ -54,7 +54,7 @@ type ChunkQuerier struct {
 
 // Query implements Querier and transforms a list of chunks into sample
 // matrices.
-func (q *ChunkQuerier) Query(ctx context.Context, from, to model.Time, matchers ...*metric.LabelMatcher) ([]local.SeriesIterator, error) {
+func (q *ChunkQuerier) Query(ctx context.Context, from, to model.Time, matchers ...*labels.Matcher) ([]local.SeriesIterator, error) {
 	// Get iterators for all matching series from ChunkStore.
 	iterators, err := q.Store.Get(ctx, from, to, matchers...)
 	if err != nil {
@@ -71,7 +71,7 @@ func (q *ChunkQuerier) LabelValuesForLabelName(ctx context.Context, ln model.Lab
 }
 
 // MetricsForLabelMatchers is a noop for chunk querier.
-func (q *ChunkQuerier) MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matcherSets ...metric.LabelMatchers) ([]metric.Metric, error) {
+func (q *ChunkQuerier) MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matcherSets ...[]*labels.Matcher) ([]metric.Metric, error) {
 	return nil, nil
 }
 
@@ -81,7 +81,7 @@ type Queryable struct {
 }
 
 // Querier implements Queryable
-func (q Queryable) Querier(mint, maxt int64) (storage.Querier, error) {
+func (q Queryable) Querier(ctx context.Context, mint, maxt int64) (storage.Querier, error) {
 	return MergeQuerier{
 		Queriers: q.Queriers,
 		mint:     mint,
@@ -115,7 +115,7 @@ func (q Queryable) RemoteReadHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			querier, err := q.Querier(int64(from), int64(to))
+			querier, err := q.Querier(ctx, int64(from), int64(to))
 			if err != nil {
 				errors <- err
 				return
@@ -169,13 +169,14 @@ func (q Queryable) RemoteReadHandler(w http.ResponseWriter, r *http.Request) {
 type MergeQuerier struct {
 	Queriers   []Querier
 	mint, maxt int64
+	ctx        context.Context // TODO(prom2): Set.
 }
 
 // TODO(prom2): Replace last usage of this method with Select()?
 //
 // QueryRange fetches series for a given time range and label matchers from multiple
 // promql.Queriers and returns the merged results as a map of series iterators.
-func (qm MergeQuerier) QueryRange(ctx context.Context, from, to model.Time, matchers ...*metric.LabelMatcher) ([]local.SeriesIterator, error) {
+func (qm MergeQuerier) QueryRange(ctx context.Context, from, to model.Time, matchers ...*labels.Matcher) ([]local.SeriesIterator, error) {
 	incomingIterators := make(chan []local.SeriesIterator)
 	incomingErrors := make(chan error)
 
@@ -197,16 +198,17 @@ func (qm MergeQuerier) QueryRange(ctx context.Context, from, to model.Time, matc
 	return mergeIterators, err
 }
 
+// TODO(prom2): remove?
 // // QueryInstant fetches series for a given instant and label matchers from multiple
 // // promql.Queriers and returns the merged results as a map of series iterators.
-// func (qm MergeQuerier) QueryInstant(ctx context.Context, ts model.Time, stalenessDelta time.Duration, matchers ...*metric.LabelMatcher) ([]local.SeriesIterator, error) {
+// func (qm MergeQuerier) QueryInstant(ctx context.Context, ts model.Time, stalenessDelta time.Duration, matchers ...*labels.Matcher) ([]local.SeriesIterator, error) {
 // 	// For now, just fall back to QueryRange, as QueryInstant is merely allows
 // 	// for instant-specific optimization.
 // 	return qm.QueryRange(ctx, ts.Add(-stalenessDelta), ts, matchers...)
 // }
 
 // // MetricsForLabelMatchers Implements local.Querier.
-// func (qm MergeQuerier) MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matcherSets ...metric.LabelMatchers) ([]metric.Metric, error) {
+// func (qm MergeQuerier) MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matcherSets ...[]*labels.Matcher) ([]metric.Metric, error) {
 // 	// NB we don't do this in parallel, as in practice we only have 2 queriers,
 // 	// one of which is the chunk store which doesn't implement this.
 
@@ -228,9 +230,29 @@ func (qm MergeQuerier) QueryRange(ctx context.Context, from, to model.Time, matc
 // 	return result, nil
 // }
 
-// LabelValues implements storage.Querier.
-func (qm MergeQuerier) Select(...*labels.Matcher) storage.SeriesSet {
-	return nil
+// Select implements storage.Querier.
+func (qm MergeQuerier) Select(matchers ...*labels.Matcher) storage.SeriesSet {
+	incomingIterators := make(chan []local.SeriesIterator)
+	incomingErrors := make(chan error)
+
+	for _, q := range qm.Queriers {
+		go func(q Querier) {
+			iterators, err := q.Query(qm.ctx, model.Time(qm.mint), model.Time(qm.maxt), matchers...)
+			if err != nil {
+				incomingErrors <- err
+			} else {
+				incomingIterators <- iterators
+			}
+		}(q)
+	}
+
+	mergeIterators, err := createMergeIterators(incomingIterators, incomingErrors, len(qm.Queriers))
+	if err != nil {
+		util.WithContext(qm.ctx).Errorf("Error in MergeQuerier.Query: %+v", err)
+	}
+	_ = mergeIterators // TODO(prom2): remove
+	//return mergeIterators, err
+	return nil // TODO(prom2): implement.
 }
 
 // LabelValues implements storage.Querier.
@@ -239,31 +261,32 @@ func (qm MergeQuerier) LabelValues(name string) ([]string, error) {
 	return nil, nil
 }
 
-// LastSampleForLabelMatchers implements local.Querier.
-func (qm MergeQuerier) LastSampleForLabelMatchers(ctx context.Context, cutoff model.Time, matcherSets ...metric.LabelMatchers) (model.Vector, error) {
-	// TODO: Implement.
-	return nil, nil
-}
+// TODO(prom2): remove?
+// // LastSampleForLabelMatchers implements local.Querier.
+// func (qm MergeQuerier) LastSampleForLabelMatchers(ctx context.Context, cutoff model.Time, matcherSets ...[]*labels.Matcher) (model.Vector, error) {
+// 	// TODO: Implement.
+// 	return nil, nil
+// }
 
-// LabelValuesForLabelName implements local.Querier.
-func (qm MergeQuerier) LabelValuesForLabelName(ctx context.Context, name model.LabelName) (model.LabelValues, error) {
-	valueSet := map[model.LabelValue]struct{}{}
-	for _, q := range qm.Queriers {
-		vals, err := q.LabelValuesForLabelName(ctx, name)
-		if err != nil {
-			return nil, err
-		}
-		for _, v := range vals {
-			valueSet[v] = struct{}{}
-		}
-	}
+// // LabelValuesForLabelName implements local.Querier.
+// func (qm MergeQuerier) LabelValuesForLabelName(ctx context.Context, name model.LabelName) (model.LabelValues, error) {
+// 	valueSet := map[model.LabelValue]struct{}{}
+// 	for _, q := range qm.Queriers {
+// 		vals, err := q.LabelValuesForLabelName(ctx, name)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		for _, v := range vals {
+// 			valueSet[v] = struct{}{}
+// 		}
+// 	}
 
-	values := make(model.LabelValues, 0, len(valueSet))
-	for v := range valueSet {
-		values = append(values, v)
-	}
-	return values, nil
-}
+// 	values := make(model.LabelValues, 0, len(valueSet))
+// 	for v := range valueSet {
+// 		values = append(values, v)
+// 	}
+// 	return values, nil
+// }
 
 // Close is a noop
 func (qm MergeQuerier) Close() error {
@@ -355,7 +378,7 @@ func (DummyStorage) NeedsThrottling() bool {
 // DropMetricsForLabelMatchers implements local.Storage. Needed
 // to satisfy interface requirements for usage with the Prometheus
 // web API.
-func (DummyStorage) DropMetricsForLabelMatchers(context.Context, ...*metric.LabelMatcher) (int, error) {
+func (DummyStorage) DropMetricsForLabelMatchers(context.Context, ...*labels.Matcher) (int, error) {
 	return 0, fmt.Errorf("dropping metrics is not supported")
 }
 

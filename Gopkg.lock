@@ -503,10 +503,10 @@
   revision = "6ac8c5d890d415025dd5aae7595bcb2a6e7e2fad"
 
 [[projects]]
-  branch = "dev-2.0"
+  branch = "readd-contexts"
   name = "github.com/prometheus/prometheus"
-  packages = ["config","discovery","discovery/azure","discovery/consul","discovery/dns","discovery/ec2","discovery/file","discovery/gce","discovery/kubernetes","discovery/marathon","discovery/openstack","discovery/triton","discovery/zookeeper","notifier","pkg/labels","pkg/pool","pkg/relabel","pkg/rulefmt","pkg/textparse","pkg/timestamp","pkg/value","promql","relabel","retrieval","rules","storage","storage/tsdb","template","util/flock","util/httputil","util/stats","util/strutil","util/testutil","util/treecache","web/api/v1"]
-  revision = "6c0070986dd36d0192d985c5f038c06bb7725468"
+  packages = ["config","discovery","discovery/azure","discovery/consul","discovery/dns","discovery/ec2","discovery/file","discovery/gce","discovery/kubernetes","discovery/marathon","discovery/openstack","discovery/triton","discovery/zookeeper","notifier","pkg/labels","pkg/pool","pkg/relabel","pkg/rulefmt","pkg/textparse","pkg/timestamp","pkg/value","promql","retrieval","rules","storage","storage/tsdb","template","util/flock","util/httputil","util/stats","util/strutil","util/testutil","util/treecache","web/api/v1"]
+  revision = "82a5ab8ad3314ebfc0ec067ed989d33343853f36"
 
 [[projects]]
   branch = "master"
@@ -700,6 +700,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "4fa3bb878529b3633701283addf8cb9d4216d312fd3ba95842de77759407f166"
+  inputs-digest = "be0d149850169a92a9f5921c705cc074919b3eb6728a6efe110079ec18bddebe"
   solver-name = "gps-cdcl"
   solver-version = 1

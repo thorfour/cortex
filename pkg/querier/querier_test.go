@@ -2,6 +2,7 @@ package querier
 
 import (
 	"bytes"
+	"context"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -10,13 +11,13 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/golang/snappy"
 	"github.com/prometheus/common/model"
+	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/stretchr/testify/require"
 	"github.com/weaveworks/cortex/pkg/ingester/client"
 	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
 	"github.com/weaveworks/cortex/pkg/prom1/storage/metric"
 	"github.com/weaveworks/cortex/pkg/util"
 	"github.com/weaveworks/cortex/pkg/util/wire"
-	"golang.org/x/net/context"
 )
 
 func TestRemoteReadHandler(t *testing.T) {
@@ -81,7 +82,7 @@ type mockQuerier struct {
 	iters []local.SeriesIterator
 }
 
-func (m mockQuerier) Query(ctx context.Context, from, to model.Time, matchers ...*metric.LabelMatcher) ([]local.SeriesIterator, error) {
+func (m mockQuerier) Query(ctx context.Context, from, to model.Time, matchers ...*labels.Matcher) ([]local.SeriesIterator, error) {
 	return m.iters, nil
 }
 
@@ -89,6 +90,6 @@ func (mockQuerier) LabelValuesForLabelName(context.Context, model.LabelName) (mo
 	return nil, nil
 }
 
-func (mockQuerier) MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matcherSets ...metric.LabelMatchers) ([]metric.Metric, error) {
+func (mockQuerier) MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matcherSets ...[]*labels.Matcher) ([]metric.Metric, error) {
 	return nil, nil
 }
