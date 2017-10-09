@@ -1,6 +1,7 @@
 package chunk
 
 import (
+	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -11,7 +12,6 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/prometheus/prometheus/promql"
 	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
-	"golang.org/x/net/context"
 
 	"github.com/weaveworks/common/user"
 	"github.com/weaveworks/cortex/pkg/util"

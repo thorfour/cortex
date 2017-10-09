@@ -257,7 +257,7 @@ func (qm MergeQuerier) Select(matchers ...*labels.Matcher) storage.SeriesSet {
 
 // LabelValues implements storage.Querier.
 func (qm MergeQuerier) LabelValues(name string) ([]string, error) {
-	// TODO: Implement.
+	// TODO(prom2): Implement.
 	return nil, nil
 }
 
@@ -359,6 +359,7 @@ func mergeMatrices(matrices chan model.Matrix, errors chan error, n int) (model.
 // Queryable, such that it can be used with web.NewAPI.
 // TODO(juliusv): Remove all the dummy local.Storage methods below
 // once the upstream web API expects a leaner interface.
+// TODO(prom2): Update to new interface.
 type DummyStorage struct {
 	Queryable
 }

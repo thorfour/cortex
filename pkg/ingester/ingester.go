@@ -1,6 +1,7 @@
 package ingester
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"net/http"
@@ -8,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"golang.org/x/net/context"
+	old_ctx "golang.org/x/net/context"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
@@ -287,7 +288,7 @@ func New(cfg Config, schemaCfg cortex_chunk.SchemaConfig, chunkStore ChunkStore)
 }
 
 // Push implements client.IngesterServer
-func (i *Ingester) Push(ctx context.Context, req *client.WriteRequest) (*client.WriteResponse, error) {
+func (i *Ingester) Push(ctx old_ctx.Context, req *client.WriteRequest) (*client.WriteResponse, error) {
 	var lastPartialErr error
 	samples := util.FromWriteRequest(req)
 
@@ -357,7 +358,7 @@ func (i *Ingester) append(ctx context.Context, sample *model.Sample) error {
 }
 
 // Query implements service.IngesterServer
-func (i *Ingester) Query(ctx context.Context, req *client.QueryRequest) (*client.QueryResponse, error) {
+func (i *Ingester) Query(ctx old_ctx.Context, req *client.QueryRequest) (*client.QueryResponse, error) {
 	start, end, matchers, err := util.FromQueryRequest(req)
 	if err != nil {
 		return nil, err
@@ -401,7 +402,7 @@ func (i *Ingester) query(ctx context.Context, from, through model.Time, matchers
 }
 
 // LabelValues returns all label values that are associated with a given label name.
-func (i *Ingester) LabelValues(ctx context.Context, req *client.LabelValuesRequest) (*client.LabelValuesResponse, error) {
+func (i *Ingester) LabelValues(ctx old_ctx.Context, req *client.LabelValuesRequest) (*client.LabelValuesResponse, error) {
 	i.userStatesMtx.RLock()
 	defer i.userStatesMtx.RUnlock()
 	state, err := i.userStates.getOrCreate(ctx)
@@ -418,7 +419,7 @@ func (i *Ingester) LabelValues(ctx context.Context, req *client.LabelValuesReque
 }
 
 // MetricsForLabelMatchers returns all the metrics which match a set of matchers.
-func (i *Ingester) MetricsForLabelMatchers(ctx context.Context, req *client.MetricsForLabelMatchersRequest) (*client.MetricsForLabelMatchersResponse, error) {
+func (i *Ingester) MetricsForLabelMatchers(ctx old_ctx.Context, req *client.MetricsForLabelMatchersRequest) (*client.MetricsForLabelMatchersResponse, error) {
 	i.userStatesMtx.RLock()
 	defer i.userStatesMtx.RUnlock()
 	state, err := i.userStates.getOrCreate(ctx)
@@ -453,7 +454,7 @@ func (i *Ingester) MetricsForLabelMatchers(ctx context.Context, req *client.Metr
 }
 
 // UserStats returns ingestion statistics for the current user.
-func (i *Ingester) UserStats(ctx context.Context, req *client.UserStatsRequest) (*client.UserStatsResponse, error) {
+func (i *Ingester) UserStats(ctx old_ctx.Context, req *client.UserStatsRequest) (*client.UserStatsResponse, error) {
 	i.userStatesMtx.RLock()
 	defer i.userStatesMtx.RUnlock()
 	state, err := i.userStates.getOrCreate(ctx)

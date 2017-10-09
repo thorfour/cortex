@@ -62,7 +62,7 @@ func RulesFromConfig(c configs.Config) ([]rules.Rule, error) {
 
 			switch r := stmt.(type) {
 			case *promql.AlertStmt:
-				// TODO: Wrap our logger into a gokit logger.
+				// TODO(prom2): Wrap our logger into a gokit logger.
 				rule = rules.NewAlertingRule(r.Name, r.Expr, r.Duration, r.Labels, r.Annotations, gklog.NewNopLogger())
 
 			case *promql.RecordStmt:
