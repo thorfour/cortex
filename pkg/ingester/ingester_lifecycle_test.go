@@ -37,9 +37,10 @@ func defaultIngesterTestConfig() Config {
 		HeartbeatPeriod: 5 * time.Second,
 		ListenPort:      func(i int) *int { return &i }(0),
 
-		FlushCheckPeriod:  99999 * time.Hour,
-		MaxChunkIdle:      99999 * time.Hour,
-		ConcurrentFlushes: 1,
+		FlushCheckPeriod:       99999 * time.Hour,
+		MaxChunkIdle:           99999 * time.Hour,
+		ConcurrentFlushes:      1,
+		MaxLabelNamesPerSeries: 64,
 
 		addr: "localhost",
 		id:   "localhost",

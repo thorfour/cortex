@@ -32,6 +32,7 @@ const (
 	outOfOrderTimestamp     = "timestamp_out_of_order"
 	duplicateSample         = "multiple_values_for_timestamp"
 	greaterThanMaxSampleAge = "greater_than_max_sample_age"
+	maxLabelNamesPerSeries  = "max_label_names_per_series"
 
 	// DefaultConcurrentFlush is the number of series to flush concurrently
 	DefaultConcurrentFlush = 50
@@ -39,6 +40,8 @@ const (
 	DefaultMaxSeriesPerUser = 5000000
 	// DefaultMaxSeriesPerMetric is the maximum number of series in one metric (of a single user).
 	DefaultMaxSeriesPerMetric = 50000
+	// DefaultMaxLabelNamesPerSeries is the maximum number of label names in one series.
+	DefaultMaxLabelNamesPerSeries = 64
 )
 
 var (
@@ -78,7 +81,8 @@ type Config struct {
 	ConcurrentFlushes int
 	ChunkEncoding     string
 
-	// Config for rejecting old samples
+	// Config for rejecting samples
+	MaxLabelNamesPerSeries int
 	RejectOldSamples       bool
 	RejectOldSamplesMaxAge time.Duration
 
@@ -106,6 +110,7 @@ func (cfg *Config) RegisterFlags(f *flag.FlagSet) {
 	f.DurationVar(&cfg.MaxChunkIdle, "ingester.max-chunk-idle", promql.StalenessDelta, "Maximum chunk idle time before flushing.")
 	f.IntVar(&cfg.ConcurrentFlushes, "ingester.concurrent-flushes", DefaultConcurrentFlush, "Number of concurrent goroutines flushing to dynamodb.")
 	f.StringVar(&cfg.ChunkEncoding, "ingester.chunk-encoding", "1", "Encoding version to use for chunks.")
+	f.IntVar(&cfg.MaxLabelNamesPerSeries, "ingester.max-label-names-per-series", DefaultMaxLabelNamesPerSeries, "Maximum number of label names per series.")
 
 	f.BoolVar(&cfg.RejectOldSamples, "ingester.reject-old-samples", false, "Reject old samples.")
 	f.DurationVar(&cfg.RejectOldSamplesMaxAge, "ingester.reject-old-samples.max-age", 14*24*time.Hour, "Maximum accepted sample age before rejecting.")
@@ -313,6 +318,12 @@ func (i *Ingester) append(ctx context.Context, sample *model.Sample) error {
 	if i.cfg.RejectOldSamples && sample.Timestamp < model.Now().Add(-i.cfg.RejectOldSamplesMaxAge) {
 		discardedSamples.WithLabelValues(greaterThanMaxSampleAge).Inc()
 		return httpgrpc.Errorf(http.StatusBadRequest, "sample with timestamp %v is older than the maximum accepted age", sample.Timestamp)
+	}
+
+	numLabelNames := len(sample.Metric)
+	if numLabelNames > i.cfg.MaxLabelNamesPerSeries {
+		discardedSamples.WithLabelValues(maxLabelNamesPerSeries).Inc()
+		return httpgrpc.Errorf(http.StatusBadRequest, "sample has %d label names which is greater than the accepted maximum of %d", numLabelNames, i.cfg.MaxLabelNamesPerSeries)
 	}
 
 	if err := util.ValidateSample(sample); err != nil {
