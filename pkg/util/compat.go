@@ -110,23 +110,17 @@ func FromQueryResponse(resp *client.QueryResponse) model.Matrix {
 }
 
 // ToMetricsForLabelMatchersRequest builds a MetricsForLabelMatchersRequest proto
-func ToMetricsForLabelMatchersRequest(from, to model.Time, matchersSet [][]*labels.Matcher) (*client.MetricsForLabelMatchersRequest, error) {
-	req := &client.MetricsForLabelMatchersRequest{
-		StartTimestampMs: int64(from),
-		EndTimestampMs:   int64(to),
-		MatchersSet:      make([]*client.LabelMatchers, 0, len(matchersSet)),
+func ToMetricsForLabelMatchersRequest(from, to model.Time, matchers []*labels.Matcher) (*client.MetricsForLabelMatchersRequest, error) {
+	ms, err := toLabelMatchers(matchers)
+	if err != nil {
+		return nil, err
 	}
 
-	for _, matchers := range matchersSet {
-		ms, err := toLabelMatchers(matchers)
-		if err != nil {
-			return nil, err
-		}
-		req.MatchersSet = append(req.MatchersSet, &client.LabelMatchers{
-			Matchers: ms,
-		})
-	}
-	return req, nil
+	return &client.MetricsForLabelMatchersRequest{
+		StartTimestampMs: int64(from),
+		EndTimestampMs:   int64(to),
+		MatchersSet:      []*client.LabelMatchers{{Matchers: ms}},
+	}, nil
 }
 
 // FromMetricsForLabelMatchersRequest unpacks a MetricsForLabelMatchersRequest proto

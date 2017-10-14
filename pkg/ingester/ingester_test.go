@@ -370,10 +370,10 @@ func TestIngesterRejectOldSamples(t *testing.T) {
 	}
 
 	// Read samples back via ingester queries.
-	matcher, err := metric.NewLabelMatcher(metric.Equal, model.MetricNameLabel, "testmetric")
+	matcher, err := labels.NewMatcher(labels.MatchEqual, model.MetricNameLabel, "testmetric")
 	require.NoError(t, err)
 
-	req, err := util.ToQueryRequest(model.Earliest, model.Latest, []*metric.LabelMatcher{matcher})
+	req, err := util.ToQueryRequest(model.Earliest, model.Latest, []*labels.Matcher{matcher})
 	require.NoError(t, err)
 
 	resp, err := ing.Query(ctx, req)

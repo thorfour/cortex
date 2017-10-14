@@ -14,23 +14,21 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/stretchr/testify/require"
 	"github.com/weaveworks/cortex/pkg/ingester/client"
-	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
 	"github.com/weaveworks/cortex/pkg/prom1/storage/metric"
-	"github.com/weaveworks/cortex/pkg/util"
 	"github.com/weaveworks/cortex/pkg/util/wire"
 )
 
 func TestRemoteReadHandler(t *testing.T) {
-	q := Queryable{
-		Queriers: []Querier{
+	q := MergeQueryable{
+		queriers: []Querier{
 			mockQuerier{
-				iters: []local.SeriesIterator{
-					util.NewSampleStreamIterator(&model.SampleStream{
+				matrix: model.Matrix{
+					{
 						Metric: model.Metric{"foo": "bar"},
 						Values: []model.SamplePair{
 							{0, 0}, {1, 1}, {2, 2}, {3, 3},
 						},
-					}),
+					},
 				},
 			},
 		},
@@ -79,17 +77,17 @@ func TestRemoteReadHandler(t *testing.T) {
 }
 
 type mockQuerier struct {
-	iters []local.SeriesIterator
+	matrix model.Matrix
 }
 
-func (m mockQuerier) Query(ctx context.Context, from, to model.Time, matchers ...*labels.Matcher) ([]local.SeriesIterator, error) {
-	return m.iters, nil
+func (m mockQuerier) Query(ctx context.Context, from, to model.Time, matchers ...*labels.Matcher) (model.Matrix, error) {
+	return m.matrix, nil
 }
 
 func (mockQuerier) LabelValuesForLabelName(context.Context, model.LabelName) (model.LabelValues, error) {
 	return nil, nil
 }
 
-func (mockQuerier) MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matcherSets ...[]*labels.Matcher) ([]metric.Metric, error) {
+func (mockQuerier) MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matcherSets ...*labels.Matcher) ([]metric.Metric, error) {
 	return nil, nil
 }

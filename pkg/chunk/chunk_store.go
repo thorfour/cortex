@@ -11,7 +11,6 @@ import (
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/prometheus/prometheus/promql"
-	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
 
 	"github.com/weaveworks/common/user"
 	"github.com/weaveworks/cortex/pkg/util"
@@ -150,7 +149,7 @@ func (c *Store) calculateDynamoWrites(userID string, chunks []Chunk) (WriteBatch
 }
 
 // Get implements ChunkStore
-func (c *Store) Get(ctx context.Context, from, through model.Time, allMatchers ...*labels.Matcher) ([]local.SeriesIterator, error) {
+func (c *Store) Get(ctx context.Context, from, through model.Time, allMatchers ...*labels.Matcher) (model.Matrix, error) {
 	if through < from {
 		return nil, fmt.Errorf("invalid query, through < from (%d < %d)", through, from)
 	}
@@ -159,7 +158,7 @@ func (c *Store) Get(ctx context.Context, from, through model.Time, allMatchers .
 	if from.After(now) {
 		// time-span start is in future ... regard as legal
 		util.WithContext(ctx).Debugf("Whole timerange %v..%v in future (now=%v) yield empty resultset", through, from, now)
-		return []local.SeriesIterator{}, nil
+		return nil, nil
 	}
 
 	if through.After(now) {
@@ -178,12 +177,12 @@ func (c *Store) Get(ctx context.Context, from, through model.Time, allMatchers .
 	return c.getSeriesIterators(ctx, from, through, matchers, metricNameMatcher)
 }
 
-func (c *Store) getMetricNameIterators(ctx context.Context, from, through model.Time, allMatchers []*labels.Matcher, metricName string) ([]local.SeriesIterator, error) {
+func (c *Store) getMetricNameIterators(ctx context.Context, from, through model.Time, allMatchers []*labels.Matcher, metricName string) (model.Matrix, error) {
 	chunks, err := c.getMetricNameChunks(ctx, from, through, allMatchers, metricName)
 	if err != nil {
 		return nil, err
 	}
-	return chunksToIterators(chunks)
+	return chunksToMatrix(chunks)
 }
 
 func (c *Store) getMetricNameChunks(ctx context.Context, from, through model.Time, allMatchers []*labels.Matcher, metricName string) ([]Chunk, error) {
@@ -238,53 +237,55 @@ outer:
 	return filteredChunks, nil
 }
 
-func (c *Store) getSeriesIterators(ctx context.Context, from, through model.Time, allMatchers []*labels.Matcher, metricNameMatcher *labels.Matcher) ([]local.SeriesIterator, error) {
-	// Get all series from the index
-	userID, err := user.ExtractOrgID(ctx)
-	if err != nil {
-		return nil, err
-	}
-	seriesQueries, err := c.schema.GetReadQueries(from, through, userID)
-	if err != nil {
-		return nil, err
-	}
-	seriesEntries, err := c.lookupEntriesByQueries(ctx, seriesQueries)
-	if err != nil {
-		return nil, err
-	}
+func (c *Store) getSeriesIterators(ctx context.Context, from, through model.Time, allMatchers []*labels.Matcher, metricNameMatcher *labels.Matcher) (model.Matrix, error) {
+	// 	// Get all series from the index
+	// 	userID, err := user.ExtractOrgID(ctx)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	seriesQueries, err := c.schema.GetReadQueries(from, through, userID)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	seriesEntries, err := c.lookupEntriesByQueries(ctx, seriesQueries)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
 
-	lazyIterators := make([]local.SeriesIterator, 0, len(seriesEntries))
-outer:
-	for _, seriesEntry := range seriesEntries {
-		metric, err := parseSeriesRangeValue(seriesEntry.RangeValue, seriesEntry.Value)
-		if err != nil {
-			return nil, err
-		}
+	// 	lazyIterators := make([]local.SeriesIterator, 0, len(seriesEntries))
+	// outer:
+	// 	for _, seriesEntry := range seriesEntries {
+	// 		metric, err := parseSeriesRangeValue(seriesEntry.RangeValue, seriesEntry.Value)
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
 
-		// Apply metric name matcher
-		if metricNameMatcher != nil && !metricNameMatcher.Matches(string(metric[model.LabelName(metricNameMatcher.Name)])) {
-			continue outer
-		}
+	// 		// Apply metric name matcher
+	// 		if metricNameMatcher != nil && !metricNameMatcher.Matches(string(metric[model.LabelName(metricNameMatcher.Name)])) {
+	// 			continue outer
+	// 		}
 
-		// Apply matchers
-		for _, matcher := range allMatchers {
-			if !matcher.Matches(string(metric[model.LabelName(matcher.Name)])) {
-				continue outer
-			}
-		}
+	// 		// Apply matchers
+	// 		for _, matcher := range allMatchers {
+	// 			if !matcher.Matches(string(metric[model.LabelName(matcher.Name)])) {
+	// 				continue outer
+	// 			}
+	// 		}
 
-		orgID, err := user.ExtractOrgID(ctx)
-		if err != nil {
-			return nil, err
-		}
-		newIterator, err := NewLazySeriesIterator(c, metric, from, through, orgID)
-		if err != nil {
-			return nil, err
-		}
+	// 		orgID, err := user.ExtractOrgID(ctx)
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
+	// 		newIterator, err := NewLazySeriesIterator(c, metric, from, through, orgID)
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
 
-		lazyIterators = append(lazyIterators, newIterator)
-	}
-	return lazyIterators, nil
+	// 		lazyIterators = append(lazyIterators, newIterator)
+	// 	}
+	// 	return lazyIterators, nil
+	// TODO(prom2): implement.
+	return nil, nil
 }
 
 func (c *Store) lookupChunksByMetricName(ctx context.Context, from, through model.Time, matchers []*labels.Matcher, metricName string) ([]Chunk, error) {

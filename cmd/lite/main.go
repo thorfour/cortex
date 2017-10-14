@@ -123,7 +123,7 @@ func main() {
 	engine := promql.NewEngine(queryable, nil)
 	api := v1.NewAPI(
 		engine,
-		querier.DummyStorage{Queryable: queryable},
+		queryable,
 		querier.DummyTargetRetriever{},
 		querier.DummyAlertmanagerRetriever{},
 		func() config.Config { return config.Config{} },

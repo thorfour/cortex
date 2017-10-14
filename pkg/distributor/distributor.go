@@ -26,7 +26,6 @@ import (
 	"github.com/weaveworks/common/user"
 	"github.com/weaveworks/cortex/pkg/ingester/client"
 	ingester_client "github.com/weaveworks/cortex/pkg/ingester/client"
-	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
 	"github.com/weaveworks/cortex/pkg/ring"
 	"github.com/weaveworks/cortex/pkg/util"
 )
@@ -432,21 +431,7 @@ func (d *Distributor) sendSamplesErr(ctx context.Context, ingester *ring.Ingeste
 }
 
 // Query implements Querier.
-func (d *Distributor) Query(ctx context.Context, from, to model.Time, matchers ...*labels.Matcher) ([]local.SeriesIterator, error) {
-	matrix, err := d.matrixQuery(ctx, from, to, matchers...)
-	if err != nil {
-		return nil, err
-	}
-
-	iterators := make([]local.SeriesIterator, 0, len(matrix))
-	for _, ss := range matrix {
-		iterators = append(iterators, util.NewSampleStreamIterator(ss))
-	}
-
-	return iterators, err
-}
-
-func (d *Distributor) matrixQuery(ctx context.Context, from, to model.Time, matchers ...*labels.Matcher) (model.Matrix, error) {
+func (d *Distributor) Query(ctx context.Context, from, to model.Time, matchers ...*labels.Matcher) (model.Matrix, error) {
 	var matrix model.Matrix
 	err := instrument.TimeRequestHistogram(ctx, "Distributor.Query", d.queryDuration, func(ctx old_ctx.Context) error {
 		userID, err := user.ExtractOrgID(ctx)
@@ -615,7 +600,7 @@ func (d *Distributor) LabelValuesForLabelName(ctx context.Context, labelName mod
 }
 
 // MetricsForLabelMatchers gets the metrics that match said matchers
-func (d *Distributor) MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matchers ...[]*labels.Matcher) ([]metric.Metric, error) {
+func (d *Distributor) MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matchers ...*labels.Matcher) ([]metric.Metric, error) {
 	req, err := util.ToMetricsForLabelMatchersRequest(from, through, matchers)
 	if err != nil {
 		return nil, err
