@@ -13,13 +13,11 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/weaveworks/cortex/pkg/prom1/storage/local"
 	"github.com/weaveworks/cortex/pkg/prom1/storage/local/chunk"
 	"golang.org/x/net/context"
 
 	"github.com/weaveworks/common/test"
 	"github.com/weaveworks/common/user"
-	"github.com/weaveworks/cortex/pkg/util"
 )
 
 // newTestStore creates a new Store for testing.
@@ -35,32 +33,33 @@ func newTestChunkStore(t *testing.T, cfg StoreConfig) *Store {
 	return store
 }
 
-func createSampleStreamIteratorFrom(chunk Chunk) (local.SeriesIterator, error) {
+func createSampleStreamFrom(chunk Chunk) (*model.SampleStream, error) {
 	samples, err := chunk.Samples()
 	if err != nil {
 		return nil, err
 	}
-	return util.NewSampleStreamIterator(&model.SampleStream{
+	return &model.SampleStream{
 		Metric: chunk.Metric,
 		Values: samples,
-	}), nil
+	}, nil
 }
 
 // Allow sorting of local.SeriesIterator by fingerprint (for comparisation tests)
-type ByFingerprint []local.SeriesIterator
+type ByFingerprint model.Matrix
 
-func (s ByFingerprint) Len() int {
-	return len(s)
+func (bfp ByFingerprint) Len() int {
+	return len(bfp)
 }
-func (s ByFingerprint) Swap(i, j int) {
-	s[i], s[j] = s[j], s[i]
+func (bfp ByFingerprint) Swap(i, j int) {
+	bfp[i], bfp[j] = bfp[j], bfp[i]
 }
-func (s ByFingerprint) Less(i, j int) bool {
-	return s[i].Metric().Metric.Fingerprint() < s[j].Metric().Metric.Fingerprint()
+func (bfp ByFingerprint) Less(i, j int) bool {
+	return bfp[i].Metric.Fingerprint() < bfp[j].Metric.Fingerprint()
 }
 
-// TestChunkStore_Get tests iterators are returned correctly depending on the type of query
-func TestChunkStore_Get_concrete(t *testing.T) {
+// TODO(prom2): reintroduce tests that were part of TestChunkStore_Get_lazy
+// TestChunkStore_Get tests results are returned correctly depending on the type of query
+func TestChunkStore_Get(t *testing.T) {
 	ctx := user.InjectOrgID(context.Background(), userID)
 	now := model.Now()
 
@@ -80,9 +79,9 @@ func TestChunkStore_Get_concrete(t *testing.T) {
 	foo1Chunk1 := dummyChunkFor(foo1Metric1)
 	foo1Chunk2 := dummyChunkFor(foo1Metric2)
 
-	foo1Iterator1, err := createSampleStreamIteratorFrom(foo1Chunk1)
+	foo1SampleStream1, err := createSampleStreamFrom(foo1Chunk1)
 	require.NoError(t, err)
-	foo1Iterator2, err := createSampleStreamIteratorFrom(foo1Chunk2)
+	foo1SampleStream2, err := createSampleStreamFrom(foo1Chunk2)
 	require.NoError(t, err)
 
 	schemas := []struct {
@@ -103,52 +102,52 @@ func TestChunkStore_Get_concrete(t *testing.T) {
 
 	for _, tc := range []struct {
 		query    string
-		expect   []local.SeriesIterator
+		expect   model.Matrix
 		matchers []*labels.Matcher
 	}{
 		{
 			`foo1`,
-			[]local.SeriesIterator{foo1Iterator1, foo1Iterator2},
+			model.Matrix{foo1SampleStream1, foo1SampleStream2},
 			[]*labels.Matcher{nameMatcher},
 		},
 		{
 			`foo1{flip=""}`,
-			[]local.SeriesIterator{foo1Iterator2},
+			model.Matrix{foo1SampleStream2},
 			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchEqual, "flip", "")},
 		},
 		{
 			`foo1{bar="baz"}`,
-			[]local.SeriesIterator{foo1Iterator1},
+			model.Matrix{foo1SampleStream1},
 			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchEqual, "bar", "baz")},
 		},
 		{
 			`foo1{bar="beep"}`,
-			[]local.SeriesIterator{foo1Iterator2},
+			model.Matrix{foo1SampleStream2},
 			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchEqual, "bar", "beep")},
 		},
 		{
 			`foo1{toms="code"}`,
-			[]local.SeriesIterator{foo1Iterator1, foo1Iterator2},
+			model.Matrix{foo1SampleStream1, foo1SampleStream2},
 			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchEqual, "toms", "code")},
 		},
 		{
 			`foo1{bar!="baz"}`,
-			[]local.SeriesIterator{foo1Iterator2},
+			model.Matrix{foo1SampleStream2},
 			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchNotEqual, "bar", "baz")},
 		},
 		{
 			`foo1{bar=~"beep|baz"}`,
-			[]local.SeriesIterator{foo1Iterator1, foo1Iterator2},
+			model.Matrix{foo1SampleStream1, foo1SampleStream2},
 			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchRegexp, "bar", "beep|baz")},
 		},
 		{
 			`foo1{toms="code", bar=~"beep|baz"}`,
-			[]local.SeriesIterator{foo1Iterator1, foo1Iterator2},
+			model.Matrix{foo1SampleStream1, foo1SampleStream2},
 			[]*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchEqual, "toms", "code"), mustNewLabelMatcher(labels.MatchRegexp, "bar", "beep|baz")},
 		},
 		{
 			`foo1{toms="code", bar="baz"}`,
-			[]local.SeriesIterator{foo1Iterator1}, []*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchEqual, "toms", "code"), mustNewLabelMatcher(labels.MatchEqual, "bar", "baz")},
+			model.Matrix{foo1SampleStream1}, []*labels.Matcher{nameMatcher, mustNewLabelMatcher(labels.MatchEqual, "toms", "code"), mustNewLabelMatcher(labels.MatchEqual, "bar", "baz")},
 		},
 	} {
 		for _, schema := range schemas {
@@ -189,144 +188,6 @@ func TestChunkStore_Get_concrete(t *testing.T) {
 				if len(iterators3) != 0 {
 					t.Fatalf("%s: future query should yield empty resultset ... actually got %v chunks: %#v",
 						tc.query, len(iterators3), iterators3)
-				}
-			})
-		}
-	}
-}
-
-// TestChunkStore_Get tests iterators are returned correctly depending on the type of query
-func TestChunkStore_Get_lazy(t *testing.T) {
-	ctx := user.InjectOrgID(context.Background(), userID)
-	now := model.Now()
-	from := now.Add(-time.Hour)
-
-	foo1Metric1 := model.Metric{
-		model.MetricNameLabel: "foo1",
-		"bar":  "baz",
-		"flip": "flop",
-		"toms": "code",
-	}
-	foo1Metric2 := model.Metric{
-		model.MetricNameLabel: "foo1",
-		"bar":  "beep",
-		"toms": "code",
-	}
-	foo2Metric := model.Metric{
-		model.MetricNameLabel: "foo2",
-		"bar":  "beep",
-		"toms": "code",
-	}
-	foo3Metric := model.Metric{
-		model.MetricNameLabel: "foo3",
-		"bar":  "beep",
-		"toms": "code",
-	}
-
-	foo1Chunk1 := dummyChunkFor(foo1Metric1)
-	foo1Chunk2 := dummyChunkFor(foo1Metric2)
-	foo2Chunk := dummyChunkFor(foo2Metric)
-	foo3Chunk := dummyChunkFor(foo3Metric)
-
-	schemas := []struct {
-		name string
-		fn   func(cfg SchemaConfig) Schema
-	}{
-		{"v8 schema", v8Schema},
-	}
-
-	regexMatcher := mustNewLabelMatcher(labels.MatchRegexp, "bar", "beep|baz")
-
-	for _, tc := range []struct {
-		query                   string
-		matchers                []*labels.Matcher
-		expectedIteratorMetrics []model.Metric
-	}{
-		// When name matcher is used without Equal, start matching all metric names
-		// however still filter out metric names which do not match query
-		{
-			`{__name__!="foo1"}`,
-			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchNotEqual, model.MetricNameLabel, "foo1")},
-			[]model.Metric{foo3Metric, foo2Metric},
-		},
-		{
-			`{__name__=~"foo1|foo2"}`,
-			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchRegexp, model.MetricNameLabel, "foo1|foo2")},
-			[]model.Metric{foo1Metric1, foo2Metric, foo1Metric2},
-		},
-		// No metric names
-		{
-			`{bar="baz"}`,
-			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "bar", "baz")},
-			[]model.Metric{foo1Metric1},
-		},
-		{
-			`{bar="beep"}`,
-			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "bar", "beep")},
-			[]model.Metric{foo3Metric, foo2Metric, foo1Metric2}, // doesn't match foo1 metric 1
-		},
-		{
-			`{flip=""}`,
-			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "flip", "")},
-			[]model.Metric{foo3Metric, foo2Metric, foo1Metric2}, // doesn't match foo1 chunk1 as it has a flip value
-		},
-		{
-			`{bar!="beep"}`,
-			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchNotEqual, "bar", "beep")},
-			[]model.Metric{foo1Metric1},
-		},
-		{
-			`{bar=~"beep|baz"}`,
-			[]*labels.Matcher{regexMatcher},
-			[]model.Metric{foo3Metric, foo1Metric1, foo2Metric, foo1Metric2},
-		},
-		{
-			`{toms="code", bar=~"beep|baz"}`,
-			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "toms", "code"), regexMatcher},
-			[]model.Metric{foo3Metric, foo1Metric1, foo2Metric, foo1Metric2},
-		},
-		{
-			`{toms="code", bar="baz"}`,
-			[]*labels.Matcher{mustNewLabelMatcher(labels.MatchEqual, "toms", "code"), mustNewLabelMatcher(labels.MatchEqual, "bar", "baz")},
-			[]model.Metric{foo1Metric1},
-		},
-	} {
-		for _, schema := range schemas {
-			// Create store for schema
-			store := newTestChunkStore(t, StoreConfig{
-				schemaFactory: schema.fn,
-			})
-
-			// Run test cases for this schema, checking lazy series iterators
-			t.Run(fmt.Sprintf("%s / %s", tc.query, schema.name), func(t *testing.T) {
-				log.Infoln("========= Running query", tc.query, "with schema", schema.name)
-
-				// Add chunks to store
-				if err := store.Put(ctx, []Chunk{
-					foo1Chunk1,
-					foo1Chunk2,
-					foo2Chunk,
-					foo3Chunk,
-				}); err != nil {
-					t.Fatal(err)
-				}
-
-				// Get iterators from store given the matchers
-				iterators, err := store.Get(ctx, from, now, tc.matchers...)
-				require.NoError(t, err)
-
-				// Create expected iterators with current schema store
-				var expectedIterators []local.SeriesIterator
-				for _, expectedMetric := range tc.expectedIteratorMetrics {
-					newIterator, err := NewLazySeriesIterator(store, expectedMetric, from, now, userID)
-					require.NoError(t, err)
-					expectedIterators = append(expectedIterators, newIterator)
-				}
-
-				// Check iterators are correct
-				sort.Sort(ByFingerprint(iterators))
-				if !reflect.DeepEqual(expectedIterators, iterators) {
-					t.Fatalf("%s: wrong iterators - %s", tc.query, test.Diff(expectedIterators, iterators))
 				}
 			})
 		}

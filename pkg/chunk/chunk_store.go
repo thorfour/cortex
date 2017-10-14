@@ -170,14 +170,14 @@ func (c *Store) Get(ctx context.Context, from, through model.Time, allMatchers .
 	// Fetch metric name chunks if the matcher is of type equal,
 	metricNameMatcher, matchers, ok := util.ExtractMetricNameMatcherFromMatchers(allMatchers)
 	if ok && metricNameMatcher.Type == labels.MatchEqual {
-		return c.getMetricNameIterators(ctx, from, through, matchers, metricNameMatcher.Value)
+		return c.getMetricNameMatrix(ctx, from, through, matchers, metricNameMatcher.Value)
 	}
 
 	// Otherwise we will create lazy iterators for all series in our index
-	return c.getSeriesIterators(ctx, from, through, matchers, metricNameMatcher)
+	return c.getSeriesMatrix(ctx, from, through, matchers, metricNameMatcher)
 }
 
-func (c *Store) getMetricNameIterators(ctx context.Context, from, through model.Time, allMatchers []*labels.Matcher, metricName string) (model.Matrix, error) {
+func (c *Store) getMetricNameMatrix(ctx context.Context, from, through model.Time, allMatchers []*labels.Matcher, metricName string) (model.Matrix, error) {
 	chunks, err := c.getMetricNameChunks(ctx, from, through, allMatchers, metricName)
 	if err != nil {
 		return nil, err
@@ -237,55 +237,71 @@ outer:
 	return filteredChunks, nil
 }
 
-func (c *Store) getSeriesIterators(ctx context.Context, from, through model.Time, allMatchers []*labels.Matcher, metricNameMatcher *labels.Matcher) (model.Matrix, error) {
-	// 	// Get all series from the index
-	// 	userID, err := user.ExtractOrgID(ctx)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	seriesQueries, err := c.schema.GetReadQueries(from, through, userID)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	seriesEntries, err := c.lookupEntriesByQueries(ctx, seriesQueries)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
+type byMatcherLabel []*labels.Matcher
 
-	// 	lazyIterators := make([]local.SeriesIterator, 0, len(seriesEntries))
-	// outer:
-	// 	for _, seriesEntry := range seriesEntries {
-	// 		metric, err := parseSeriesRangeValue(seriesEntry.RangeValue, seriesEntry.Value)
-	// 		if err != nil {
-	// 			return nil, err
-	// 		}
+func (lms byMatcherLabel) Len() int           { return len(lms) }
+func (lms byMatcherLabel) Swap(i, j int)      { lms[i], lms[j] = lms[j], lms[i] }
+func (lms byMatcherLabel) Less(i, j int) bool { return lms[i].Name < lms[j].Name }
 
-	// 		// Apply metric name matcher
-	// 		if metricNameMatcher != nil && !metricNameMatcher.Matches(string(metric[model.LabelName(metricNameMatcher.Name)])) {
-	// 			continue outer
-	// 		}
+func (c *Store) getSeriesMatrix(ctx context.Context, from, through model.Time, allMatchers []*labels.Matcher, metricNameMatcher *labels.Matcher) (model.Matrix, error) {
+	// Get all series from the index
+	userID, err := user.ExtractOrgID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	seriesQueries, err := c.schema.GetReadQueries(from, through, userID)
+	if err != nil {
+		return nil, err
+	}
+	seriesEntries, err := c.lookupEntriesByQueries(ctx, seriesQueries)
+	if err != nil {
+		return nil, err
+	}
 
-	// 		// Apply matchers
-	// 		for _, matcher := range allMatchers {
-	// 			if !matcher.Matches(string(metric[model.LabelName(matcher.Name)])) {
-	// 				continue outer
-	// 			}
-	// 		}
+	matrix := make(model.Matrix, 0, len(seriesEntries))
+outer:
+	for _, seriesEntry := range seriesEntries {
+		metric, err := parseSeriesRangeValue(seriesEntry.RangeValue, seriesEntry.Value)
+		if err != nil {
+			return nil, err
+		}
 
-	// 		orgID, err := user.ExtractOrgID(ctx)
-	// 		if err != nil {
-	// 			return nil, err
-	// 		}
-	// 		newIterator, err := NewLazySeriesIterator(c, metric, from, through, orgID)
-	// 		if err != nil {
-	// 			return nil, err
-	// 		}
+		// Apply metric name matcher
+		if metricNameMatcher != nil && !metricNameMatcher.Matches(string(metric[model.LabelName(metricNameMatcher.Name)])) {
+			continue outer
+		}
 
-	// 		lazyIterators = append(lazyIterators, newIterator)
-	// 	}
-	// 	return lazyIterators, nil
-	// TODO(prom2): implement.
-	return nil, nil
+		// Apply matchers
+		for _, matcher := range allMatchers {
+			if !matcher.Matches(string(metric[model.LabelName(matcher.Name)])) {
+				continue outer
+			}
+		}
+
+		// TODO(prom2): Does this contraption over-match?
+		var matchers []*labels.Matcher
+		for labelName, labelValue := range metric {
+			if labelName == "__name__" {
+				continue
+			}
+
+			matcher, err := labels.NewMatcher(labels.MatchEqual, string(labelName), string(labelValue))
+			if err != nil {
+				return nil, err
+			}
+			matchers = append(matchers, matcher)
+		}
+		// TODO(prom2): why is sorting needed?
+		sort.Sort(byMatcherLabel(matchers))
+
+		m, err := c.getMetricNameMatrix(ctx, from, through, matchers, metricNameMatcher.Name)
+		if err != nil {
+			return nil, err
+		}
+
+		matrix = append(matrix, m...)
+	}
+	return matrix, nil
 }
 
 func (c *Store) lookupChunksByMetricName(ctx context.Context, from, through model.Time, matchers []*labels.Matcher, metricName string) ([]Chunk, error) {
