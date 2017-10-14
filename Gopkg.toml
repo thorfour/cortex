@@ -8,7 +8,7 @@
 
 [[constraint]]
   name = "github.com/prometheus/prometheus"
-  branch = "readd-contexts"
+  branch = "master"
 
 [[constraint]]
   name = "github.com/weaveworks/common"
