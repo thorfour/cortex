@@ -410,6 +410,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/mwitkow/go-conntrack"
+  packages = ["."]
+  revision = "cc309e4a22231782e8893f3c35ced0967807a33e"
+
+[[projects]]
+  branch = "master"
   name = "github.com/mwitkow/go-grpc-middleware"
   packages = ["."]
   revision = "164c5fae744b141cd3e4a182b40d66fd4655c822"
@@ -503,10 +509,10 @@
   revision = "6ac8c5d890d415025dd5aae7595bcb2a6e7e2fad"
 
 [[projects]]
-  branch = "readd-contexts"
+  branch = "master"
   name = "github.com/prometheus/prometheus"
   packages = ["config","discovery","discovery/azure","discovery/consul","discovery/dns","discovery/ec2","discovery/file","discovery/gce","discovery/kubernetes","discovery/marathon","discovery/openstack","discovery/triton","discovery/zookeeper","notifier","pkg/labels","pkg/pool","pkg/relabel","pkg/rulefmt","pkg/textparse","pkg/timestamp","pkg/value","promql","retrieval","rules","storage","storage/tsdb","template","util/flock","util/httputil","util/stats","util/strutil","util/testutil","util/treecache","web/api/v1"]
-  revision = "82a5ab8ad3314ebfc0ec067ed989d33343853f36"
+  revision = "e948721a0b269707a6e89e0c513eb434a7b66c8a"
 
 [[projects]]
   branch = "master"
@@ -700,6 +706,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "be0d149850169a92a9f5921c705cc074919b3eb6728a6efe110079ec18bddebe"
+  inputs-digest = "848c7d8a493a4aadc24a1cbab37ad65ed5ba4f19b8f5d77196a6a48dc0ca1235"
   solver-name = "gps-cdcl"
   solver-version = 1

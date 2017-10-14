@@ -15,7 +15,7 @@ package promql
 
 import (
 	"container/heap"
-	native_context "context"
+	"context"
 	"fmt"
 	"math"
 	"runtime"
@@ -32,7 +32,6 @@ import (
 	"github.com/prometheus/prometheus/pkg/timestamp"
 	"github.com/prometheus/prometheus/pkg/value"
 	"github.com/prometheus/prometheus/storage"
-	"golang.org/x/net/context"
 
 	"github.com/prometheus/prometheus/util/stats"
 )
@@ -213,7 +212,7 @@ type Engine struct {
 
 // Queryable allows opening a storage querier.
 type Queryable interface {
-	Querier(ctx native_context.Context, mint, maxt int64) (storage.Querier, error)
+	Querier(ctx context.Context, mint, maxt int64) (storage.Querier, error)
 }
 
 // NewEngine returns a new engine.
@@ -680,7 +679,7 @@ func (ev *evaluator) eval(expr Expr) Value {
 	switch e := expr.(type) {
 	case *AggregateExpr:
 		Vector := ev.evalVector(e.Expr)
-		return ev.aggregation(e.Op, e.Grouping, e.Without, e.KeepCommonLabels, e.Param, Vector)
+		return ev.aggregation(e.Op, e.Grouping, e.Without, e.Param, Vector)
 
 	case *BinaryExpr:
 		lhs := ev.evalOneOf(e.LHS, ValueTypeScalar, ValueTypeVector)
@@ -779,20 +778,6 @@ func (ev *evaluator) vectorSelector(node *VectorSelector) Vector {
 		}
 		if value.IsStaleNaN(v) {
 			continue
-		}
-		// Find timestamp before this point, within the staleness delta.
-		prevT, _, ok := it.PeekBack(peek)
-		if ok && prevT >= refTime-durationMilliseconds(LookbackDelta) {
-			interval := t - prevT
-			if interval*4+interval/10 < refTime-t {
-				// It is more than 4 (+10% for safety) intervals
-				// since the last data point, skip as stale.
-				//
-				// We need 4 to allow for federation, as with a 10s einterval an eval
-				// started at t=10 could be ingested at t=20, scraped for federation at
-				// t=30 and only ingested by federation at t=40.
-				continue
-			}
 		}
 
 		vec = append(vec, Sample{
@@ -1249,7 +1234,7 @@ type groupedAggregation struct {
 }
 
 // aggregation evaluates an aggregation operation on a Vector.
-func (ev *evaluator) aggregation(op itemType, grouping []string, without bool, keepCommon bool, param Expr, vec Vector) Vector {
+func (ev *evaluator) aggregation(op itemType, grouping []string, without bool, param Expr, vec Vector) Vector {
 
 	result := map[uint64]*groupedAggregation{}
 	var k int64
@@ -1297,9 +1282,7 @@ func (ev *evaluator) aggregation(op itemType, grouping []string, without bool, k
 		if !ok {
 			var m labels.Labels
 
-			if keepCommon {
-				m = lb.Del(labels.MetricName).Labels()
-			} else if without {
+			if without {
 				m = metric
 			} else {
 				m = make(labels.Labels, 0, len(grouping))
@@ -1333,10 +1316,6 @@ func (ev *evaluator) aggregation(op itemType, grouping []string, without bool, k
 				})
 			}
 			continue
-		}
-		// Add the sample to the existing group.
-		if keepCommon {
-			group.labels = intersection(group.labels, s.Metric)
 		}
 
 		switch op {

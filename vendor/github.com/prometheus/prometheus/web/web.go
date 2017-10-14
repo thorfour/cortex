@@ -51,6 +51,7 @@ import (
 	"golang.org/x/net/context"
 	"golang.org/x/net/netutil"
 
+	"github.com/mwitkow/go-conntrack"
 	"github.com/prometheus/prometheus/config"
 	"github.com/prometheus/prometheus/notifier"
 	"github.com/prometheus/prometheus/pkg/labels"
@@ -186,6 +187,7 @@ func New(logger log.Logger, o *Options) *Handler {
 			defer h.mtx.RUnlock()
 			return *h.config
 		},
+		h.testReady,
 	)
 
 	if o.RoutePrefix != "/" {
@@ -284,6 +286,11 @@ func serveDebug(w http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
 	subpath := route.Param(ctx, "subpath")
 
+	if subpath == "/pprof" {
+		http.Redirect(w, req, req.URL.Path+"/", http.StatusMovedPermanently)
+		return
+	}
+
 	if !strings.HasPrefix(subpath, "/pprof/") {
 		http.NotFound(w, req)
 		return
@@ -300,6 +307,7 @@ func serveDebug(w http.ResponseWriter, req *http.Request) {
 	case "trace":
 		pprof.Trace(w, req)
 	default:
+		req.URL.Path = "/debug/pprof/" + subpath
 		pprof.Index(w, req)
 	}
 }
@@ -352,6 +360,11 @@ func (h *Handler) testReady(f http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+// Checks if server is ready, calls f if it is, returns 503 if it is not.
+func (h *Handler) testReadyHandler(f http.Handler) http.HandlerFunc {
+	return h.testReady(f.ServeHTTP)
+}
+
 // Quit returns the receive-only quit channel.
 func (h *Handler) Quit() <-chan struct{} {
 	return h.quitCh
@@ -366,14 +379,19 @@ func (h *Handler) Reload() <-chan chan error {
 func (h *Handler) Run(ctx context.Context) error {
 	level.Info(h.logger).Log("msg", "Start listening for connections", "address", h.options.ListenAddress)
 
-	l, err := net.Listen("tcp", h.options.ListenAddress)
+	listener, err := net.Listen("tcp", h.options.ListenAddress)
 	if err != nil {
 		return err
 	}
-	l = netutil.LimitListener(l, h.options.MaxConnections)
+	listener = netutil.LimitListener(listener, h.options.MaxConnections)
+
+	// Monitor incoming connections with conntrack.
+	listener = conntrack.NewListener(listener,
+		conntrack.TrackWithName("http"),
+		conntrack.TrackWithTracing())
 
 	var (
-		m       = cmux.New(l)
+		m       = cmux.New(listener)
 		grpcl   = m.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
 		httpl   = m.Match(cmux.HTTP1Fast())
 		grpcSrv = grpc.NewServer()
@@ -398,6 +416,8 @@ func (h *Handler) Run(ctx context.Context) error {
 		return err
 	}
 
+	hhFunc := h.testReadyHandler(hh)
+
 	operationName := nethttp.OperationNameFunc(func(r *http.Request) string {
 		return fmt.Sprintf("%s %s", r.Method, r.URL.Path)
 	})
@@ -414,10 +434,10 @@ func (h *Handler) Run(ctx context.Context) error {
 
 	mux.Handle(apiPath+"/v1/", http.StripPrefix(apiPath+"/v1", av1))
 
-	mux.Handle(apiPath, http.StripPrefix(apiPath,
+	mux.Handle(apiPath+"/", http.StripPrefix(apiPath,
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			setCORS(w)
-			hh.ServeHTTP(w, r)
+			hhFunc(w, r)
 		}),
 	))
 

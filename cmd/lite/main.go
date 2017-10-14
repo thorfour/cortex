@@ -127,6 +127,7 @@ func main() {
 		querier.DummyTargetRetriever{},
 		querier.DummyAlertmanagerRetriever{},
 		func() config.Config { return config.Config{} },
+		func(f http.HandlerFunc) http.HandlerFunc { return f },
 	)
 	promRouter := route.New(func(r *http.Request) (context.Context, error) {
 		return r.Context(), nil

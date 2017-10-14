@@ -17,6 +17,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"net/http"
 	_ "net/http/pprof" // Comment this line to disable pprof endpoint.
 	"net/url"
 	"os"
@@ -27,7 +28,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/asaskevich/govalidator"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"github.com/pkg/errors"
@@ -38,6 +38,7 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 	k8s_runtime "k8s.io/apimachinery/pkg/util/runtime"
 
+	"github.com/mwitkow/go-conntrack"
 	"github.com/prometheus/common/promlog"
 	promlogflag "github.com/prometheus/common/promlog/flag"
 	"github.com/prometheus/prometheus/config"
@@ -174,6 +175,7 @@ func main() {
 
 	_, err := a.Parse(os.Args[1:])
 	if err != nil {
+		fmt.Fprintln(os.Stderr, errors.Wrapf(err, "Error parsing commandline arguments"))
 		a.Usage(os.Args[1:])
 		os.Exit(2)
 	}
@@ -267,6 +269,11 @@ func main() {
 	}
 
 	webHandler := web.New(log.With(logger, "component", "web"), &cfg.web)
+
+	// Monitor outgoing connections on default transport with conntrack.
+	http.DefaultTransport.(*http.Transport).DialContext = conntrack.NewDialContextFunc(
+		conntrack.DialWithTracing(),
+	)
 
 	reloadables := []Reloadable{
 		remoteStorage,
@@ -363,7 +370,7 @@ func main() {
 	webHandler.Ready()
 	level.Info(logger).Log("msg", "Server is ready to receive requests.")
 
-	term := make(chan os.Signal)
+	term := make(chan os.Signal, 1)
 	signal.Notify(term, os.Interrupt, syscall.SIGTERM)
 	select {
 	case <-term:
@@ -413,6 +420,11 @@ func reloadConfig(filename string, logger log.Logger, rls ...Reloadable) (err er
 	return nil
 }
 
+func startsOrEndsWithQuote(s string) bool {
+	return strings.HasPrefix(s, "\"") || strings.HasPrefix(s, "'") ||
+		strings.HasSuffix(s, "\"") || strings.HasSuffix(s, "'")
+}
+
 // computeExternalURL computes a sanitized external URL from a raw input. It infers unset
 // URL parts from the OS and the given listen address.
 func computeExternalURL(u, listenAddr string) (*url.URL, error) {
@@ -428,8 +440,8 @@ func computeExternalURL(u, listenAddr string) (*url.URL, error) {
 		u = fmt.Sprintf("http://%s:%s/", hostname, port)
 	}
 
-	if ok := govalidator.IsURL(u); !ok {
-		return nil, fmt.Errorf("invalid external URL %q", u)
+	if startsOrEndsWithQuote(u) {
+		return nil, fmt.Errorf("URL must not begin or end with quotes")
 	}
 
 	eu, err := url.Parse(u)

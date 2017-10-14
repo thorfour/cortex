@@ -15,12 +15,19 @@ package web
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
+	"os"
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/prometheus/prometheus/storage/tsdb"
+	"github.com/prometheus/prometheus/util/testutil"
+	libtsdb "github.com/prometheus/tsdb"
 )
 
 func TestGlobalURL(t *testing.T) {
@@ -59,22 +66,29 @@ func TestGlobalURL(t *testing.T) {
 		},
 	}
 
-	for i, test := range tests {
+	for _, test := range tests {
 		inURL, err := url.Parse(test.inURL)
-		if err != nil {
-			t.Fatalf("%d. Error parsing input URL: %s", i, err)
-		}
+
+		testutil.Ok(t, err)
+
 		globalURL := tmplFuncs("", opts)["globalURL"].(func(u *url.URL) *url.URL)
 		outURL := globalURL(inURL)
 
-		if outURL.String() != test.outURL {
-			t.Fatalf("%d. got %s, want %s", i, outURL.String(), test.outURL)
-		}
+		testutil.Equals(t, test.outURL, outURL.String())
 	}
 }
 
 func TestReadyAndHealthy(t *testing.T) {
 	t.Parallel()
+	dbDir, err := ioutil.TempDir("", "tsdb-ready")
+
+	testutil.Ok(t, err)
+
+	defer os.RemoveAll(dbDir)
+	db, err := libtsdb.Open(dbDir, nil, nil, nil)
+
+	testutil.Ok(t, err)
+
 	opts := &Options{
 		ListenAddress:  ":9090",
 		ReadTimeout:    30 * time.Second,
@@ -87,6 +101,8 @@ func TestReadyAndHealthy(t *testing.T) {
 		Notifier:       nil,
 		RoutePrefix:    "/",
 		MetricsPath:    "/metrics/",
+		EnableAdminAPI: true,
+		TSDB:           func() *libtsdb.DB { return db },
 	}
 
 	opts.Flags = map[string]string{}
@@ -99,59 +115,71 @@ func TestReadyAndHealthy(t *testing.T) {
 	time.Sleep(5 * time.Second)
 
 	resp, err := http.Get("http://localhost:9090/-/healthy")
-	if err != nil {
-		t.Fatalf("Unexpected HTTP error %s", err)
-	}
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("Path /-/healthy with server unready test, Expected status 200 got: %s", resp.Status)
-	}
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusOK, resp.StatusCode)
 
 	resp, err = http.Get("http://localhost:9090/-/ready")
-	if err != nil {
-		t.Fatalf("Unexpected HTTP error %s", err)
-	}
-	if resp.StatusCode != http.StatusServiceUnavailable {
-		t.Fatalf("Path /-/ready with server unready test, Expected status 503 got: %s", resp.Status)
-	}
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusServiceUnavailable, resp.StatusCode)
 
 	resp, err = http.Get("http://localhost:9090/version")
-	if err != nil {
-		t.Fatalf("Unexpected HTTP error %s", err)
-	}
-	if resp.StatusCode != http.StatusServiceUnavailable {
-		t.Fatalf("Path /version with server unready test, Expected status 503 got: %s", resp.Status)
-	}
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusServiceUnavailable, resp.StatusCode)
+
+	resp, err = http.Post("http://localhost:9090/api/v2/admin/tsdb/snapshot", "", strings.NewReader(""))
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusServiceUnavailable, resp.StatusCode)
+
+	resp, err = http.Post("http://localhost:9090/api/v2/admin/tsdb/delete_series", "", strings.NewReader("{}"))
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusServiceUnavailable, resp.StatusCode)
 
 	// Set to ready.
 	webHandler.Ready()
 
 	resp, err = http.Get("http://localhost:9090/-/healthy")
-	if err != nil {
-		t.Fatalf("Unexpected HTTP error %s", err)
-	}
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("Path /-/healthy with server ready test, Expected status 200 got: %s", resp.Status)
-	}
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusOK, resp.StatusCode)
 
 	resp, err = http.Get("http://localhost:9090/-/ready")
-	if err != nil {
-		t.Fatalf("Unexpected HTTP error %s", err)
-	}
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("Path /-/ready with server ready test, Expected status 200 got: %s", resp.Status)
-	}
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusOK, resp.StatusCode)
 
 	resp, err = http.Get("http://localhost:9090/version")
-	if err != nil {
-		t.Fatalf("Unexpected HTTP error %s", err)
-	}
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("Path /version with server ready test, Expected status 200 got: %s", resp.Status)
-	}
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusOK, resp.StatusCode)
+
+	resp, err = http.Post("http://localhost:9090/api/v2/admin/tsdb/snapshot", "", strings.NewReader(""))
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusOK, resp.StatusCode)
+
+	resp, err = http.Post("http://localhost:9090/api/v2/admin/tsdb/delete_series", "", strings.NewReader("{}"))
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusOK, resp.StatusCode)
 }
 
 func TestRoutePrefix(t *testing.T) {
 	t.Parallel()
+	dbDir, err := ioutil.TempDir("", "tsdb-ready")
+
+	testutil.Ok(t, err)
+
+	defer os.RemoveAll(dbDir)
+
+	db, err := libtsdb.Open(dbDir, nil, nil, nil)
+
+	testutil.Ok(t, err)
+
 	opts := &Options{
 		ListenAddress:  ":9091",
 		ReadTimeout:    30 * time.Second,
@@ -164,6 +192,8 @@ func TestRoutePrefix(t *testing.T) {
 		Notifier:       nil,
 		RoutePrefix:    "/prometheus",
 		MetricsPath:    "/prometheus/metrics",
+		EnableAdminAPI: true,
+		TSDB:           func() *libtsdb.DB { return db },
 	}
 
 	opts.Flags = map[string]string{}
@@ -172,7 +202,7 @@ func TestRoutePrefix(t *testing.T) {
 	go func() {
 		err := webHandler.Run(context.Background())
 		if err != nil {
-			t.Fatalf("Can't start webhandler error %s", err)
+			panic(fmt.Sprintf("Can't start webhandler error %s", err))
 		}
 	}()
 
@@ -181,53 +211,88 @@ func TestRoutePrefix(t *testing.T) {
 	time.Sleep(5 * time.Second)
 
 	resp, err := http.Get("http://localhost:9091" + opts.RoutePrefix + "/-/healthy")
-	if err != nil {
-		t.Fatalf("Unexpected HTTP error %s", err)
-	}
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("Path "+opts.RoutePrefix+"/-/healthy with server unready test, Expected status 200 got: %s", resp.Status)
-	}
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusOK, resp.StatusCode)
 
 	resp, err = http.Get("http://localhost:9091" + opts.RoutePrefix + "/-/ready")
-	if err != nil {
-		t.Fatalf("Unexpected HTTP error %s", err)
-	}
-	if resp.StatusCode != http.StatusServiceUnavailable {
-		t.Fatalf("Path "+opts.RoutePrefix+"/-/ready with server unready test, Expected status 503 got: %s", resp.Status)
-	}
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusServiceUnavailable, resp.StatusCode)
 
 	resp, err = http.Get("http://localhost:9091" + opts.RoutePrefix + "/version")
-	if err != nil {
-		t.Fatalf("Unexpected HTTP error %s", err)
-	}
-	if resp.StatusCode != http.StatusServiceUnavailable {
-		t.Fatalf("Path "+opts.RoutePrefix+"/version with server unready test, Expected status 503 got: %s", resp.Status)
-	}
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusServiceUnavailable, resp.StatusCode)
+
+	resp, err = http.Post("http://localhost:9091"+opts.RoutePrefix+"/api/v2/admin/tsdb/snapshot", "", strings.NewReader(""))
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusServiceUnavailable, resp.StatusCode)
+
+	resp, err = http.Post("http://localhost:9091"+opts.RoutePrefix+"/api/v2/admin/tsdb/delete_series", "", strings.NewReader("{}"))
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusServiceUnavailable, resp.StatusCode)
 
 	// Set to ready.
 	webHandler.Ready()
 
 	resp, err = http.Get("http://localhost:9091" + opts.RoutePrefix + "/-/healthy")
-	if err != nil {
-		t.Fatalf("Unexpected HTTP error %s", err)
-	}
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("Path "+opts.RoutePrefix+"/-/healthy with server ready test, Expected status 200 got: %s", resp.Status)
-	}
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusOK, resp.StatusCode)
 
 	resp, err = http.Get("http://localhost:9091" + opts.RoutePrefix + "/-/ready")
-	if err != nil {
-		t.Fatalf("Unexpected HTTP error %s", err)
-	}
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("Path "+opts.RoutePrefix+"/-/ready with server ready test, Expected status 200 got: %s", resp.Status)
-	}
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusOK, resp.StatusCode)
 
 	resp, err = http.Get("http://localhost:9091" + opts.RoutePrefix + "/version")
-	if err != nil {
-		t.Fatalf("Unexpected HTTP error %s", err)
-	}
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("Path "+opts.RoutePrefix+"/version with server ready test, Expected status 200 got: %s", resp.Status)
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusOK, resp.StatusCode)
+
+	resp, err = http.Post("http://localhost:9091"+opts.RoutePrefix+"/api/v2/admin/tsdb/snapshot", "", strings.NewReader(""))
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusOK, resp.StatusCode)
+
+	resp, err = http.Post("http://localhost:9091"+opts.RoutePrefix+"/api/v2/admin/tsdb/delete_series", "", strings.NewReader("{}"))
+
+	testutil.Ok(t, err)
+	testutil.Equals(t, http.StatusOK, resp.StatusCode)
+}
+
+func TestDebugHandler(t *testing.T) {
+	for _, tc := range []struct {
+		prefix, url string
+		code        int
+	}{
+		{"/", "/debug/pprof/cmdline", 200},
+		{"/foo", "/foo/debug/pprof/cmdline", 200},
+
+		{"/", "/debug/pprof/goroutine", 200},
+		{"/foo", "/foo/debug/pprof/goroutine", 200},
+
+		{"/", "/debug/pprof/foo", 404},
+		{"/foo", "/bar/debug/pprof/goroutine", 404},
+	} {
+		opts := &Options{
+			RoutePrefix: tc.prefix,
+			MetricsPath: "/metrics",
+		}
+		handler := New(nil, opts)
+		handler.Ready()
+
+		w := httptest.NewRecorder()
+
+		req, err := http.NewRequest("GET", tc.url, nil)
+
+		testutil.Ok(t, err)
+
+		handler.router.ServeHTTP(w, req)
+
+		testutil.Equals(t, tc.code, w.Code)
 	}
 }

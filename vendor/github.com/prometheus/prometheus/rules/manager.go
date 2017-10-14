@@ -253,7 +253,7 @@ func (g *Group) copyState(from *Group) {
 	}
 
 	for i, rule := range g.rules {
-		indexes, ok := ruleMap[rule.Name()]
+		indexes, _ := ruleMap[rule.Name()]
 		if len(indexes) == 0 {
 			continue
 		}
@@ -390,7 +390,7 @@ func (g *Group) sendAlerts(rule *AlertingRule) error {
 			StartsAt:     alert.ActiveAt.Add(rule.holdDuration),
 			Labels:       alert.Labels,
 			Annotations:  alert.Annotations,
-			GeneratorURL: g.opts.ExternalURL.String() + strutil.GraphLinkForExpression(rule.vector.String()),
+			GeneratorURL: g.opts.ExternalURL.String() + strutil.TableLinkForExpression(rule.vector.String()),
 		}
 		if !alert.ResolvedAt.IsZero() {
 			a.EndsAt = alert.ResolvedAt
