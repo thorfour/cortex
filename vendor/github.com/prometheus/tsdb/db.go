@@ -30,13 +30,14 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/coreos/etcd/pkg/fileutil"
 	"github.com/go-kit/kit/log"
+	"github.com/go-kit/kit/log/level"
 	"github.com/nightlyone/lockfile"
 	"github.com/oklog/ulid"
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/tsdb/chunks"
+	"github.com/prometheus/tsdb/fileutil"
 	"github.com/prometheus/tsdb/labels"
 )
 
@@ -104,7 +105,7 @@ type DB struct {
 
 	// Mutex for that must be held when modifying the general block layout.
 	mtx    sync.RWMutex
-	blocks []DiskBlock
+	blocks []*Block
 
 	head *Head
 
@@ -203,7 +204,7 @@ func Open(dir string, l log.Logger, r prometheus.Registerer, opts *Options) (db 
 		return nil, errors.Wrap(err, "create leveled compactor")
 	}
 
-	wal, err := OpenSegmentWAL(filepath.Join(dir, "wal"), l, 10*time.Second)
+	wal, err := OpenSegmentWAL(filepath.Join(dir, "wal"), l, opts.WALFlushInterval, r)
 	if err != nil {
 		return nil, err
 	}
@@ -251,12 +252,12 @@ func (db *DB) run() {
 
 			_, err1 := db.retentionCutoff()
 			if err1 != nil {
-				db.logger.Log("msg", "retention cutoff failed", "err", err1)
+				level.Error(db.logger).Log("msg", "retention cutoff failed", "err", err1)
 			}
 
 			_, err2 := db.compact()
 			if err2 != nil {
-				db.logger.Log("msg", "compaction failed", "err", err2)
+				level.Error(db.logger).Log("msg", "compaction failed", "err", err2)
 			}
 
 			if err1 != nil || err2 != nil {
@@ -430,7 +431,7 @@ func retentionCutoff(dir string, mint int64) (bool, error) {
 	return changes, fileutil.Fsync(df)
 }
 
-func (db *DB) getBlock(id ulid.ULID) (DiskBlock, bool) {
+func (db *DB) getBlock(id ulid.ULID) (*Block, bool) {
 	for _, b := range db.blocks {
 		if b.Meta().ULID == id {
 			return b, true
@@ -455,7 +456,7 @@ func (db *DB) reload() (err error) {
 		return errors.Wrap(err, "find blocks")
 	}
 	var (
-		blocks []DiskBlock
+		blocks []*Block
 		exist  = map[ulid.ULID]struct{}{}
 	)
 
@@ -467,7 +468,7 @@ func (db *DB) reload() (err error) {
 
 		b, ok := db.getBlock(meta.ULID)
 		if !ok {
-			b, err = newPersistedBlock(dir, db.chunkPool)
+			b, err = OpenBlock(dir, db.chunkPool)
 			if err != nil {
 				return errors.Wrapf(err, "open block %s", dir)
 			}
@@ -504,7 +505,7 @@ func (db *DB) reload() (err error) {
 	return errors.Wrap(db.head.Truncate(maxt), "head truncate failed")
 }
 
-func validateBlockSequence(bs []DiskBlock) error {
+func validateBlockSequence(bs []*Block) error {
 	if len(bs) == 0 {
 		return nil
 	}
@@ -518,6 +519,23 @@ func validateBlockSequence(bs []DiskBlock) error {
 		}
 	}
 	return nil
+}
+
+func (db *DB) String() string {
+	return "HEAD"
+}
+
+// Blocks returns the databases persisted blocks.
+func (db *DB) Blocks() []*Block {
+	db.mtx.RLock()
+	defer db.mtx.RUnlock()
+
+	return db.blocks
+}
+
+// Head returns the databases's head.
+func (db *DB) Head() *Head {
+	return db.head
 }
 
 // Close the partition.
@@ -551,7 +569,7 @@ func (db *DB) DisableCompactions() {
 	defer db.cmtx.Unlock()
 
 	db.compactionsEnabled = false
-	db.logger.Log("msg", "compactions disabled")
+	level.Info(db.logger).Log("msg", "compactions disabled")
 }
 
 // EnableCompactions enables compactions.
@@ -560,7 +578,7 @@ func (db *DB) EnableCompactions() {
 	defer db.cmtx.Unlock()
 
 	db.compactionsEnabled = true
-	db.logger.Log("msg", "compactions enabled")
+	level.Info(db.logger).Log("msg", "compactions enabled")
 }
 
 // Snapshot writes the current data to the directory.
@@ -575,41 +593,42 @@ func (db *DB) Snapshot(dir string) error {
 	db.cmtx.Lock()
 	defer db.cmtx.Unlock()
 
-	db.mtx.RLock()
-	defer db.mtx.RUnlock()
-
-	for _, b := range db.blocks {
-		db.logger.Log("msg", "snapshotting block", "block", b)
+	for _, b := range db.Blocks() {
+		level.Info(db.logger).Log("msg", "snapshotting block", "block", b)
 
 		if err := b.Snapshot(dir); err != nil {
 			return errors.Wrap(err, "error snapshotting headblock")
 		}
 	}
-
 	return db.compactor.Write(dir, db.head, db.head.MinTime(), db.head.MaxTime())
 }
 
 // Querier returns a new querier over the data partition for the given time range.
 // A goroutine must not handle more than one open Querier.
-func (db *DB) Querier(mint, maxt int64) Querier {
-	db.mtx.RLock()
+func (db *DB) Querier(mint, maxt int64) (Querier, error) {
+	var blocks []BlockReader
 
-	blocks := db.blocksForInterval(mint, maxt)
+	for _, b := range db.Blocks() {
+		m := b.Meta()
+		if intervalOverlap(mint, maxt, m.MinTime, m.MaxTime) {
+			blocks = append(blocks, b)
+		}
+	}
+	if maxt >= db.head.MinTime() {
+		blocks = append(blocks, db.head)
+	}
 
 	sq := &querier{
 		blocks: make([]Querier, 0, len(blocks)),
-		db:     db,
 	}
 	for _, b := range blocks {
-		sq.blocks = append(sq.blocks, &blockQuerier{
-			mint:       mint,
-			maxt:       maxt,
-			index:      b.Index(),
-			chunks:     b.Chunks(),
-			tombstones: b.Tombstones(),
-		})
+		q, err := NewBlockQuerier(b, mint, maxt)
+		if err != nil {
+			return nil, errors.Wrapf(err, "open querier for block %s", b)
+		}
+		sq.blocks = append(sq.blocks, q)
 	}
-	return sq
+	return sq, nil
 }
 
 func rangeForTimestamp(t int64, width int64) (mint, maxt int64) {
@@ -622,28 +641,22 @@ func (db *DB) Delete(mint, maxt int64, ms ...labels.Matcher) error {
 	db.cmtx.Lock()
 	defer db.cmtx.Unlock()
 
-	db.mtx.Lock()
-	defer db.mtx.Unlock()
-
 	var g errgroup.Group
 
-	for _, b := range db.blocks {
+	for _, b := range db.Blocks() {
 		m := b.Meta()
 		if intervalOverlap(mint, maxt, m.MinTime, m.MaxTime) {
-			g.Go(func(b DiskBlock) func() error {
+			g.Go(func(b *Block) func() error {
 				return func() error { return b.Delete(mint, maxt, ms...) }
 			}(b))
 		}
 	}
-
 	g.Go(func() error {
 		return db.head.Delete(mint, maxt, ms...)
 	})
-
 	if err := g.Wait(); err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -654,24 +667,6 @@ func intervalOverlap(amin, amax, bmin, bmax int64) bool {
 
 func intervalContains(min, max, t int64) bool {
 	return t >= min && t <= max
-}
-
-// blocksForInterval returns all blocks within the partition that may contain
-// data for the given time range.
-func (db *DB) blocksForInterval(mint, maxt int64) []BlockReader {
-	var bs []BlockReader
-
-	for _, b := range db.blocks {
-		m := b.Meta()
-		if intervalOverlap(mint, maxt, m.MinTime, m.MaxTime) {
-			bs = append(bs, b)
-		}
-	}
-	if maxt >= db.head.MinTime() {
-		bs = append(bs, db.head)
-	}
-
-	return bs
 }
 
 func isBlockDir(fi os.FileInfo) bool {

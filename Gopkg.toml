@@ -30,9 +30,9 @@
   name = "github.com/Azure/azure-sdk-for-go"
   revision = "bd73d950fa4440dae889bd9917bff7cef539f86e"
 
-[[override]]
-  name = "github.com/prometheus/common"
-  revision = "49fee292b27bfff7f354ee0f64e1bc4850462edf"
+#[[override]]
+#  name = "github.com/prometheus/common"
+#  revision = "49fee292b27bfff7f354ee0f64e1bc4850462edf"
 
 [[override]]
   name = "github.com/weaveworks/mesh"

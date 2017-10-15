@@ -21,9 +21,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/coreos/etcd/pkg/fileutil"
 	"github.com/pkg/errors"
 	"github.com/prometheus/tsdb/chunks"
+	"github.com/prometheus/tsdb/fileutil"
 )
 
 const (
