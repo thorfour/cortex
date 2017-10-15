@@ -14,8 +14,8 @@
 
 [[projects]]
   name = "github.com/Azure/go-autorest"
-  packages = ["autorest","autorest/adal","autorest/azure","autorest/date","autorest/to","autorest/validation"]
-  revision = "f6be1abbb5abd0517522f850dd785990d373da7e"
+  packages = ["autorest","autorest/azure","autorest/date","autorest/to","autorest/validation"]
+  revision = "8a25372bbfec739b8719a9e3987400d15ef9e179"
   version = "v8.4.0"
 
 [[projects]]
@@ -497,10 +497,9 @@
   revision = "e948721a0b269707a6e89e0c513eb434a7b66c8a"
 
 [[projects]]
-  branch = "master"
   name = "github.com/prometheus/tsdb"
   packages = [".","chunks","fileutil","labels"]
-  revision = "7f8fa07cf7ee8ebde7bdb9ed084f7931c7c0e579"
+  revision = "4a7c39d9d8e53151f2137df3b16b7173ce435397"
 
 [[projects]]
   branch = "master"
@@ -706,6 +705,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "359a0a13e3874e490eed99555fd5edcc38b7e77b20ad220f84264de0990d0ba8"
+  inputs-digest = "5e70b31b13f3d0a2c4a26bec3a725b6923a7a01895b6c98ad6fcd1aa43c46495"
   solver-name = "gps-cdcl"
   solver-version = 1

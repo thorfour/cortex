@@ -14,7 +14,6 @@
 package tsdb
 
 import (
-	"io"
 	"math/rand"
 	"os"
 	"path/filepath"
@@ -300,7 +299,7 @@ func (c *LeveledCompactor) Compact(dest string, dirs ...string) (err error) {
 	var metas []*BlockMeta
 
 	for _, d := range dirs {
-		b, err := OpenBlock(d, c.chunkPool)
+		b, err := newPersistedBlock(d, c.chunkPool)
 		if err != nil {
 			return err
 		}
@@ -445,30 +444,10 @@ func (c *LeveledCompactor) populateBlock(blocks []BlockReader, meta *BlockMeta, 
 	var (
 		set        compactionSet
 		allSymbols = make(map[string]struct{}, 1<<16)
-		closers    = []io.Closer{}
 	)
-	defer func() { closeAll(closers...) }()
-
 	for i, b := range blocks {
-		indexr, err := b.Index()
-		if err != nil {
-			return errors.Wrapf(err, "open index reader for block %s", b)
-		}
-		closers = append(closers, indexr)
 
-		chunkr, err := b.Chunks()
-		if err != nil {
-			return errors.Wrapf(err, "open chunk reader for block %s", b)
-		}
-		closers = append(closers, chunkr)
-
-		tombsr, err := b.Tombstones()
-		if err != nil {
-			return errors.Wrapf(err, "open tombstone reader for block %s", b)
-		}
-		closers = append(closers, tombsr)
-
-		symbols, err := indexr.Symbols()
+		symbols, err := b.Index().Symbols()
 		if err != nil {
 			return errors.Wrap(err, "read symbols")
 		}
@@ -476,13 +455,15 @@ func (c *LeveledCompactor) populateBlock(blocks []BlockReader, meta *BlockMeta, 
 			allSymbols[s] = struct{}{}
 		}
 
+		indexr := b.Index()
+
 		all, err := indexr.Postings(allPostingsKey.Name, allPostingsKey.Value)
 		if err != nil {
 			return err
 		}
 		all = indexr.SortedPostings(all)
 
-		s := newCompactionSeriesSet(indexr, chunkr, tombsr, all)
+		s := newCompactionSeriesSet(indexr, b.Chunks(), b.Tombstones(), all)
 
 		if i == 0 {
 			set = s
@@ -584,6 +565,7 @@ func (c *LeveledCompactor) populateBlock(blocks []BlockReader, meta *BlockMeta, 
 			return errors.Wrap(err, "write postings")
 		}
 	}
+
 	return nil
 }
 

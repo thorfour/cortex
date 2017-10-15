@@ -27,16 +27,16 @@ import (
 	"sync"
 	"time"
 
+	"github.com/prometheus/tsdb/fileutil"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"github.com/pkg/errors"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/tsdb/fileutil"
 	"github.com/prometheus/tsdb/labels"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 // WALEntryType indicates what data a WAL entry contains.
-type WALEntryType uint8
+type WALEntryType byte
 
 const (
 	// WALMagic is a 4 byte number every WAL segment file starts with.
@@ -54,9 +54,20 @@ const (
 	WALEntryDeletes WALEntryType = 4
 )
 
+// SamplesCB is the callback after reading samples. The passed slice
+// is only valid until the call returns.
+type SamplesCB func([]RefSample) error
+
+// SeriesCB is the callback after reading series. The passed slice
+// is only valid until the call returns.
+type SeriesCB func([]RefSeries) error
+
+// DeletesCB is the callback after reading deletes. The passed slice
+// is only valid until the call returns.
+type DeletesCB func([]Stone) error
+
 type walMetrics struct {
 	fsyncDuration prometheus.Summary
-	corruptions   prometheus.Counter
 }
 
 func newWalMetrics(wal *SegmentWAL, r prometheus.Registerer) *walMetrics {
@@ -66,15 +77,10 @@ func newWalMetrics(wal *SegmentWAL, r prometheus.Registerer) *walMetrics {
 		Name: "tsdb_wal_fsync_duration_seconds",
 		Help: "Duration of WAL fsync.",
 	})
-	m.corruptions = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "tsdb_wal_corruptions_total",
-		Help: "Total number of WAL corruptions.",
-	})
 
 	if r != nil {
 		r.MustRegister(
 			m.fsyncDuration,
-			m.corruptions,
 		)
 	}
 	return m
@@ -98,27 +104,17 @@ func NopWAL() WAL {
 
 type nopWAL struct{}
 
-func (nopWAL) Read(
-	seriesf func([]RefSeries),
-	samplesf func([]RefSample),
-	deletesf func([]Stone),
-) error {
-	return nil
-}
-func (w nopWAL) Reader() WALReader                     { return w }
-func (nopWAL) LogSeries([]RefSeries) error             { return nil }
-func (nopWAL) LogSamples([]RefSample) error            { return nil }
-func (nopWAL) LogDeletes([]Stone) error                { return nil }
-func (nopWAL) Truncate(int64, func(uint64) bool) error { return nil }
-func (nopWAL) Close() error                            { return nil }
+func (nopWAL) Read(SeriesCB, SamplesCB, DeletesCB) error { return nil }
+func (w nopWAL) Reader() WALReader                       { return w }
+func (nopWAL) LogSeries([]RefSeries) error               { return nil }
+func (nopWAL) LogSamples([]RefSample) error              { return nil }
+func (nopWAL) LogDeletes([]Stone) error                  { return nil }
+func (nopWAL) Truncate(int64, func(uint64) bool) error   { return nil }
+func (nopWAL) Close() error                              { return nil }
 
 // WALReader reads entries from a WAL.
 type WALReader interface {
-	Read(
-		seriesf func([]RefSeries),
-		samplesf func([]RefSample),
-		deletesf func([]Stone),
-	) error
+	Read(SeriesCB, SamplesCB, DeletesCB) error
 }
 
 // RefSeries is the series labels with the series ID.
@@ -174,7 +170,7 @@ func newCRC32() hash.Hash32 {
 
 // SegmentWAL is a write ahead log for series data.
 type SegmentWAL struct {
-	mtx     sync.Mutex
+	mtx sync.Mutex
 	metrics *walMetrics
 
 	dirFile *os.File
@@ -242,20 +238,15 @@ type repairingWALReader struct {
 	r   WALReader
 }
 
-func (r *repairingWALReader) Read(
-	seriesf func([]RefSeries),
-	samplesf func([]RefSample),
-	deletesf func([]Stone),
-) error {
-	err := r.r.Read(seriesf, samplesf, deletesf)
+func (r *repairingWALReader) Read(series SeriesCB, samples SamplesCB, deletes DeletesCB) error {
+	err := r.r.Read(series, samples, deletes)
 	if err == nil {
 		return nil
 	}
-	cerr, ok := errors.Cause(err).(walCorruptionErr)
+	cerr, ok := err.(walCorruptionErr)
 	if !ok {
 		return err
 	}
-	r.wal.metrics.corruptions.Inc()
 	return r.wal.truncate(cerr.err, cerr.file, cerr.lastOffset)
 }
 
@@ -345,7 +336,6 @@ func (w *SegmentWAL) Truncate(mint int64, keep func(uint64) bool) error {
 	var (
 		csf          = newSegmentFile(f)
 		crc32        = newCRC32()
-		decSeries    = []RefSeries{}
 		activeSeries = []RefSeries{}
 	)
 
@@ -355,14 +345,13 @@ func (w *SegmentWAL) Truncate(mint int64, keep func(uint64) bool) error {
 		if rt != WALEntrySeries {
 			continue
 		}
-		decSeries = decSeries[:0]
-		activeSeries = activeSeries[:0]
-
-		err := r.decodeSeries(flag, byt, &decSeries)
+		series, err := r.decodeSeries(flag, byt)
 		if err != nil {
 			return errors.Wrap(err, "decode samples while truncating")
 		}
-		for _, s := range decSeries {
+		activeSeries = activeSeries[:0]
+
+		for _, s := range series {
 			if keep(s.Ref) {
 				activeSeries = append(activeSeries, s)
 			}
@@ -818,6 +807,10 @@ type walReader struct {
 	curBuf     []byte
 	lastOffset int64 // offset after last successfully read entry
 
+	seriesBuf    []RefSeries
+	sampleBuf    []RefSample
+	tombstoneBuf []Stone
+
 	err error
 }
 
@@ -838,118 +831,70 @@ func (r *walReader) Err() error {
 	return r.err
 }
 
-func (r *walReader) Read(
-	seriesf func([]RefSeries),
-	samplesf func([]RefSample),
-	deletesf func([]Stone),
-) error {
-	// Concurrency for replaying the WAL is very limited. We at least split out decoding and
-	// processing into separate threads.
-	// Historically, the processing is the bottleneck with reading and decoding using only
-	// 15% of the CPU.
-	var (
-		seriesPool sync.Pool
-		samplePool sync.Pool
-		deletePool sync.Pool
-	)
-	donec := make(chan struct{})
-	datac := make(chan interface{}, 100)
-
-	go func() {
-		defer close(donec)
-
-		for x := range datac {
-			switch v := x.(type) {
-			case []RefSeries:
-				if seriesf != nil {
-					seriesf(v)
-				}
-				seriesPool.Put(v[:0])
-			case []RefSample:
-				if samplesf != nil {
-					samplesf(v)
-				}
-				samplePool.Put(v[:0])
-			case []Stone:
-				if deletesf != nil {
-					deletesf(v)
-				}
-				deletePool.Put(v[:0])
-			default:
-				level.Error(r.logger).Log("msg", "unexpected data type")
-			}
-		}
-	}()
-
-	var err error
+func (r *walReader) Read(seriesf SeriesCB, samplesf SamplesCB, deletesf DeletesCB) error {
+	if seriesf == nil {
+		seriesf = func([]RefSeries) error { return nil }
+	}
+	if samplesf == nil {
+		samplesf = func([]RefSample) error { return nil }
+	}
+	if deletesf == nil {
+		deletesf = func([]Stone) error { return nil }
+	}
 
 	for r.next() {
 		et, flag, b := r.at()
-
 		// In decoding below we never return a walCorruptionErr for now.
 		// Those should generally be catched by entry decoding before.
 		switch et {
 		case WALEntrySeries:
-			var series []RefSeries
-			if v := seriesPool.Get(); v == nil {
-				series = make([]RefSeries, 0, 512)
-			} else {
-				series = v.([]RefSeries)
-			}
-
-			err := r.decodeSeries(flag, b, &series)
+			series, err := r.decodeSeries(flag, b)
 			if err != nil {
-				err = errors.Wrap(err, "decode series entry")
-				break
+				return errors.Wrap(err, "decode series entry")
 			}
-			datac <- series
+			if err := seriesf(series); err != nil {
+				return err
+			}
 
 			cf := r.current()
+
 			for _, s := range series {
 				if cf.minSeries > s.Ref {
 					cf.minSeries = s.Ref
 				}
 			}
-		case WALEntrySamples:
-			var samples []RefSample
-			if v := samplePool.Get(); v == nil {
-				samples = make([]RefSample, 0, 512)
-			} else {
-				samples = v.([]RefSample)
-			}
 
-			err := r.decodeSamples(flag, b, &samples)
+		case WALEntrySamples:
+			samples, err := r.decodeSamples(flag, b)
 			if err != nil {
-				err = errors.Wrap(err, "decode samples entry")
-				break
+				return errors.Wrap(err, "decode samples entry")
 			}
-			datac <- samples
+			if err := samplesf(samples); err != nil {
+				return err
+			}
 
 			// Update the times for the WAL segment file.
 			cf := r.current()
+
 			for _, s := range samples {
 				if cf.maxTime < s.T {
 					cf.maxTime = s.T
 				}
 			}
+
 		case WALEntryDeletes:
-			var deletes []Stone
-			if v := deletePool.Get(); v == nil {
-				deletes = make([]Stone, 0, 512)
-			} else {
-				deletes = v.([]Stone)
-			}
-
-			err := r.decodeDeletes(flag, b, &deletes)
+			stones, err := r.decodeDeletes(flag, b)
 			if err != nil {
-				err = errors.Wrap(err, "decode delete entry")
-				break
+				return errors.Wrap(err, "decode delete entry")
 			}
-			datac <- deletes
-
+			if err := deletesf(stones); err != nil {
+				return err
+			}
 			// Update the times for the WAL segment file.
+
 			cf := r.current()
-			for _, s := range deletes {
+
+			for _, s := range stones {
 				for _, iv := range s.intervals {
 					if cf.maxTime < iv.Maxt {
 						cf.maxTime = iv.Maxt
@@ -958,16 +903,27 @@ func (r *walReader) Read(
 			}
 		}
 	}
-	close(datac)
-	<-donec
 
-	if err != nil {
-		return err
+	return r.Err()
+}
+
+// nextEntry retrieves the next entry. It is also used as a testing hook.
+func (r *walReader) nextEntry() (WALEntryType, byte, []byte, error) {
+	if r.cur >= len(r.files) {
+		return 0, 0, nil, io.EOF
 	}
-	if r.Err() != nil {
-		return errors.Wrap(r.Err(), "read entry")
+	cf := r.current()
+
+	et, flag, b, err := r.entry(cf)
+	// If we reached the end of the reader, advance to the next one and close.
+	// Do not close on the last one as it will still be appended to.
+	if err == io.EOF && r.cur < len(r.files)-1 {
+		// Current reader completed. Leave the file open for later reads
+		// for truncating.
+		r.cur++
+		return r.nextEntry()
 	}
-	return nil
+	return et, flag, b, err
 }
 
 func (r *walReader) at() (WALEntryType, byte, []byte) {
@@ -1087,7 +1043,9 @@ func (r *walReader) entry(cr io.Reader) (WALEntryType, byte, []byte, error) {
 	return etype, flag, buf, nil
 }
 
-func (r *walReader) decodeSeries(flag byte, b []byte, res *[]RefSeries) error {
+func (r *walReader) decodeSeries(flag byte, b []byte) ([]RefSeries, error) {
+	r.seriesBuf = r.seriesBuf[:0]
+
 	dec := decbuf{b: b}
 
 	for len(dec.b) > 0 && dec.err() == nil {
@@ -1101,24 +1059,25 @@ func (r *walReader) decodeSeries(flag byte, b []byte, res *[]RefSeries) error {
 		}
 		sort.Sort(lset)
 
-		*res = append(*res, RefSeries{
+		r.seriesBuf = append(r.seriesBuf, RefSeries{
 			Ref:    ref,
 			Labels: lset,
 		})
 	}
 	if dec.err() != nil {
-		return dec.err()
+		return nil, dec.err()
 	}
 	if len(dec.b) > 0 {
-		return errors.Errorf("unexpected %d bytes left in entry", len(dec.b))
+		return r.seriesBuf, errors.Errorf("unexpected %d bytes left in entry", len(dec.b))
 	}
-	return nil
+	return r.seriesBuf, nil
 }
 
-func (r *walReader) decodeSamples(flag byte, b []byte, res *[]RefSample) error {
+func (r *walReader) decodeSamples(flag byte, b []byte) ([]RefSample, error) {
 	if len(b) == 0 {
-		return nil
+		return nil, nil
 	}
+	r.sampleBuf = r.sampleBuf[:0]
 	dec := decbuf{b: b}
 
 	var (
@@ -1131,7 +1090,7 @@ func (r *walReader) decodeSamples(flag byte, b []byte, res *[]RefSample) error {
 		dtime := dec.varint64()
 		val := dec.be64()
 
-		*res = append(*res, RefSample{
+		r.sampleBuf = append(r.sampleBuf, RefSample{
 			Ref: uint64(int64(baseRef) + dref),
 			T:   baseTime + dtime,
 			V:   math.Float64frombits(val),
@@ -1139,19 +1098,20 @@ func (r *walReader) decodeSamples(flag byte, b []byte, res *[]RefSample) error {
 	}
 
 	if dec.err() != nil {
-		return errors.Wrapf(dec.err(), "decode error after %d samples", len(*res))
+		return nil, errors.Wrapf(dec.err(), "decode error after %d samples", len(r.sampleBuf))
 	}
 	if len(dec.b) > 0 {
-		return errors.Errorf("unexpected %d bytes left in entry", len(dec.b))
+		return r.sampleBuf, errors.Errorf("unexpected %d bytes left in entry", len(dec.b))
 	}
-	return nil
+	return r.sampleBuf, nil
 }
 
-func (r *walReader) decodeDeletes(flag byte, b []byte, res *[]Stone) error {
+func (r *walReader) decodeDeletes(flag byte, b []byte) ([]Stone, error) {
 	dec := &decbuf{b: b}
+	r.tombstoneBuf = r.tombstoneBuf[:0]
 
 	for dec.len() > 0 && dec.err() == nil {
-		*res = append(*res, Stone{
+		r.tombstoneBuf = append(r.tombstoneBuf, Stone{
 			ref: dec.be64(),
 			intervals: Intervals{
 				{Mint: dec.varint64(), Maxt: dec.varint64()},
@@ -1159,10 +1119,10 @@ func (r *walReader) decodeDeletes(flag byte, b []byte, res *[]Stone) error {
 		})
 	}
 	if dec.err() != nil {
-		return dec.err()
+		return nil, dec.err()
 	}
 	if len(dec.b) > 0 {
-		return errors.Errorf("unexpected %d bytes left in entry", len(dec.b))
+		return r.tombstoneBuf, errors.Errorf("unexpected %d bytes left in entry", len(dec.b))
 	}
-	return nil
+	return r.tombstoneBuf, nil
 }

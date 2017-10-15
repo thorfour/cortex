@@ -18,7 +18,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/pkg/errors"
 	"github.com/prometheus/tsdb/chunks"
 	"github.com/prometheus/tsdb/labels"
 )
@@ -51,6 +50,7 @@ type Series interface {
 // querier aggregates querying results from time blocks within
 // a single partition.
 type querier struct {
+	db     *DB
 	blocks []Querier
 }
 
@@ -103,30 +103,21 @@ func (q *querier) Close() error {
 	for _, bq := range q.blocks {
 		merr.Add(bq.Close())
 	}
+	q.db.mtx.RUnlock()
+
 	return merr.Err()
 }
 
 // NewBlockQuerier returns a queries against the readers.
-func NewBlockQuerier(b BlockReader, mint, maxt int64) (Querier, error) {
-	indexr, err := b.Index()
-	if err != nil {
-		return nil, errors.Wrapf(err, "open index reader")
-	}
-	chunkr, err := b.Chunks()
-	if err != nil {
-		return nil, errors.Wrapf(err, "open chunk reader")
-	}
-	tombsr, err := b.Tombstones()
-	if err != nil {
-		return nil, errors.Wrapf(err, "open tombstone reader")
-	}
+func NewBlockQuerier(ir IndexReader, cr ChunkReader, tr TombstoneReader, mint, maxt int64) Querier {
 	return &blockQuerier{
-		mint:       mint,
-		maxt:       maxt,
-		index:      indexr,
-		chunks:     chunkr,
-		tombstones: tombsr,
-	}, nil
+		index:      ir,
+		chunks:     cr,
+		tombstones: tr,
+
+		mint: mint,
+		maxt: maxt,
+	}
 }
 
 // blockQuerier provides querying access to a single block database.
@@ -184,13 +175,7 @@ func (q *blockQuerier) LabelValuesFor(string, labels.Label) ([]string, error) {
 }
 
 func (q *blockQuerier) Close() error {
-	var merr MultiError
-
-	merr.Add(q.index.Close())
-	merr.Add(q.chunks.Close())
-	merr.Add(q.tombstones.Close())
-
-	return merr.Err()
+	return nil
 }
 
 // postingsReader is used to select matching postings from an IndexReader.
@@ -450,10 +435,6 @@ Outer:
 	for s.p.Next() {
 		ref := s.p.At()
 		if err := s.index.Series(ref, &lset, &chunks); err != nil {
-			// Postings may be stale. Skip if no underlying series exists.
-			if errors.Cause(err) == ErrNotFound {
-				continue
-			}
 			s.err = err
 			return false
 		}

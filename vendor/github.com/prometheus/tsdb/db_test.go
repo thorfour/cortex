@@ -68,8 +68,7 @@ func TestDataAvailableOnlyAfterCommit(t *testing.T) {
 	_, err := app.Add(labels.FromStrings("foo", "bar"), 0, 0)
 	require.NoError(t, err)
 
-	querier, err := db.Querier(0, 1)
-	require.NoError(t, err)
+	querier := db.Querier(0, 1)
 	seriesSet := readSeriesSet(t, querier.Select(labels.NewEqualMatcher("foo", "bar")))
 
 	require.Equal(t, seriesSet, map[string][]sample{})
@@ -78,8 +77,7 @@ func TestDataAvailableOnlyAfterCommit(t *testing.T) {
 	err = app.Commit()
 	require.NoError(t, err)
 
-	querier, err = db.Querier(0, 1)
-	require.NoError(t, err)
+	querier = db.Querier(0, 1)
 	defer querier.Close()
 
 	seriesSet = readSeriesSet(t, querier.Select(labels.NewEqualMatcher("foo", "bar")))
@@ -98,8 +96,7 @@ func TestDataNotAvailableAfterRollback(t *testing.T) {
 	err = app.Rollback()
 	require.NoError(t, err)
 
-	querier, err := db.Querier(0, 1)
-	require.NoError(t, err)
+	querier := db.Querier(0, 1)
 	defer querier.Close()
 
 	seriesSet := readSeriesSet(t, querier.Select(labels.NewEqualMatcher("foo", "bar")))
@@ -143,9 +140,7 @@ func TestDBAppenderAddRef(t *testing.T) {
 
 	require.NoError(t, app2.Commit())
 
-	q, err := db.Querier(0, 200)
-	require.NoError(t, err)
-
+	q := db.Querier(0, 200)
 	res := readSeriesSet(t, q.Select(labels.NewEqualMatcher("a", "b")))
 
 	require.Equal(t, map[string][]sample{
@@ -195,9 +190,7 @@ Outer:
 		}
 
 		// Compare the result.
-		q, err := db.Querier(0, numSamples)
-		require.NoError(t, err)
-
+		q := db.Querier(0, numSamples)
 		res := q.Select(labels.NewEqualMatcher("a", "b"))
 
 		expSamples := make([]sample, 0, len(c.remaint))
@@ -291,9 +284,7 @@ func TestSkippingInvalidValuesInSameTxn(t *testing.T) {
 	require.NoError(t, app.Commit())
 
 	// Make sure the right value is stored.
-	q, err := db.Querier(0, 10)
-	require.NoError(t, err)
-
+	q := db.Querier(0, 10)
 	ss := q.Select(labels.NewEqualMatcher("a", "b"))
 	ssMap := readSeriesSet(t, ss)
 
@@ -311,9 +302,7 @@ func TestSkippingInvalidValuesInSameTxn(t *testing.T) {
 	require.NoError(t, err)
 	require.NoError(t, app.Commit())
 
-	q, err = db.Querier(0, 10)
-	require.NoError(t, err)
-
+	q = db.Querier(0, 10)
 	ss = q.Select(labels.NewEqualMatcher("a", "b"))
 	ssMap = readSeriesSet(t, ss)
 
@@ -347,8 +336,7 @@ func TestDB_Snapshot(t *testing.T) {
 	db, err = Open(snap, nil, nil, nil)
 	require.NoError(t, err)
 
-	querier, err := db.Querier(mint, mint+1000)
-	require.NoError(t, err)
+	querier := db.Querier(mint, mint+1000)
 	defer querier.Close()
 
 	// sum values
@@ -497,9 +485,7 @@ func TestDB_e2e(t *testing.T) {
 				}
 			}
 
-			q, err := db.Querier(mint, maxt)
-			require.NoError(t, err)
-
+			q := db.Querier(mint, maxt)
 			ss := q.Select(qry.ms...)
 
 			result := map[string][]sample{}

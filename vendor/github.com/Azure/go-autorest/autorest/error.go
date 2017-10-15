@@ -28,12 +28,6 @@ type DetailedError struct {
 
 	// Message is the error message.
 	Message string
-
-	// Service Error is the response body of failed API in bytes
-	ServiceError []byte
-
-	// Response is the response object that was returned during failure if applicable.
-	Response *http.Response
 }
 
 // NewError creates a new Error conforming object from the passed packageType, method, and
@@ -70,7 +64,6 @@ func NewErrorWithError(original error, packageType string, method string, resp *
 		Method:      method,
 		StatusCode:  statusCode,
 		Message:     fmt.Sprintf(message, args...),
-		Response:    resp,
 	}
 }
 
