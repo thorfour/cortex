@@ -38,3 +38,8 @@
 [[override]]
   name = "github.com/weaveworks/mesh"
   revision = "5015f896ab62d3e9fe757456c757521ce0c3faff"
+
+[[override]]
+  name = "github.com/ugorji/go"
+  branch = "release-1.5"
+  source = "github.com/kubernetes/client-go/1.5/vendor/github.com/ugorji/go"
