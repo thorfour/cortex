@@ -136,7 +136,6 @@
         {"shape":"ValidationException"},
         {"shape":"LimitExceededException"},
         {"shape":"AccessDeniedException"},
-        {"shape":"DirectoryNotEnabledException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"InvalidAttachmentException"},
         {"shape":"ValidationException"},
@@ -496,7 +495,6 @@
         {"shape":"ValidationException"},
         {"shape":"LimitExceededException"},
         {"shape":"AccessDeniedException"},
-        {"shape":"DirectoryNotEnabledException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"FacetValidationException"}
       ]
@@ -776,7 +774,6 @@
         {"shape":"ValidationException"},
         {"shape":"LimitExceededException"},
         {"shape":"AccessDeniedException"},
-        {"shape":"DirectoryNotEnabledException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"InvalidNextTokenException"},
         {"shape":"FacetValidationException"}
@@ -930,7 +927,6 @@
         {"shape":"ValidationException"},
         {"shape":"LimitExceededException"},
         {"shape":"AccessDeniedException"},
-        {"shape":"DirectoryNotEnabledException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"InvalidNextTokenException"},
         {"shape":"FacetValidationException"}
@@ -1498,80 +1494,6 @@
         "attachedObjectIdentifier":{"shape":"ObjectIdentifier"}
       }
     },
-    "BatchAttachPolicy":{
-      "type":"structure",
-      "required":[
-        "PolicyReference",
-        "ObjectReference"
-      ],
-      "members":{
-        "PolicyReference":{"shape":"ObjectReference"},
-        "ObjectReference":{"shape":"ObjectReference"}
-      }
-    },
-    "BatchAttachPolicyResponse":{
-      "type":"structure",
-      "members":{
-      }
-    },
-    "BatchAttachToIndex":{
-      "type":"structure",
-      "required":[
-        "IndexReference",
-        "TargetReference"
-      ],
-      "members":{
-        "IndexReference":{"shape":"ObjectReference"},
-        "TargetReference":{"shape":"ObjectReference"}
-      }
-    },
-    "BatchAttachToIndexResponse":{
-      "type":"structure",
-      "members":{
-        "AttachedObjectIdentifier":{"shape":"ObjectIdentifier"}
-      }
-    },
-    "BatchAttachTypedLink":{
-      "type":"structure",
-      "required":[
-        "SourceObjectReference",
-        "TargetObjectReference",
-        "TypedLinkFacet",
-        "Attributes"
-      ],
-      "members":{
-        "SourceObjectReference":{"shape":"ObjectReference"},
-        "TargetObjectReference":{"shape":"ObjectReference"},
-        "TypedLinkFacet":{"shape":"TypedLinkSchemaAndFacetName"},
-        "Attributes":{"shape":"AttributeNameAndValueList"}
-      }
-    },
-    "BatchAttachTypedLinkResponse":{
-      "type":"structure",
-      "members":{
-        "TypedLinkSpecifier":{"shape":"TypedLinkSpecifier"}
-      }
-    },
-    "BatchCreateIndex":{
-      "type":"structure",
-      "required":[
-        "OrderedIndexedAttributeList",
-        "IsUnique"
-      ],
-      "members":{
-        "OrderedIndexedAttributeList":{"shape":"AttributeKeyList"},
-        "IsUnique":{"shape":"Bool"},
-        "ParentReference":{"shape":"ObjectReference"},
-        "LinkName":{"shape":"LinkName"},
-        "BatchReferenceName":{"shape":"BatchReferenceName"}
-      }
-    },
-    "BatchCreateIndexResponse":{
-      "type":"structure",
-      "members":{
-        "ObjectIdentifier":{"shape":"ObjectIdentifier"}
-      }
-    },
     "BatchCreateObject":{
       "type":"structure",
       "required":[
@@ -1607,23 +1529,6 @@
       "members":{
       }
     },
-    "BatchDetachFromIndex":{
-      "type":"structure",
-      "required":[
-        "IndexReference",
-        "TargetReference"
-      ],
-      "members":{
-        "IndexReference":{"shape":"ObjectReference"},
-        "TargetReference":{"shape":"ObjectReference"}
-      }
-    },
-    "BatchDetachFromIndexResponse":{
-      "type":"structure",
-      "members":{
-        "DetachedObjectIdentifier":{"shape":"ObjectIdentifier"}
-      }
-    },
     "BatchDetachObject":{
       "type":"structure",
       "required":[
@@ -1641,99 +1546,6 @@
       "type":"structure",
       "members":{
         "detachedObjectIdentifier":{"shape":"ObjectIdentifier"}
-      }
-    },
-    "BatchDetachPolicy":{
-      "type":"structure",
-      "required":[
-        "PolicyReference",
-        "ObjectReference"
-      ],
-      "members":{
-        "PolicyReference":{"shape":"ObjectReference"},
-        "ObjectReference":{"shape":"ObjectReference"}
-      }
-    },
-    "BatchDetachPolicyResponse":{
-      "type":"structure",
-      "members":{
-      }
-    },
-    "BatchDetachTypedLink":{
-      "type":"structure",
-      "required":["TypedLinkSpecifier"],
-      "members":{
-        "TypedLinkSpecifier":{"shape":"TypedLinkSpecifier"}
-      }
-    },
-    "BatchDetachTypedLinkResponse":{
-      "type":"structure",
-      "members":{
-      }
-    },
-    "BatchGetObjectInformation":{
-      "type":"structure",
-      "required":["ObjectReference"],
-      "members":{
-        "ObjectReference":{"shape":"ObjectReference"}
-      }
-    },
-    "BatchGetObjectInformationResponse":{
-      "type":"structure",
-      "members":{
-        "SchemaFacets":{"shape":"SchemaFacetList"},
-        "ObjectIdentifier":{"shape":"ObjectIdentifier"}
-      }
-    },
-    "BatchListAttachedIndices":{
-      "type":"structure",
-      "required":["TargetReference"],
-      "members":{
-        "TargetReference":{"shape":"ObjectReference"},
-        "NextToken":{"shape":"NextToken"},
-        "MaxResults":{"shape":"NumberResults"}
-      }
-    },
-    "BatchListAttachedIndicesResponse":{
-      "type":"structure",
-      "members":{
-        "IndexAttachments":{"shape":"IndexAttachmentList"},
-        "NextToken":{"shape":"NextToken"}
-      }
-    },
-    "BatchListIncomingTypedLinks":{
-      "type":"structure",
-      "required":["ObjectReference"],
-      "members":{
-        "ObjectReference":{"shape":"ObjectReference"},
-        "FilterAttributeRanges":{"shape":"TypedLinkAttributeRangeList"},
-        "FilterTypedLink":{"shape":"TypedLinkSchemaAndFacetName"},
-        "NextToken":{"shape":"NextToken"},
-        "MaxResults":{"shape":"NumberResults"}
-      }
-    },
-    "BatchListIncomingTypedLinksResponse":{
-      "type":"structure",
-      "members":{
-        "LinkSpecifiers":{"shape":"TypedLinkSpecifierList"},
-        "NextToken":{"shape":"NextToken"}
-      }
-    },
-    "BatchListIndex":{
-      "type":"structure",
-      "required":["IndexReference"],
-      "members":{
-        "RangesOnIndexedValues":{"shape":"ObjectAttributeRangeList"},
-        "IndexReference":{"shape":"ObjectReference"},
-        "MaxResults":{"shape":"NumberResults"},
-        "NextToken":{"shape":"NextToken"}
-      }
-    },
-    "BatchListIndexResponse":{
-      "type":"structure",
-      "members":{
-        "IndexAttachments":{"shape":"IndexAttachmentList"},
-        "NextToken":{"shape":"NextToken"}
       }
     },
     "BatchListObjectAttributes":{
@@ -1769,88 +1581,6 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
-    "BatchListObjectParentPaths":{
-      "type":"structure",
-      "required":["ObjectReference"],
-      "members":{
-        "ObjectReference":{"shape":"ObjectReference"},
-        "NextToken":{"shape":"NextToken"},
-        "MaxResults":{"shape":"NumberResults"}
-      }
-    },
-    "BatchListObjectParentPathsResponse":{
-      "type":"structure",
-      "members":{
-        "PathToObjectIdentifiersList":{"shape":"PathToObjectIdentifiersList"},
-        "NextToken":{"shape":"NextToken"}
-      }
-    },
-    "BatchListObjectPolicies":{
-      "type":"structure",
-      "required":["ObjectReference"],
-      "members":{
-        "ObjectReference":{"shape":"ObjectReference"},
-        "NextToken":{"shape":"NextToken"},
-        "MaxResults":{"shape":"NumberResults"}
-      }
-    },
-    "BatchListObjectPoliciesResponse":{
-      "type":"structure",
-      "members":{
-        "AttachedPolicyIds":{"shape":"ObjectIdentifierList"},
-        "NextToken":{"shape":"NextToken"}
-      }
-    },
-    "BatchListOutgoingTypedLinks":{
-      "type":"structure",
-      "required":["ObjectReference"],
-      "members":{
-        "ObjectReference":{"shape":"ObjectReference"},
-        "FilterAttributeRanges":{"shape":"TypedLinkAttributeRangeList"},
-        "FilterTypedLink":{"shape":"TypedLinkSchemaAndFacetName"},
-        "NextToken":{"shape":"NextToken"},
-        "MaxResults":{"shape":"NumberResults"}
-      }
-    },
-    "BatchListOutgoingTypedLinksResponse":{
-      "type":"structure",
-      "members":{
-        "TypedLinkSpecifiers":{"shape":"TypedLinkSpecifierList"},
-        "NextToken":{"shape":"NextToken"}
-      }
-    },
-    "BatchListPolicyAttachments":{
-      "type":"structure",
-      "required":["PolicyReference"],
-      "members":{
-        "PolicyReference":{"shape":"ObjectReference"},
-        "NextToken":{"shape":"NextToken"},
-        "MaxResults":{"shape":"NumberResults"}
-      }
-    },
-    "BatchListPolicyAttachmentsResponse":{
-      "type":"structure",
-      "members":{
-        "ObjectIdentifiers":{"shape":"ObjectIdentifierList"},
-        "NextToken":{"shape":"NextToken"}
-      }
-    },
-    "BatchLookupPolicy":{
-      "type":"structure",
-      "required":["ObjectReference"],
-      "members":{
-        "ObjectReference":{"shape":"ObjectReference"},
-        "NextToken":{"shape":"NextToken"},
-        "MaxResults":{"shape":"NumberResults"}
-      }
-    },
-    "BatchLookupPolicyResponse":{
-      "type":"structure",
-      "members":{
-        "PolicyToPathList":{"shape":"PolicyToPathList"},
-        "NextToken":{"shape":"NextToken"}
-      }
-    },
     "BatchOperationIndex":{"type":"integer"},
     "BatchReadException":{
       "type":"structure",
@@ -1867,30 +1597,14 @@
         "ResourceNotFoundException",
         "InvalidNextTokenException",
         "AccessDeniedException",
-        "NotNodeException",
-        "FacetValidationException",
-        "CannotListParentOfRootException",
-        "NotIndexException",
-        "NotPolicyException",
-        "DirectoryNotEnabledException",
-        "LimitExceededException",
-        "InternalServiceException"
+        "NotNodeException"
       ]
     },
     "BatchReadOperation":{
       "type":"structure",
       "members":{
         "ListObjectAttributes":{"shape":"BatchListObjectAttributes"},
-        "ListObjectChildren":{"shape":"BatchListObjectChildren"},
-        "ListAttachedIndices":{"shape":"BatchListAttachedIndices"},
-        "ListObjectParentPaths":{"shape":"BatchListObjectParentPaths"},
-        "GetObjectInformation":{"shape":"BatchGetObjectInformation"},
-        "ListObjectPolicies":{"shape":"BatchListObjectPolicies"},
-        "ListPolicyAttachments":{"shape":"BatchListPolicyAttachments"},
-        "LookupPolicy":{"shape":"BatchLookupPolicy"},
-        "ListIndex":{"shape":"BatchListIndex"},
-        "ListOutgoingTypedLinks":{"shape":"BatchListOutgoingTypedLinks"},
-        "ListIncomingTypedLinks":{"shape":"BatchListIncomingTypedLinks"}
+        "ListObjectChildren":{"shape":"BatchListObjectChildren"}
       }
     },
     "BatchReadOperationList":{
@@ -1938,16 +1652,7 @@
       "type":"structure",
       "members":{
         "ListObjectAttributes":{"shape":"BatchListObjectAttributesResponse"},
-        "ListObjectChildren":{"shape":"BatchListObjectChildrenResponse"},
-        "GetObjectInformation":{"shape":"BatchGetObjectInformationResponse"},
-        "ListAttachedIndices":{"shape":"BatchListAttachedIndicesResponse"},
-        "ListObjectParentPaths":{"shape":"BatchListObjectParentPathsResponse"},
-        "ListObjectPolicies":{"shape":"BatchListObjectPoliciesResponse"},
-        "ListPolicyAttachments":{"shape":"BatchListPolicyAttachmentsResponse"},
-        "LookupPolicy":{"shape":"BatchLookupPolicyResponse"},
-        "ListIndex":{"shape":"BatchListIndexResponse"},
-        "ListOutgoingTypedLinks":{"shape":"BatchListOutgoingTypedLinksResponse"},
-        "ListIncomingTypedLinks":{"shape":"BatchListIncomingTypedLinksResponse"}
+        "ListObjectChildren":{"shape":"BatchListObjectChildrenResponse"}
       }
     },
     "BatchReferenceName":{"type":"string"},
@@ -2004,15 +1709,7 @@
         "FacetValidationException",
         "ObjectNotDetachedException",
         "ResourceNotFoundException",
-        "AccessDeniedException",
-        "InvalidAttachmentException",
-        "NotIndexException",
-        "IndexedAttributeMissingException",
-        "ObjectAlreadyDetachedException",
-        "NotPolicyException",
-        "DirectoryNotEnabledException",
-        "LimitExceededException",
-        "UnsupportedIndexTypeException"
+        "AccessDeniedException"
       ]
     },
     "BatchWriteOperation":{
@@ -2024,14 +1721,7 @@
         "UpdateObjectAttributes":{"shape":"BatchUpdateObjectAttributes"},
         "DeleteObject":{"shape":"BatchDeleteObject"},
         "AddFacetToObject":{"shape":"BatchAddFacetToObject"},
-        "RemoveFacetFromObject":{"shape":"BatchRemoveFacetFromObject"},
-        "AttachPolicy":{"shape":"BatchAttachPolicy"},
-        "DetachPolicy":{"shape":"BatchDetachPolicy"},
-        "CreateIndex":{"shape":"BatchCreateIndex"},
-        "AttachToIndex":{"shape":"BatchAttachToIndex"},
-        "DetachFromIndex":{"shape":"BatchDetachFromIndex"},
-        "AttachTypedLink":{"shape":"BatchAttachTypedLink"},
-        "DetachTypedLink":{"shape":"BatchDetachTypedLink"}
+        "RemoveFacetFromObject":{"shape":"BatchRemoveFacetFromObject"}
       }
     },
     "BatchWriteOperationList":{
@@ -2047,14 +1737,7 @@
         "UpdateObjectAttributes":{"shape":"BatchUpdateObjectAttributesResponse"},
         "DeleteObject":{"shape":"BatchDeleteObjectResponse"},
         "AddFacetToObject":{"shape":"BatchAddFacetToObjectResponse"},
-        "RemoveFacetFromObject":{"shape":"BatchRemoveFacetFromObjectResponse"},
-        "AttachPolicy":{"shape":"BatchAttachPolicyResponse"},
-        "DetachPolicy":{"shape":"BatchDetachPolicyResponse"},
-        "CreateIndex":{"shape":"BatchCreateIndexResponse"},
-        "AttachToIndex":{"shape":"BatchAttachToIndexResponse"},
-        "DetachFromIndex":{"shape":"BatchDetachFromIndexResponse"},
-        "AttachTypedLink":{"shape":"BatchAttachTypedLinkResponse"},
-        "DetachTypedLink":{"shape":"BatchDetachTypedLinkResponse"}
+        "RemoveFacetFromObject":{"shape":"BatchRemoveFacetFromObjectResponse"}
       }
     },
     "BatchWriteOperationResponseList":{

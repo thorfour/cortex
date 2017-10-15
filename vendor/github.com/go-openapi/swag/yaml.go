@@ -20,9 +20,6 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/mailru/easyjson/jlexer"
-	"github.com/mailru/easyjson/jwriter"
-
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -43,150 +40,48 @@ func YAMLToJSON(data interface{}) (json.RawMessage, error) {
 }
 
 func BytesToYAMLDoc(data []byte) (interface{}, error) {
-	var canary map[interface{}]interface{} // validate this is an object and not a different type
-	if err := yaml.Unmarshal(data, &canary); err != nil {
-		return nil, err
-	}
-
-	var document yaml.MapSlice // preserve order that is present in the document
+	var document map[interface{}]interface{}
 	if err := yaml.Unmarshal(data, &document); err != nil {
 		return nil, err
 	}
+
 	return document, nil
 }
 
-type JSONMapSlice []JSONMapItem
-
-func (s JSONMapSlice) MarshalJSON() ([]byte, error) {
-	w := &jwriter.Writer{Flags: jwriter.NilMapAsEmpty | jwriter.NilSliceAsEmpty}
-	s.MarshalEasyJSON(w)
-	return w.BuildBytes()
-}
-
-func (s JSONMapSlice) MarshalEasyJSON(w *jwriter.Writer) {
-	w.RawByte('{')
-
-	ln := len(s)
-	last := ln - 1
-	for i := 0; i < ln; i++ {
-		s[i].MarshalEasyJSON(w)
-		if i != last { // last item
-			w.RawByte(',')
-		}
-	}
-
-	w.RawByte('}')
-}
-
-func (s *JSONMapSlice) UnmarshalJSON(data []byte) error {
-	l := jlexer.Lexer{Data: data}
-	s.UnmarshalEasyJSON(&l)
-	return l.Error()
-}
-func (s *JSONMapSlice) UnmarshalEasyJSON(in *jlexer.Lexer) {
-	if in.IsNull() {
-		in.Skip()
-		return
-	}
-
-	var result JSONMapSlice
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		var mi JSONMapItem
-		mi.UnmarshalEasyJSON(in)
-		result = append(result, mi)
-	}
-	*s = result
-}
-
-type JSONMapItem struct {
-	Key   string
-	Value interface{}
-}
-
-func (s JSONMapItem) MarshalJSON() ([]byte, error) {
-	w := &jwriter.Writer{Flags: jwriter.NilMapAsEmpty | jwriter.NilSliceAsEmpty}
-	s.MarshalEasyJSON(w)
-	return w.BuildBytes()
-}
-
-func (s JSONMapItem) MarshalEasyJSON(w *jwriter.Writer) {
-	w.String(s.Key)
-	w.RawByte(':')
-	w.Raw(WriteJSON(s.Value))
-}
-
-func (s *JSONMapItem) UnmarshalEasyJSON(in *jlexer.Lexer) {
-	key := in.UnsafeString()
-	in.WantColon()
-	value := in.Interface()
-	in.WantComma()
-	s.Key = key
-	s.Value = value
-}
-func (s *JSONMapItem) UnmarshalJSON(data []byte) error {
-	l := jlexer.Lexer{Data: data}
-	s.UnmarshalEasyJSON(&l)
-	return l.Error()
-}
-
-func transformData(input interface{}) (out interface{}, err error) {
-	switch in := input.(type) {
-	case yaml.MapSlice:
-
-		o := make(JSONMapSlice, len(in))
-		for i, mi := range in {
-			var nmi JSONMapItem
-			switch k := mi.Key.(type) {
-			case string:
-				nmi.Key = k
-			case int:
-				nmi.Key = strconv.Itoa(k)
-			default:
-				return nil, fmt.Errorf("types don't match expect map key string or int got: %T", mi.Key)
-			}
-
-			v, err := transformData(mi.Value)
-			if err != nil {
-				return nil, err
-			}
-			nmi.Value = v
-			o[i] = nmi
-		}
-		return o, nil
+func transformData(in interface{}) (out interface{}, err error) {
+	switch in.(type) {
 	case map[interface{}]interface{}:
-		o := make(JSONMapSlice, 0, len(in))
-		for ke, va := range in {
-			var nmi JSONMapItem
-			switch k := ke.(type) {
+		o := make(map[string]interface{})
+		for k, v := range in.(map[interface{}]interface{}) {
+			sk := ""
+			switch k.(type) {
 			case string:
-				nmi.Key = k
+				sk = k.(string)
 			case int:
-				nmi.Key = strconv.Itoa(k)
+				sk = strconv.Itoa(k.(int))
 			default:
-				return nil, fmt.Errorf("types don't match expect map key string or int got: %T", ke)
+				return nil, fmt.Errorf("types don't match: expect map key string or int get: %T", k)
 			}
-
-			v, err := transformData(va)
+			v, err = transformData(v)
 			if err != nil {
 				return nil, err
 			}
-			nmi.Value = v
-			o = append(o, nmi)
+			o[sk] = v
 		}
 		return o, nil
 	case []interface{}:
-		len1 := len(in)
+		in1 := in.([]interface{})
+		len1 := len(in1)
 		o := make([]interface{}, len1)
 		for i := 0; i < len1; i++ {
-			o[i], err = transformData(in[i])
+			o[i], err = transformData(in1[i])
 			if err != nil {
 				return nil, err
 			}
 		}
 		return o, nil
 	}
-	return input, nil
+	return in, nil
 }
 
 // YAMLDoc loads a yaml document from either http or a file and converts it to json

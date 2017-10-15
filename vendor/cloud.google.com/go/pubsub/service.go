@@ -16,8 +16,8 @@ package pubsub
 
 import (
 	"fmt"
+	"io"
 	"math"
-	"strings"
 	"sync"
 	"time"
 
@@ -27,13 +27,11 @@ import (
 	"cloud.google.com/go/internal/version"
 	vkit "cloud.google.com/go/pubsub/apiv1"
 	durpb "github.com/golang/protobuf/ptypes/duration"
-	gax "github.com/googleapis/gax-go"
 	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	pb "google.golang.org/genproto/googleapis/pubsub/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 type nextStringFunc func() (string, error)
@@ -257,7 +255,6 @@ const (
 	maxPayload       = 512 * 1024
 	reqFixedOverhead = 100
 	overheadPerID    = 3
-	maxSendRecvBytes = 20 * 1024 * 1024 // 20M
 )
 
 // splitAckIDs splits ids into two slices, the first of which contains at most maxPayload bytes of ackID data.
@@ -283,7 +280,7 @@ func (s *apiService) fetchMessages(ctx context.Context, subName string, maxMessa
 	resp, err := s.subc.Pull(ctx, &pb.PullRequest{
 		Subscription: subName,
 		MaxMessages:  maxMessages,
-	}, gax.WithGRPCOptions(grpc.MaxCallRecvMsgSize(maxSendRecvBytes)))
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -313,7 +310,7 @@ func (s *apiService) publishMessages(ctx context.Context, topicName string, msgs
 	resp, err := s.pubc.Publish(ctx, &pb.PublishRequest{
 		Topic:    topicName,
 		Messages: rawMsgs,
-	}, gax.WithGRPCOptions(grpc.MaxCallSendMsgSize(maxSendRecvBytes)))
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -384,16 +381,16 @@ func (p *streamingPuller) openLocked() {
 		return
 	}
 	// No opens in flight; start one.
-	// Keep the lock held, to avoid a race where we
-	// close the old stream while opening a new one.
 	p.inFlight = true
-	spc, err := p.subc.StreamingPull(p.ctx, gax.WithGRPCOptions(grpc.MaxCallRecvMsgSize(maxSendRecvBytes)))
+	p.c.L.Unlock()
+	spc, err := p.subc.StreamingPull(p.ctx)
 	if err == nil {
 		err = spc.Send(&pb.StreamingPullRequest{
 			Subscription:             p.subName,
 			StreamAckDeadlineSeconds: p.ackDeadlineSecs,
 		})
 	}
+	p.c.L.Lock()
 	p.spc = spc
 	p.err = err
 	p.inFlight = false
@@ -407,14 +404,9 @@ func (p *streamingPuller) call(f func(pb.Subscriber_StreamingPullClient) error) 
 	for p.inFlight {
 		p.c.Wait()
 	}
+	// TODO(jba): better retry strategy.
 	var err error
-	var bo gax.Backoff
-	for {
-		select {
-		case <-p.ctx.Done():
-			p.err = p.ctx.Err()
-		default:
-		}
+	for i := 0; i < 3; i++ {
 		if p.err != nil {
 			return p.err
 		}
@@ -426,33 +418,19 @@ func (p *streamingPuller) call(f func(pb.Subscriber_StreamingPullClient) error) 
 		p.c.L.Unlock()
 		err = f(spc)
 		p.c.L.Lock()
-		if !p.closed && err != nil && isRetryable(err) {
-			// Sleep with exponential backoff. Normally we wouldn't hold the lock while sleeping,
-			// but here it can't do any harm, since the stream is broken anyway.
-			gax.Sleep(p.ctx, bo.Pause())
+		if !p.closed && (err == io.EOF || grpc.Code(err) == codes.Unavailable) {
+			time.Sleep(500 * time.Millisecond)
 			p.openLocked()
 			continue
 		}
-		// Not an error, or not a retryable error; stop retrying.
+		// Not a retry-able error; fail permanently.
+		// TODO(jba): for some errors, should we retry f (the Send or Recv)
+		// but not re-open the stream?
 		p.err = err
 		return err
 	}
-}
-
-// Logic from https://github.com/GoogleCloudPlatform/google-cloud-java/blob/master/google-cloud-pubsub/src/main/java/com/google/cloud/pubsub/v1/StatusUtil.java.
-func isRetryable(err error) bool {
-	s, ok := status.FromError(err)
-	if !ok { // includes io.EOF, normal stream close, which causes us to reopen
-		return true
-	}
-	switch s.Code() {
-	case codes.DeadlineExceeded, codes.Internal, codes.Canceled, codes.ResourceExhausted:
-		return true
-	case codes.Unavailable:
-		return !strings.Contains(s.Message(), "Server shutdownNow invoked")
-	default:
-		return false
-	}
+	p.err = fmt.Errorf("retry exceeded; last error was %v", err)
+	return p.err
 }
 
 func (p *streamingPuller) fetchMessages() ([]*Message, error) {
@@ -488,8 +466,8 @@ func (p *streamingPuller) send(req *pb.StreamingPullRequest) error {
 func (p *streamingPuller) closeSend() {
 	p.mu.Lock()
 	p.closed = true
-	p.spc.CloseSend()
 	p.mu.Unlock()
+	p.spc.CloseSend()
 }
 
 // Split req into a prefix that is smaller than maxSize, and a remainder.

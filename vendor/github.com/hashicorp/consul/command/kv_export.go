@@ -7,12 +7,13 @@ import (
 	"strings"
 
 	"github.com/hashicorp/consul/api"
+	"github.com/hashicorp/consul/command/base"
 )
 
 // KVExportCommand is a Command implementation that is used to export
 // a KV tree as JSON
 type KVExportCommand struct {
-	BaseCommand
+	base.Command
 }
 
 func (c *KVExportCommand) Synopsis() string {
@@ -31,14 +32,14 @@ Usage: consul kv export [KEY_OR_PREFIX]
 
   For a full list of options and examples, please see the Consul documentation.
 
-` + c.BaseCommand.Help()
+` + c.Command.Help()
 
 	return strings.TrimSpace(helpText)
 }
 
 func (c *KVExportCommand) Run(args []string) int {
-	f := c.BaseCommand.NewFlagSet(c)
-	if err := c.BaseCommand.Parse(args); err != nil {
+	f := c.Command.NewFlagSet(c)
+	if err := c.Command.Parse(args); err != nil {
 		return 1
 	}
 
@@ -51,7 +52,7 @@ func (c *KVExportCommand) Run(args []string) int {
 	case 1:
 		key = args[0]
 	default:
-		c.UI.Error(fmt.Sprintf("Too many arguments (expected 1, got %d)", len(args)))
+		c.Ui.Error(fmt.Sprintf("Too many arguments (expected 1, got %d)", len(args)))
 		return 1
 	}
 
@@ -63,17 +64,17 @@ func (c *KVExportCommand) Run(args []string) int {
 	}
 
 	// Create and test the HTTP client
-	client, err := c.BaseCommand.HTTPClient()
+	client, err := c.Command.HTTPClient()
 	if err != nil {
-		c.UI.Error(fmt.Sprintf("Error connecting to Consul agent: %s", err))
+		c.Ui.Error(fmt.Sprintf("Error connecting to Consul agent: %s", err))
 		return 1
 	}
 
 	pairs, _, err := client.KV().List(key, &api.QueryOptions{
-		AllowStale: c.BaseCommand.HTTPStale(),
+		AllowStale: c.Command.HTTPStale(),
 	})
 	if err != nil {
-		c.UI.Error(fmt.Sprintf("Error querying Consul agent: %s", err))
+		c.Ui.Error(fmt.Sprintf("Error querying Consul agent: %s", err))
 		return 1
 	}
 
@@ -84,11 +85,11 @@ func (c *KVExportCommand) Run(args []string) int {
 
 	marshaled, err := json.MarshalIndent(exported, "", "\t")
 	if err != nil {
-		c.UI.Error(fmt.Sprintf("Error exporting KV data: %s", err))
+		c.Ui.Error(fmt.Sprintf("Error exporting KV data: %s", err))
 		return 1
 	}
 
-	c.UI.Info(string(marshaled))
+	c.Ui.Info(string(marshaled))
 
 	return 0
 }

@@ -12,18 +12,19 @@ const opAssociateRoleToGroup = "AssociateRoleToGroup"
 
 // AssociateRoleToGroupRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateRoleToGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See AssociateRoleToGroup for usage and error information.
 //
-// See AssociateRoleToGroup for more information on using the AssociateRoleToGroup
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the AssociateRoleToGroup method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the AssociateRoleToGroupRequest method.
 //    req, resp := client.AssociateRoleToGroupRequest(params)
@@ -68,7 +69,7 @@ func (c *Greengrass) AssociateRoleToGroupRequest(input *AssociateRoleToGroupInpu
 //   user error
 //
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
-//   Server Error
+//   This request was invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/AssociateRoleToGroup
 func (c *Greengrass) AssociateRoleToGroup(input *AssociateRoleToGroupInput) (*AssociateRoleToGroupOutput, error) {
@@ -96,18 +97,19 @@ const opAssociateServiceRoleToAccount = "AssociateServiceRoleToAccount"
 
 // AssociateServiceRoleToAccountRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateServiceRoleToAccount operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See AssociateServiceRoleToAccount for usage and error information.
 //
-// See AssociateServiceRoleToAccount for more information on using the AssociateServiceRoleToAccount
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the AssociateServiceRoleToAccount method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the AssociateServiceRoleToAccountRequest method.
 //    req, resp := client.AssociateServiceRoleToAccountRequest(params)
@@ -153,7 +155,7 @@ func (c *Greengrass) AssociateServiceRoleToAccountRequest(input *AssociateServic
 //   user error
 //
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
-//   Server Error
+//   This request was invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/AssociateServiceRoleToAccount
 func (c *Greengrass) AssociateServiceRoleToAccount(input *AssociateServiceRoleToAccountInput) (*AssociateServiceRoleToAccountOutput, error) {
@@ -181,18 +183,19 @@ const opCreateCoreDefinition = "CreateCoreDefinition"
 
 // CreateCoreDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCoreDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateCoreDefinition for usage and error information.
 //
-// See CreateCoreDefinition for more information on using the CreateCoreDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateCoreDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateCoreDefinitionRequest method.
 //    req, resp := client.CreateCoreDefinitionRequest(params)
@@ -262,18 +265,19 @@ const opCreateCoreDefinitionVersion = "CreateCoreDefinitionVersion"
 
 // CreateCoreDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCoreDefinitionVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateCoreDefinitionVersion for usage and error information.
 //
-// See CreateCoreDefinitionVersion for more information on using the CreateCoreDefinitionVersion
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateCoreDefinitionVersion method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateCoreDefinitionVersionRequest method.
 //    req, resp := client.CreateCoreDefinitionVersionRequest(params)
@@ -342,18 +346,19 @@ const opCreateDeployment = "CreateDeployment"
 
 // CreateDeploymentRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDeployment operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateDeployment for usage and error information.
 //
-// See CreateDeployment for more information on using the CreateDeployment
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateDeployment method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateDeploymentRequest method.
 //    req, resp := client.CreateDeploymentRequest(params)
@@ -421,18 +426,19 @@ const opCreateDeviceDefinition = "CreateDeviceDefinition"
 
 // CreateDeviceDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDeviceDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateDeviceDefinition for usage and error information.
 //
-// See CreateDeviceDefinition for more information on using the CreateDeviceDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateDeviceDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateDeviceDefinitionRequest method.
 //    req, resp := client.CreateDeviceDefinitionRequest(params)
@@ -502,18 +508,19 @@ const opCreateDeviceDefinitionVersion = "CreateDeviceDefinitionVersion"
 
 // CreateDeviceDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDeviceDefinitionVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateDeviceDefinitionVersion for usage and error information.
 //
-// See CreateDeviceDefinitionVersion for more information on using the CreateDeviceDefinitionVersion
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateDeviceDefinitionVersion method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateDeviceDefinitionVersionRequest method.
 //    req, resp := client.CreateDeviceDefinitionVersionRequest(params)
@@ -581,18 +588,19 @@ const opCreateFunctionDefinition = "CreateFunctionDefinition"
 
 // CreateFunctionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateFunctionDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateFunctionDefinition for usage and error information.
 //
-// See CreateFunctionDefinition for more information on using the CreateFunctionDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateFunctionDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateFunctionDefinitionRequest method.
 //    req, resp := client.CreateFunctionDefinitionRequest(params)
@@ -663,18 +671,19 @@ const opCreateFunctionDefinitionVersion = "CreateFunctionDefinitionVersion"
 
 // CreateFunctionDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateFunctionDefinitionVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateFunctionDefinitionVersion for usage and error information.
 //
-// See CreateFunctionDefinitionVersion for more information on using the CreateFunctionDefinitionVersion
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateFunctionDefinitionVersion method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateFunctionDefinitionVersionRequest method.
 //    req, resp := client.CreateFunctionDefinitionVersionRequest(params)
@@ -742,18 +751,19 @@ const opCreateGroup = "CreateGroup"
 
 // CreateGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateGroup for usage and error information.
 //
-// See CreateGroup for more information on using the CreateGroup
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateGroup method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateGroupRequest method.
 //    req, resp := client.CreateGroupRequest(params)
@@ -822,18 +832,19 @@ const opCreateGroupCertificateAuthority = "CreateGroupCertificateAuthority"
 
 // CreateGroupCertificateAuthorityRequest generates a "aws/request.Request" representing the
 // client's request for the CreateGroupCertificateAuthority operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateGroupCertificateAuthority for usage and error information.
 //
-// See CreateGroupCertificateAuthority for more information on using the CreateGroupCertificateAuthority
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateGroupCertificateAuthority method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateGroupCertificateAuthorityRequest method.
 //    req, resp := client.CreateGroupCertificateAuthorityRequest(params)
@@ -877,7 +888,7 @@ func (c *Greengrass) CreateGroupCertificateAuthorityRequest(input *CreateGroupCe
 //   user error
 //
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
-//   Server Error
+//   This request was invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateGroupCertificateAuthority
 func (c *Greengrass) CreateGroupCertificateAuthority(input *CreateGroupCertificateAuthorityInput) (*CreateGroupCertificateAuthorityOutput, error) {
@@ -905,18 +916,19 @@ const opCreateGroupVersion = "CreateGroupVersion"
 
 // CreateGroupVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateGroupVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateGroupVersion for usage and error information.
 //
-// See CreateGroupVersion for more information on using the CreateGroupVersion
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateGroupVersion method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateGroupVersionRequest method.
 //    req, resp := client.CreateGroupVersionRequest(params)
@@ -984,18 +996,19 @@ const opCreateLoggerDefinition = "CreateLoggerDefinition"
 
 // CreateLoggerDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateLoggerDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateLoggerDefinition for usage and error information.
 //
-// See CreateLoggerDefinition for more information on using the CreateLoggerDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateLoggerDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateLoggerDefinitionRequest method.
 //    req, resp := client.CreateLoggerDefinitionRequest(params)
@@ -1065,18 +1078,19 @@ const opCreateLoggerDefinitionVersion = "CreateLoggerDefinitionVersion"
 
 // CreateLoggerDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateLoggerDefinitionVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateLoggerDefinitionVersion for usage and error information.
 //
-// See CreateLoggerDefinitionVersion for more information on using the CreateLoggerDefinitionVersion
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateLoggerDefinitionVersion method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateLoggerDefinitionVersionRequest method.
 //    req, resp := client.CreateLoggerDefinitionVersionRequest(params)
@@ -1144,18 +1158,19 @@ const opCreateSubscriptionDefinition = "CreateSubscriptionDefinition"
 
 // CreateSubscriptionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSubscriptionDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateSubscriptionDefinition for usage and error information.
 //
-// See CreateSubscriptionDefinition for more information on using the CreateSubscriptionDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateSubscriptionDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateSubscriptionDefinitionRequest method.
 //    req, resp := client.CreateSubscriptionDefinitionRequest(params)
@@ -1225,18 +1240,19 @@ const opCreateSubscriptionDefinitionVersion = "CreateSubscriptionDefinitionVersi
 
 // CreateSubscriptionDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSubscriptionDefinitionVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateSubscriptionDefinitionVersion for usage and error information.
 //
-// See CreateSubscriptionDefinitionVersion for more information on using the CreateSubscriptionDefinitionVersion
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateSubscriptionDefinitionVersion method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateSubscriptionDefinitionVersionRequest method.
 //    req, resp := client.CreateSubscriptionDefinitionVersionRequest(params)
@@ -1304,18 +1320,19 @@ const opDeleteCoreDefinition = "DeleteCoreDefinition"
 
 // DeleteCoreDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteCoreDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteCoreDefinition for usage and error information.
 //
-// See DeleteCoreDefinition for more information on using the DeleteCoreDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteCoreDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteCoreDefinitionRequest method.
 //    req, resp := client.DeleteCoreDefinitionRequest(params)
@@ -1384,18 +1401,19 @@ const opDeleteDeviceDefinition = "DeleteDeviceDefinition"
 
 // DeleteDeviceDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDeviceDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteDeviceDefinition for usage and error information.
 //
-// See DeleteDeviceDefinition for more information on using the DeleteDeviceDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteDeviceDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteDeviceDefinitionRequest method.
 //    req, resp := client.DeleteDeviceDefinitionRequest(params)
@@ -1464,18 +1482,19 @@ const opDeleteFunctionDefinition = "DeleteFunctionDefinition"
 
 // DeleteFunctionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteFunctionDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteFunctionDefinition for usage and error information.
 //
-// See DeleteFunctionDefinition for more information on using the DeleteFunctionDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteFunctionDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteFunctionDefinitionRequest method.
 //    req, resp := client.DeleteFunctionDefinitionRequest(params)
@@ -1544,18 +1563,19 @@ const opDeleteGroup = "DeleteGroup"
 
 // DeleteGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteGroup for usage and error information.
 //
-// See DeleteGroup for more information on using the DeleteGroup
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteGroup method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteGroupRequest method.
 //    req, resp := client.DeleteGroupRequest(params)
@@ -1623,18 +1643,19 @@ const opDeleteLoggerDefinition = "DeleteLoggerDefinition"
 
 // DeleteLoggerDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteLoggerDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteLoggerDefinition for usage and error information.
 //
-// See DeleteLoggerDefinition for more information on using the DeleteLoggerDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteLoggerDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteLoggerDefinitionRequest method.
 //    req, resp := client.DeleteLoggerDefinitionRequest(params)
@@ -1703,18 +1724,19 @@ const opDeleteSubscriptionDefinition = "DeleteSubscriptionDefinition"
 
 // DeleteSubscriptionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSubscriptionDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteSubscriptionDefinition for usage and error information.
 //
-// See DeleteSubscriptionDefinition for more information on using the DeleteSubscriptionDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteSubscriptionDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteSubscriptionDefinitionRequest method.
 //    req, resp := client.DeleteSubscriptionDefinitionRequest(params)
@@ -1783,18 +1805,19 @@ const opDisassociateRoleFromGroup = "DisassociateRoleFromGroup"
 
 // DisassociateRoleFromGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateRoleFromGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DisassociateRoleFromGroup for usage and error information.
 //
-// See DisassociateRoleFromGroup for more information on using the DisassociateRoleFromGroup
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DisassociateRoleFromGroup method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DisassociateRoleFromGroupRequest method.
 //    req, resp := client.DisassociateRoleFromGroupRequest(params)
@@ -1837,7 +1860,7 @@ func (c *Greengrass) DisassociateRoleFromGroupRequest(input *DisassociateRoleFro
 //   user error
 //
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
-//   Server Error
+//   This request was invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DisassociateRoleFromGroup
 func (c *Greengrass) DisassociateRoleFromGroup(input *DisassociateRoleFromGroupInput) (*DisassociateRoleFromGroupOutput, error) {
@@ -1865,18 +1888,19 @@ const opDisassociateServiceRoleFromAccount = "DisassociateServiceRoleFromAccount
 
 // DisassociateServiceRoleFromAccountRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateServiceRoleFromAccount operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DisassociateServiceRoleFromAccount for usage and error information.
 //
-// See DisassociateServiceRoleFromAccount for more information on using the DisassociateServiceRoleFromAccount
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DisassociateServiceRoleFromAccount method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DisassociateServiceRoleFromAccountRequest method.
 //    req, resp := client.DisassociateServiceRoleFromAccountRequest(params)
@@ -1917,7 +1941,7 @@ func (c *Greengrass) DisassociateServiceRoleFromAccountRequest(input *Disassocia
 //
 // Returned Error Codes:
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
-//   Server Error
+//   This request was invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DisassociateServiceRoleFromAccount
 func (c *Greengrass) DisassociateServiceRoleFromAccount(input *DisassociateServiceRoleFromAccountInput) (*DisassociateServiceRoleFromAccountOutput, error) {
@@ -1945,18 +1969,19 @@ const opGetAssociatedRole = "GetAssociatedRole"
 
 // GetAssociatedRoleRequest generates a "aws/request.Request" representing the
 // client's request for the GetAssociatedRole operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetAssociatedRole for usage and error information.
 //
-// See GetAssociatedRole for more information on using the GetAssociatedRole
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetAssociatedRole method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetAssociatedRoleRequest method.
 //    req, resp := client.GetAssociatedRoleRequest(params)
@@ -1999,7 +2024,7 @@ func (c *Greengrass) GetAssociatedRoleRequest(input *GetAssociatedRoleInput) (re
 //   user error
 //
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
-//   Server Error
+//   This request was invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetAssociatedRole
 func (c *Greengrass) GetAssociatedRole(input *GetAssociatedRoleInput) (*GetAssociatedRoleOutput, error) {
@@ -2027,18 +2052,19 @@ const opGetConnectivityInfo = "GetConnectivityInfo"
 
 // GetConnectivityInfoRequest generates a "aws/request.Request" representing the
 // client's request for the GetConnectivityInfo operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetConnectivityInfo for usage and error information.
 //
-// See GetConnectivityInfo for more information on using the GetConnectivityInfo
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetConnectivityInfo method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetConnectivityInfoRequest method.
 //    req, resp := client.GetConnectivityInfoRequest(params)
@@ -2081,7 +2107,7 @@ func (c *Greengrass) GetConnectivityInfoRequest(input *GetConnectivityInfoInput)
 //   user error
 //
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
-//   Server Error
+//   This request was invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetConnectivityInfo
 func (c *Greengrass) GetConnectivityInfo(input *GetConnectivityInfoInput) (*GetConnectivityInfoOutput, error) {
@@ -2109,18 +2135,19 @@ const opGetCoreDefinition = "GetCoreDefinition"
 
 // GetCoreDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the GetCoreDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetCoreDefinition for usage and error information.
 //
-// See GetCoreDefinition for more information on using the GetCoreDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetCoreDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetCoreDefinitionRequest method.
 //    req, resp := client.GetCoreDefinitionRequest(params)
@@ -2188,18 +2215,19 @@ const opGetCoreDefinitionVersion = "GetCoreDefinitionVersion"
 
 // GetCoreDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetCoreDefinitionVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetCoreDefinitionVersion for usage and error information.
 //
-// See GetCoreDefinitionVersion for more information on using the GetCoreDefinitionVersion
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetCoreDefinitionVersion method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetCoreDefinitionVersionRequest method.
 //    req, resp := client.GetCoreDefinitionVersionRequest(params)
@@ -2267,18 +2295,19 @@ const opGetDeploymentStatus = "GetDeploymentStatus"
 
 // GetDeploymentStatusRequest generates a "aws/request.Request" representing the
 // client's request for the GetDeploymentStatus operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetDeploymentStatus for usage and error information.
 //
-// See GetDeploymentStatus for more information on using the GetDeploymentStatus
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetDeploymentStatus method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetDeploymentStatusRequest method.
 //    req, resp := client.GetDeploymentStatusRequest(params)
@@ -2346,18 +2375,19 @@ const opGetDeviceDefinition = "GetDeviceDefinition"
 
 // GetDeviceDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the GetDeviceDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetDeviceDefinition for usage and error information.
 //
-// See GetDeviceDefinition for more information on using the GetDeviceDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetDeviceDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetDeviceDefinitionRequest method.
 //    req, resp := client.GetDeviceDefinitionRequest(params)
@@ -2425,18 +2455,19 @@ const opGetDeviceDefinitionVersion = "GetDeviceDefinitionVersion"
 
 // GetDeviceDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetDeviceDefinitionVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetDeviceDefinitionVersion for usage and error information.
 //
-// See GetDeviceDefinitionVersion for more information on using the GetDeviceDefinitionVersion
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetDeviceDefinitionVersion method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetDeviceDefinitionVersionRequest method.
 //    req, resp := client.GetDeviceDefinitionVersionRequest(params)
@@ -2504,18 +2535,19 @@ const opGetFunctionDefinition = "GetFunctionDefinition"
 
 // GetFunctionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the GetFunctionDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetFunctionDefinition for usage and error information.
 //
-// See GetFunctionDefinition for more information on using the GetFunctionDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetFunctionDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetFunctionDefinitionRequest method.
 //    req, resp := client.GetFunctionDefinitionRequest(params)
@@ -2584,18 +2616,19 @@ const opGetFunctionDefinitionVersion = "GetFunctionDefinitionVersion"
 
 // GetFunctionDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetFunctionDefinitionVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetFunctionDefinitionVersion for usage and error information.
 //
-// See GetFunctionDefinitionVersion for more information on using the GetFunctionDefinitionVersion
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetFunctionDefinitionVersion method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetFunctionDefinitionVersionRequest method.
 //    req, resp := client.GetFunctionDefinitionVersionRequest(params)
@@ -2664,18 +2697,19 @@ const opGetGroup = "GetGroup"
 
 // GetGroupRequest generates a "aws/request.Request" representing the
 // client's request for the GetGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetGroup for usage and error information.
 //
-// See GetGroup for more information on using the GetGroup
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetGroup method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetGroupRequest method.
 //    req, resp := client.GetGroupRequest(params)
@@ -2743,18 +2777,19 @@ const opGetGroupCertificateAuthority = "GetGroupCertificateAuthority"
 
 // GetGroupCertificateAuthorityRequest generates a "aws/request.Request" representing the
 // client's request for the GetGroupCertificateAuthority operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetGroupCertificateAuthority for usage and error information.
 //
-// See GetGroupCertificateAuthority for more information on using the GetGroupCertificateAuthority
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetGroupCertificateAuthority method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetGroupCertificateAuthorityRequest method.
 //    req, resp := client.GetGroupCertificateAuthorityRequest(params)
@@ -2797,7 +2832,7 @@ func (c *Greengrass) GetGroupCertificateAuthorityRequest(input *GetGroupCertific
 //   user error
 //
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
-//   Server Error
+//   This request was invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetGroupCertificateAuthority
 func (c *Greengrass) GetGroupCertificateAuthority(input *GetGroupCertificateAuthorityInput) (*GetGroupCertificateAuthorityOutput, error) {
@@ -2825,18 +2860,19 @@ const opGetGroupCertificateConfiguration = "GetGroupCertificateConfiguration"
 
 // GetGroupCertificateConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the GetGroupCertificateConfiguration operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetGroupCertificateConfiguration for usage and error information.
 //
-// See GetGroupCertificateConfiguration for more information on using the GetGroupCertificateConfiguration
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetGroupCertificateConfiguration method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetGroupCertificateConfigurationRequest method.
 //    req, resp := client.GetGroupCertificateConfigurationRequest(params)
@@ -2879,7 +2915,7 @@ func (c *Greengrass) GetGroupCertificateConfigurationRequest(input *GetGroupCert
 //   user error
 //
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
-//   Server Error
+//   This request was invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetGroupCertificateConfiguration
 func (c *Greengrass) GetGroupCertificateConfiguration(input *GetGroupCertificateConfigurationInput) (*GetGroupCertificateConfigurationOutput, error) {
@@ -2907,18 +2943,19 @@ const opGetGroupVersion = "GetGroupVersion"
 
 // GetGroupVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetGroupVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetGroupVersion for usage and error information.
 //
-// See GetGroupVersion for more information on using the GetGroupVersion
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetGroupVersion method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetGroupVersionRequest method.
 //    req, resp := client.GetGroupVersionRequest(params)
@@ -2986,18 +3023,19 @@ const opGetLoggerDefinition = "GetLoggerDefinition"
 
 // GetLoggerDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the GetLoggerDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetLoggerDefinition for usage and error information.
 //
-// See GetLoggerDefinition for more information on using the GetLoggerDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetLoggerDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetLoggerDefinitionRequest method.
 //    req, resp := client.GetLoggerDefinitionRequest(params)
@@ -3065,18 +3103,19 @@ const opGetLoggerDefinitionVersion = "GetLoggerDefinitionVersion"
 
 // GetLoggerDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetLoggerDefinitionVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetLoggerDefinitionVersion for usage and error information.
 //
-// See GetLoggerDefinitionVersion for more information on using the GetLoggerDefinitionVersion
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetLoggerDefinitionVersion method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetLoggerDefinitionVersionRequest method.
 //    req, resp := client.GetLoggerDefinitionVersionRequest(params)
@@ -3144,18 +3183,19 @@ const opGetServiceRoleForAccount = "GetServiceRoleForAccount"
 
 // GetServiceRoleForAccountRequest generates a "aws/request.Request" representing the
 // client's request for the GetServiceRoleForAccount operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetServiceRoleForAccount for usage and error information.
 //
-// See GetServiceRoleForAccount for more information on using the GetServiceRoleForAccount
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetServiceRoleForAccount method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetServiceRoleForAccountRequest method.
 //    req, resp := client.GetServiceRoleForAccountRequest(params)
@@ -3195,7 +3235,7 @@ func (c *Greengrass) GetServiceRoleForAccountRequest(input *GetServiceRoleForAcc
 //
 // Returned Error Codes:
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
-//   Server Error
+//   This request was invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetServiceRoleForAccount
 func (c *Greengrass) GetServiceRoleForAccount(input *GetServiceRoleForAccountInput) (*GetServiceRoleForAccountOutput, error) {
@@ -3223,18 +3263,19 @@ const opGetSubscriptionDefinition = "GetSubscriptionDefinition"
 
 // GetSubscriptionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the GetSubscriptionDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetSubscriptionDefinition for usage and error information.
 //
-// See GetSubscriptionDefinition for more information on using the GetSubscriptionDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetSubscriptionDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetSubscriptionDefinitionRequest method.
 //    req, resp := client.GetSubscriptionDefinitionRequest(params)
@@ -3302,18 +3343,19 @@ const opGetSubscriptionDefinitionVersion = "GetSubscriptionDefinitionVersion"
 
 // GetSubscriptionDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetSubscriptionDefinitionVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetSubscriptionDefinitionVersion for usage and error information.
 //
-// See GetSubscriptionDefinitionVersion for more information on using the GetSubscriptionDefinitionVersion
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetSubscriptionDefinitionVersion method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetSubscriptionDefinitionVersionRequest method.
 //    req, resp := client.GetSubscriptionDefinitionVersionRequest(params)
@@ -3381,18 +3423,19 @@ const opListCoreDefinitionVersions = "ListCoreDefinitionVersions"
 
 // ListCoreDefinitionVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListCoreDefinitionVersions operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListCoreDefinitionVersions for usage and error information.
 //
-// See ListCoreDefinitionVersions for more information on using the ListCoreDefinitionVersions
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListCoreDefinitionVersions method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListCoreDefinitionVersionsRequest method.
 //    req, resp := client.ListCoreDefinitionVersionsRequest(params)
@@ -3460,18 +3503,19 @@ const opListCoreDefinitions = "ListCoreDefinitions"
 
 // ListCoreDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListCoreDefinitions operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListCoreDefinitions for usage and error information.
 //
-// See ListCoreDefinitions for more information on using the ListCoreDefinitions
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListCoreDefinitions method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListCoreDefinitionsRequest method.
 //    req, resp := client.ListCoreDefinitionsRequest(params)
@@ -3534,18 +3578,19 @@ const opListDeployments = "ListDeployments"
 
 // ListDeploymentsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDeployments operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListDeployments for usage and error information.
 //
-// See ListDeployments for more information on using the ListDeployments
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListDeployments method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListDeploymentsRequest method.
 //    req, resp := client.ListDeploymentsRequest(params)
@@ -3613,18 +3658,19 @@ const opListDeviceDefinitionVersions = "ListDeviceDefinitionVersions"
 
 // ListDeviceDefinitionVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDeviceDefinitionVersions operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListDeviceDefinitionVersions for usage and error information.
 //
-// See ListDeviceDefinitionVersions for more information on using the ListDeviceDefinitionVersions
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListDeviceDefinitionVersions method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListDeviceDefinitionVersionsRequest method.
 //    req, resp := client.ListDeviceDefinitionVersionsRequest(params)
@@ -3692,18 +3738,19 @@ const opListDeviceDefinitions = "ListDeviceDefinitions"
 
 // ListDeviceDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDeviceDefinitions operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListDeviceDefinitions for usage and error information.
 //
-// See ListDeviceDefinitions for more information on using the ListDeviceDefinitions
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListDeviceDefinitions method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListDeviceDefinitionsRequest method.
 //    req, resp := client.ListDeviceDefinitionsRequest(params)
@@ -3766,18 +3813,19 @@ const opListFunctionDefinitionVersions = "ListFunctionDefinitionVersions"
 
 // ListFunctionDefinitionVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListFunctionDefinitionVersions operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListFunctionDefinitionVersions for usage and error information.
 //
-// See ListFunctionDefinitionVersions for more information on using the ListFunctionDefinitionVersions
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListFunctionDefinitionVersions method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListFunctionDefinitionVersionsRequest method.
 //    req, resp := client.ListFunctionDefinitionVersionsRequest(params)
@@ -3845,18 +3893,19 @@ const opListFunctionDefinitions = "ListFunctionDefinitions"
 
 // ListFunctionDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListFunctionDefinitions operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListFunctionDefinitions for usage and error information.
 //
-// See ListFunctionDefinitions for more information on using the ListFunctionDefinitions
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListFunctionDefinitions method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListFunctionDefinitionsRequest method.
 //    req, resp := client.ListFunctionDefinitionsRequest(params)
@@ -3919,18 +3968,19 @@ const opListGroupCertificateAuthorities = "ListGroupCertificateAuthorities"
 
 // ListGroupCertificateAuthoritiesRequest generates a "aws/request.Request" representing the
 // client's request for the ListGroupCertificateAuthorities operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListGroupCertificateAuthorities for usage and error information.
 //
-// See ListGroupCertificateAuthorities for more information on using the ListGroupCertificateAuthorities
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListGroupCertificateAuthorities method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListGroupCertificateAuthoritiesRequest method.
 //    req, resp := client.ListGroupCertificateAuthoritiesRequest(params)
@@ -3973,7 +4023,7 @@ func (c *Greengrass) ListGroupCertificateAuthoritiesRequest(input *ListGroupCert
 //   user error
 //
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
-//   Server Error
+//   This request was invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListGroupCertificateAuthorities
 func (c *Greengrass) ListGroupCertificateAuthorities(input *ListGroupCertificateAuthoritiesInput) (*ListGroupCertificateAuthoritiesOutput, error) {
@@ -4001,18 +4051,19 @@ const opListGroupVersions = "ListGroupVersions"
 
 // ListGroupVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListGroupVersions operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListGroupVersions for usage and error information.
 //
-// See ListGroupVersions for more information on using the ListGroupVersions
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListGroupVersions method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListGroupVersionsRequest method.
 //    req, resp := client.ListGroupVersionsRequest(params)
@@ -4080,18 +4131,19 @@ const opListGroups = "ListGroups"
 
 // ListGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the ListGroups operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListGroups for usage and error information.
 //
-// See ListGroups for more information on using the ListGroups
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListGroups method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListGroupsRequest method.
 //    req, resp := client.ListGroupsRequest(params)
@@ -4154,18 +4206,19 @@ const opListLoggerDefinitionVersions = "ListLoggerDefinitionVersions"
 
 // ListLoggerDefinitionVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListLoggerDefinitionVersions operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListLoggerDefinitionVersions for usage and error information.
 //
-// See ListLoggerDefinitionVersions for more information on using the ListLoggerDefinitionVersions
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListLoggerDefinitionVersions method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListLoggerDefinitionVersionsRequest method.
 //    req, resp := client.ListLoggerDefinitionVersionsRequest(params)
@@ -4233,18 +4286,19 @@ const opListLoggerDefinitions = "ListLoggerDefinitions"
 
 // ListLoggerDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListLoggerDefinitions operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListLoggerDefinitions for usage and error information.
 //
-// See ListLoggerDefinitions for more information on using the ListLoggerDefinitions
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListLoggerDefinitions method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListLoggerDefinitionsRequest method.
 //    req, resp := client.ListLoggerDefinitionsRequest(params)
@@ -4307,18 +4361,19 @@ const opListSubscriptionDefinitionVersions = "ListSubscriptionDefinitionVersions
 
 // ListSubscriptionDefinitionVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSubscriptionDefinitionVersions operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListSubscriptionDefinitionVersions for usage and error information.
 //
-// See ListSubscriptionDefinitionVersions for more information on using the ListSubscriptionDefinitionVersions
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListSubscriptionDefinitionVersions method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListSubscriptionDefinitionVersionsRequest method.
 //    req, resp := client.ListSubscriptionDefinitionVersionsRequest(params)
@@ -4386,18 +4441,19 @@ const opListSubscriptionDefinitions = "ListSubscriptionDefinitions"
 
 // ListSubscriptionDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSubscriptionDefinitions operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListSubscriptionDefinitions for usage and error information.
 //
-// See ListSubscriptionDefinitions for more information on using the ListSubscriptionDefinitions
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListSubscriptionDefinitions method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListSubscriptionDefinitionsRequest method.
 //    req, resp := client.ListSubscriptionDefinitionsRequest(params)
@@ -4456,101 +4512,23 @@ func (c *Greengrass) ListSubscriptionDefinitionsWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
-const opResetDeployments = "ResetDeployments"
-
-// ResetDeploymentsRequest generates a "aws/request.Request" representing the
-// client's request for the ResetDeployments operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
-//
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
-//
-// See ResetDeployments for more information on using the ResetDeployments
-// API call, and error handling.
-//
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
-//
-//    // Example sending a request using the ResetDeploymentsRequest method.
-//    req, resp := client.ResetDeploymentsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
-//
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ResetDeployments
-func (c *Greengrass) ResetDeploymentsRequest(input *ResetDeploymentsInput) (req *request.Request, output *ResetDeploymentsOutput) {
-	op := &request.Operation{
-		Name:       opResetDeployments,
-		HTTPMethod: "POST",
-		HTTPPath:   "/greengrass/groups/{GroupId}/deployments/$reset",
-	}
-
-	if input == nil {
-		input = &ResetDeploymentsInput{}
-	}
-
-	output = &ResetDeploymentsOutput{}
-	req = c.newRequest(op, input, output)
-	return
-}
-
-// ResetDeployments API operation for AWS Greengrass.
-//
-// Resets a group's deployments.
-//
-// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
-// with awserr.Error's Code and Message methods to get detailed information about
-// the error.
-//
-// See the AWS API reference guide for AWS Greengrass's
-// API operation ResetDeployments for usage and error information.
-//
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
-//   user error
-//
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ResetDeployments
-func (c *Greengrass) ResetDeployments(input *ResetDeploymentsInput) (*ResetDeploymentsOutput, error) {
-	req, out := c.ResetDeploymentsRequest(input)
-	return out, req.Send()
-}
-
-// ResetDeploymentsWithContext is the same as ResetDeployments with the addition of
-// the ability to pass a context and additional request options.
-//
-// See ResetDeployments for details on how to use this API operation.
-//
-// The context must be non-nil and will be used for request cancellation. If
-// the context is nil a panic will occur. In the future the SDK may create
-// sub-contexts for http.Requests. See https://golang.org/pkg/context/
-// for more information on using Contexts.
-func (c *Greengrass) ResetDeploymentsWithContext(ctx aws.Context, input *ResetDeploymentsInput, opts ...request.Option) (*ResetDeploymentsOutput, error) {
-	req, out := c.ResetDeploymentsRequest(input)
-	req.SetContext(ctx)
-	req.ApplyOptions(opts...)
-	return out, req.Send()
-}
-
 const opUpdateConnectivityInfo = "UpdateConnectivityInfo"
 
 // UpdateConnectivityInfoRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateConnectivityInfo operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateConnectivityInfo for usage and error information.
 //
-// See UpdateConnectivityInfo for more information on using the UpdateConnectivityInfo
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateConnectivityInfo method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateConnectivityInfoRequest method.
 //    req, resp := client.UpdateConnectivityInfoRequest(params)
@@ -4595,7 +4573,7 @@ func (c *Greengrass) UpdateConnectivityInfoRequest(input *UpdateConnectivityInfo
 //   user error
 //
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
-//   Server Error
+//   This request was invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateConnectivityInfo
 func (c *Greengrass) UpdateConnectivityInfo(input *UpdateConnectivityInfoInput) (*UpdateConnectivityInfoOutput, error) {
@@ -4623,18 +4601,19 @@ const opUpdateCoreDefinition = "UpdateCoreDefinition"
 
 // UpdateCoreDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateCoreDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateCoreDefinition for usage and error information.
 //
-// See UpdateCoreDefinition for more information on using the UpdateCoreDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateCoreDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateCoreDefinitionRequest method.
 //    req, resp := client.UpdateCoreDefinitionRequest(params)
@@ -4702,18 +4681,19 @@ const opUpdateDeviceDefinition = "UpdateDeviceDefinition"
 
 // UpdateDeviceDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDeviceDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateDeviceDefinition for usage and error information.
 //
-// See UpdateDeviceDefinition for more information on using the UpdateDeviceDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateDeviceDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateDeviceDefinitionRequest method.
 //    req, resp := client.UpdateDeviceDefinitionRequest(params)
@@ -4781,18 +4761,19 @@ const opUpdateFunctionDefinition = "UpdateFunctionDefinition"
 
 // UpdateFunctionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateFunctionDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateFunctionDefinition for usage and error information.
 //
-// See UpdateFunctionDefinition for more information on using the UpdateFunctionDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateFunctionDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateFunctionDefinitionRequest method.
 //    req, resp := client.UpdateFunctionDefinitionRequest(params)
@@ -4860,18 +4841,19 @@ const opUpdateGroup = "UpdateGroup"
 
 // UpdateGroupRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateGroup for usage and error information.
 //
-// See UpdateGroup for more information on using the UpdateGroup
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateGroup method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateGroupRequest method.
 //    req, resp := client.UpdateGroupRequest(params)
@@ -4939,18 +4921,19 @@ const opUpdateGroupCertificateConfiguration = "UpdateGroupCertificateConfigurati
 
 // UpdateGroupCertificateConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateGroupCertificateConfiguration operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateGroupCertificateConfiguration for usage and error information.
 //
-// See UpdateGroupCertificateConfiguration for more information on using the UpdateGroupCertificateConfiguration
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateGroupCertificateConfiguration method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateGroupCertificateConfigurationRequest method.
 //    req, resp := client.UpdateGroupCertificateConfigurationRequest(params)
@@ -4993,7 +4976,7 @@ func (c *Greengrass) UpdateGroupCertificateConfigurationRequest(input *UpdateGro
 //   user error
 //
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
-//   Server Error
+//   This request was invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateGroupCertificateConfiguration
 func (c *Greengrass) UpdateGroupCertificateConfiguration(input *UpdateGroupCertificateConfigurationInput) (*UpdateGroupCertificateConfigurationOutput, error) {
@@ -5021,18 +5004,19 @@ const opUpdateLoggerDefinition = "UpdateLoggerDefinition"
 
 // UpdateLoggerDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateLoggerDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateLoggerDefinition for usage and error information.
 //
-// See UpdateLoggerDefinition for more information on using the UpdateLoggerDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateLoggerDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateLoggerDefinitionRequest method.
 //    req, resp := client.UpdateLoggerDefinitionRequest(params)
@@ -5100,18 +5084,19 @@ const opUpdateSubscriptionDefinition = "UpdateSubscriptionDefinition"
 
 // UpdateSubscriptionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSubscriptionDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateSubscriptionDefinition for usage and error information.
 //
-// See UpdateSubscriptionDefinition for more information on using the UpdateSubscriptionDefinition
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateSubscriptionDefinition method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateSubscriptionDefinitionRequest method.
 //    req, resp := client.UpdateSubscriptionDefinitionRequest(params)
@@ -5644,8 +5629,7 @@ type CreateDeploymentInput struct {
 	// Id of the deployment if you wish to redeploy a previous deployment.
 	DeploymentId *string `type:"string"`
 
-	// Type of deployment. When used in CreateDeployment, only NewDeployment and
-	// Redeployment are valid.
+	// Type of deployment
 	DeploymentType *string `type:"string" enum:"DeploymentType"`
 
 	// GroupId is a required field
@@ -5712,10 +5696,10 @@ func (s *CreateDeploymentInput) SetGroupVersionId(v string) *CreateDeploymentInp
 type CreateDeploymentOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The arn of the deployment.
+	// Arn of the deployment.
 	DeploymentArn *string `type:"string"`
 
-	// The id of the deployment.
+	// Id of the deployment.
 	DeploymentId *string `type:"string"`
 }
 
@@ -7302,9 +7286,6 @@ type Deployment struct {
 	// Id of the deployment.
 	DeploymentId *string `type:"string"`
 
-	// The type of deployment.
-	DeploymentType *string `type:"string" enum:"DeploymentType"`
-
 	// Arn of the group for this deployment.
 	GroupArn *string `type:"string"`
 }
@@ -7334,12 +7315,6 @@ func (s *Deployment) SetDeploymentArn(v string) *Deployment {
 // SetDeploymentId sets the DeploymentId field's value.
 func (s *Deployment) SetDeploymentId(v string) *Deployment {
 	s.DeploymentId = &v
-	return s
-}
-
-// SetDeploymentType sets the DeploymentType field's value.
-func (s *Deployment) SetDeploymentType(v string) *Deployment {
-	s.DeploymentType = &v
 	return s
 }
 
@@ -7837,7 +7812,7 @@ func (s *GetConnectivityInfoInput) SetThingName(v string) *GetConnectivityInfoIn
 type GetConnectivityInfoOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Connectivity info list
+	// Connectivity info array
 	ConnectivityInfo []*ConnectivityInfo `type:"list"`
 
 	Message *string `locationName:"message" type:"string"`
@@ -8139,12 +8114,6 @@ type GetDeploymentStatusOutput struct {
 	// Status of the deployment.
 	DeploymentStatus *string `type:"string"`
 
-	// The type of the deployment.
-	DeploymentType *string `type:"string" enum:"DeploymentType"`
-
-	// The error Details
-	ErrorDetails []*ErrorDetail `type:"list"`
-
 	// Error Message
 	ErrorMessage *string `type:"string"`
 
@@ -8165,18 +8134,6 @@ func (s GetDeploymentStatusOutput) GoString() string {
 // SetDeploymentStatus sets the DeploymentStatus field's value.
 func (s *GetDeploymentStatusOutput) SetDeploymentStatus(v string) *GetDeploymentStatusOutput {
 	s.DeploymentStatus = &v
-	return s
-}
-
-// SetDeploymentType sets the DeploymentType field's value.
-func (s *GetDeploymentStatusOutput) SetDeploymentType(v string) *GetDeploymentStatusOutput {
-	s.DeploymentType = &v
-	return s
-}
-
-// SetErrorDetails sets the ErrorDetails field's value.
-func (s *GetDeploymentStatusOutput) SetErrorDetails(v []*ErrorDetail) *GetDeploymentStatusOutput {
-	s.ErrorDetails = v
 	return s
 }
 
@@ -9531,7 +9488,7 @@ func (s *GroupCertificateAuthorityProperties) SetGroupCertificateAuthorityId(v s
 	return s
 }
 
-// Information on the group
+// Information of a group
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GroupInformation
 type GroupInformation struct {
 	_ struct{} `type:"structure"`
@@ -9874,7 +9831,7 @@ func (s *ListDeploymentsInput) SetNextToken(v string) *ListDeploymentsInput {
 type ListDeploymentsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// List of deployments for the requested groups
+	// Information on deployments
 	Deployments []*Deployment `type:"list"`
 
 	// The token for the next set of results, or ''null'' if there are no additional
@@ -10785,94 +10742,6 @@ func (s *LoggerDefinitionVersion) SetLoggers(v []*Logger) *LoggerDefinitionVersi
 	return s
 }
 
-// Information needed to perform a reset of a group's deployments.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ResetDeploymentsRequest
-type ResetDeploymentsInput struct {
-	_ struct{} `type:"structure"`
-
-	AmznClientToken *string `location:"header" locationName:"X-Amzn-Client-Token" type:"string"`
-
-	// When set to true, perform a best-effort only core reset.
-	Force *bool `type:"boolean"`
-
-	// GroupId is a required field
-	GroupId *string `location:"uri" locationName:"GroupId" type:"string" required:"true"`
-}
-
-// String returns the string representation
-func (s ResetDeploymentsInput) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s ResetDeploymentsInput) GoString() string {
-	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *ResetDeploymentsInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "ResetDeploymentsInput"}
-	if s.GroupId == nil {
-		invalidParams.Add(request.NewErrParamRequired("GroupId"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
-// SetAmznClientToken sets the AmznClientToken field's value.
-func (s *ResetDeploymentsInput) SetAmznClientToken(v string) *ResetDeploymentsInput {
-	s.AmznClientToken = &v
-	return s
-}
-
-// SetForce sets the Force field's value.
-func (s *ResetDeploymentsInput) SetForce(v bool) *ResetDeploymentsInput {
-	s.Force = &v
-	return s
-}
-
-// SetGroupId sets the GroupId field's value.
-func (s *ResetDeploymentsInput) SetGroupId(v string) *ResetDeploymentsInput {
-	s.GroupId = &v
-	return s
-}
-
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ResetDeploymentsResponse
-type ResetDeploymentsOutput struct {
-	_ struct{} `type:"structure"`
-
-	// The arn of the reset deployment.
-	DeploymentArn *string `type:"string"`
-
-	// The id of the reset deployment.
-	DeploymentId *string `type:"string"`
-}
-
-// String returns the string representation
-func (s ResetDeploymentsOutput) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s ResetDeploymentsOutput) GoString() string {
-	return s.String()
-}
-
-// SetDeploymentArn sets the DeploymentArn field's value.
-func (s *ResetDeploymentsOutput) SetDeploymentArn(v string) *ResetDeploymentsOutput {
-	s.DeploymentArn = &v
-	return s
-}
-
-// SetDeploymentId sets the DeploymentId field's value.
-func (s *ResetDeploymentsOutput) SetDeploymentId(v string) *ResetDeploymentsOutput {
-	s.DeploymentId = &v
-	return s
-}
-
 // Information on subscription
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/Subscription
 type Subscription struct {
@@ -10955,7 +10824,7 @@ func (s *SubscriptionDefinitionVersion) SetSubscriptions(v []*Subscription) *Sub
 type UpdateConnectivityInfoInput struct {
 	_ struct{} `type:"structure"`
 
-	// Connectivity info list
+	// Connectivity info array
 	ConnectivityInfo []*ConnectivityInfo `type:"list"`
 
 	// ThingName is a required field
@@ -11532,12 +11401,6 @@ const (
 
 	// DeploymentTypeRedeployment is a DeploymentType enum value
 	DeploymentTypeRedeployment = "Redeployment"
-
-	// DeploymentTypeResetDeployment is a DeploymentType enum value
-	DeploymentTypeResetDeployment = "ResetDeployment"
-
-	// DeploymentTypeForceResetDeployment is a DeploymentType enum value
-	DeploymentTypeForceResetDeployment = "ForceResetDeployment"
 )
 
 const (

@@ -49,18 +49,17 @@ type KVPairs []*KVPair
 type KVOp string
 
 const (
-	KVSet            KVOp = "set"
-	KVDelete         KVOp = "delete"
-	KVDeleteCAS      KVOp = "delete-cas"
-	KVDeleteTree     KVOp = "delete-tree"
-	KVCAS            KVOp = "cas"
-	KVLock           KVOp = "lock"
-	KVUnlock         KVOp = "unlock"
-	KVGet            KVOp = "get"
-	KVGetTree        KVOp = "get-tree"
-	KVCheckSession   KVOp = "check-session"
-	KVCheckIndex     KVOp = "check-index"
-	KVCheckNotExists KVOp = "check-not-exists"
+	KVSet          KVOp = "set"
+	KVDelete       KVOp = "delete"
+	KVDeleteCAS    KVOp = "delete-cas"
+	KVDeleteTree   KVOp = "delete-tree"
+	KVCAS          KVOp = "cas"
+	KVLock         KVOp = "lock"
+	KVUnlock       KVOp = "unlock"
+	KVGet          KVOp = "get"
+	KVGetTree      KVOp = "get-tree"
+	KVCheckSession KVOp = "check-session"
+	KVCheckIndex   KVOp = "check-index"
 )
 
 // KVTxnOp defines a single operation inside a transaction.

@@ -2,38 +2,39 @@ package command
 
 import (
 	"fmt"
+	"github.com/hashicorp/consul/command/base"
 	"strings"
 )
 
 // ForceLeaveCommand is a Command implementation that tells a running Consul
 // to force a member to enter the "left" state.
 type ForceLeaveCommand struct {
-	BaseCommand
+	base.Command
 }
 
 func (c *ForceLeaveCommand) Run(args []string) int {
-	f := c.BaseCommand.NewFlagSet(c)
-	if err := c.BaseCommand.Parse(args); err != nil {
+	f := c.Command.NewFlagSet(c)
+	if err := c.Command.Parse(args); err != nil {
 		return 1
 	}
 
 	nodes := f.Args()
 	if len(nodes) != 1 {
-		c.UI.Error("A single node name must be specified to force leave.")
-		c.UI.Error("")
-		c.UI.Error(c.Help())
+		c.Ui.Error("A single node name must be specified to force leave.")
+		c.Ui.Error("")
+		c.Ui.Error(c.Help())
 		return 1
 	}
 
-	client, err := c.BaseCommand.HTTPClient()
+	client, err := c.Command.HTTPClient()
 	if err != nil {
-		c.UI.Error(fmt.Sprintf("Error connecting to Consul agent: %s", err))
+		c.Ui.Error(fmt.Sprintf("Error connecting to Consul agent: %s", err))
 		return 1
 	}
 
 	err = client.Agent().ForceLeave(nodes[0])
 	if err != nil {
-		c.UI.Error(fmt.Sprintf("Error force leaving: %s", err))
+		c.Ui.Error(fmt.Sprintf("Error force leaving: %s", err))
 		return 1
 	}
 
@@ -55,7 +56,7 @@ Usage: consul force-leave [options] name
   Consul will attempt to reconnect to those failed nodes for some period of
   time before eventually reaping them.
 
-` + c.BaseCommand.Help()
+` + c.Command.Help()
 
 	return strings.TrimSpace(helpText)
 }

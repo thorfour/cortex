@@ -549,7 +549,6 @@ type Binding struct {
 	// group.
 	//    For example, `admins@example.com`.
 	//
-	//
 	// * `domain:{domain}`: A Google Apps domain name that represents all
 	// the
 	//    users of that domain. For example, `google.com` or
@@ -1737,8 +1736,8 @@ func (s *MergeVariantsRequest) MarshalJSON() ([]byte, error) {
 type Operation struct {
 	// Done: If the value is `false`, it means the operation is still in
 	// progress.
-	// If `true`, the operation is completed, and either `error` or
-	// `response` is
+	// If true, the operation is completed, and either `error` or `response`
+	// is
 	// available.
 	Done bool `json:"done,omitempty"`
 
@@ -1757,7 +1756,7 @@ type Operation struct {
 
 	// Response: If importing ReadGroupSets, an ImportReadGroupSetsResponse
 	// is returned. If importing Variants, an ImportVariantsResponse is
-	// returned. For pipelines and exports, an Empty response is returned.
+	// returned. For pipelines and exports, an empty response is returned.
 	Response googleapi.RawMessage `json:"response,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -1927,6 +1926,8 @@ func (s *OperationMetadata) MarshalJSON() ([]byte, error) {
 // [IAM developer's guide](https://cloud.google.com/iam).
 type Policy struct {
 	// Bindings: Associates a list of `members` to a `role`.
+	// Multiple `bindings` must not be specified for the same
+	// `role`.
 	// `bindings` with no members will result in an error.
 	Bindings []*Binding `json:"bindings,omitempty"`
 
@@ -3688,7 +3689,7 @@ func (s *SetIamPolicyRequest) MarshalJSON() ([]byte, error) {
 // arbitrary
 // information about the error. There is a predefined set of error
 // detail types
-// in the package `google.rpc` that can be used for common error
+// in the package `google.rpc` which can be used for common error
 // conditions.
 //
 // # Language mapping
@@ -3721,7 +3722,7 @@ func (s *SetIamPolicyRequest) MarshalJSON() ([]byte, error) {
 //
 // - Workflow errors. A typical workflow has multiple steps. Each step
 // may
-//     have a `Status` message for error reporting.
+//     have a `Status` message for error reporting purpose.
 //
 // - Batch operations. If a client uses batch request and batch
 // response, the
@@ -3744,9 +3745,9 @@ type Status struct {
 	// google.rpc.Code.
 	Code int64 `json:"code,omitempty"`
 
-	// Details: A list of messages that carry the error details.  There is a
-	// common set of
-	// message types for APIs to use.
+	// Details: A list of messages that carry the error details.  There will
+	// be a
+	// common set of message types for APIs to use.
 	Details []googleapi.RawMessage `json:"details,omitempty"`
 
 	// Message: A developer-facing error message, which should be in
@@ -8526,7 +8527,7 @@ func (c *OperationsListCall) Do(opts ...googleapi.CallOption) (*ListOperationsRe
 	//       "type": "string"
 	//     },
 	//     "name": {
-	//       "description": "The name of the operation's parent resource.",
+	//       "description": "The name of the operation collection.",
 	//       "location": "path",
 	//       "pattern": "^operations$",
 	//       "required": true,

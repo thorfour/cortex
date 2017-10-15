@@ -9,7 +9,8 @@ import (
 )
 
 func TestCopyInStmt(t *testing.T) {
-	stmt := CopyIn("table name")
+	var stmt string
+	stmt = CopyIn("table name")
 	if stmt != `COPY "table name" () FROM STDIN` {
 		t.Fatal(stmt)
 	}
@@ -26,7 +27,8 @@ func TestCopyInStmt(t *testing.T) {
 }
 
 func TestCopyInSchemaStmt(t *testing.T) {
-	stmt := CopyInSchema("schema name", "table name")
+	var stmt string
+	stmt = CopyInSchema("schema name", "table name")
 	if stmt != `COPY "schema name"."table name" () FROM STDIN` {
 		t.Fatal(stmt)
 	}
@@ -224,7 +226,7 @@ func TestCopyInTypes(t *testing.T) {
 	if text != "Héllö\n ☃!\r\t\\" {
 		t.Fatal("unexpected result", text)
 	}
-	if !bytes.Equal(blob, []byte{0, 255, 9, 10, 13}) {
+	if bytes.Compare(blob, []byte{0, 255, 9, 10, 13}) != 0 {
 		t.Fatal("unexpected result", blob)
 	}
 	if nothing.Valid {

@@ -6,28 +6,29 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/hashicorp/consul/testutil"
+	"github.com/hashicorp/consul/command/base"
 	"github.com/mitchellh/cli"
 )
 
 func testValidateCommand(t *testing.T) (*cli.MockUi, *ValidateCommand) {
-	ui := cli.NewMockUi()
+	ui := new(cli.MockUi)
 	return ui, &ValidateCommand{
-		BaseCommand: BaseCommand{
-			UI:    ui,
-			Flags: FlagSetNone,
+		Command: base.Command{
+			Ui:    ui,
+			Flags: base.FlagSetNone,
 		},
 	}
 }
 
 func TestValidateCommand_implements(t *testing.T) {
-	t.Parallel()
 	var _ cli.Command = &ValidateCommand{}
 }
 
 func TestValidateCommandFailOnEmptyFile(t *testing.T) {
-	t.Parallel()
-	tmpFile := testutil.TempFile(t, "consul")
+	tmpFile, err := ioutil.TempFile("", "consul")
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
 	defer os.RemoveAll(tmpFile.Name())
 
 	_, cmd := testValidateCommand(t)
@@ -40,8 +41,10 @@ func TestValidateCommandFailOnEmptyFile(t *testing.T) {
 }
 
 func TestValidateCommandSucceedOnEmptyDir(t *testing.T) {
-	t.Parallel()
-	td := testutil.TempDir(t, "consul")
+	td, err := ioutil.TempDir("", "consul")
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
 	defer os.RemoveAll(td)
 
 	ui, cmd := testValidateCommand(t)
@@ -54,12 +57,14 @@ func TestValidateCommandSucceedOnEmptyDir(t *testing.T) {
 }
 
 func TestValidateCommandSucceedOnMinimalConfigFile(t *testing.T) {
-	t.Parallel()
-	td := testutil.TempDir(t, "consul")
+	td, err := ioutil.TempDir("", "consul")
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
 	defer os.RemoveAll(td)
 
 	fp := filepath.Join(td, "config.json")
-	err := ioutil.WriteFile(fp, []byte(`{}`), 0644)
+	err = ioutil.WriteFile(fp, []byte(`{}`), 0644)
 	if err != nil {
 		t.Fatalf("err: %s", err)
 	}
@@ -74,11 +79,13 @@ func TestValidateCommandSucceedOnMinimalConfigFile(t *testing.T) {
 }
 
 func TestValidateCommandSucceedOnMinimalConfigDir(t *testing.T) {
-	t.Parallel()
-	td := testutil.TempDir(t, "consul")
+	td, err := ioutil.TempDir("", "consul")
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
 	defer os.RemoveAll(td)
 
-	err := ioutil.WriteFile(filepath.Join(td, "config.json"), []byte(`{}`), 0644)
+	err = ioutil.WriteFile(filepath.Join(td, "config.json"), []byte(`{}`), 0644)
 	if err != nil {
 		t.Fatalf("err: %s", err)
 	}
@@ -93,11 +100,13 @@ func TestValidateCommandSucceedOnMinimalConfigDir(t *testing.T) {
 }
 
 func TestValidateCommandSucceedOnConfigDirWithEmptyFile(t *testing.T) {
-	t.Parallel()
-	td := testutil.TempDir(t, "consul")
+	td, err := ioutil.TempDir("", "consul")
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
 	defer os.RemoveAll(td)
 
-	err := ioutil.WriteFile(filepath.Join(td, "config.json"), []byte{}, 0644)
+	err = ioutil.WriteFile(filepath.Join(td, "config.json"), []byte{}, 0644)
 	if err != nil {
 		t.Fatalf("err: %s", err)
 	}
@@ -112,8 +121,10 @@ func TestValidateCommandSucceedOnConfigDirWithEmptyFile(t *testing.T) {
 }
 
 func TestValidateCommandQuiet(t *testing.T) {
-	t.Parallel()
-	td := testutil.TempDir(t, "consul")
+	td, err := ioutil.TempDir("", "consul")
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
 	defer os.RemoveAll(td)
 
 	ui, cmd := testValidateCommand(t)
@@ -123,7 +134,7 @@ func TestValidateCommandQuiet(t *testing.T) {
 	if code := cmd.Run(args); code != 0 {
 		t.Fatalf("bad: %d, %s", code, ui.ErrorWriter.String())
 	}
-	if ui.OutputWriter.String() != "" {
+	if ui.OutputWriter.String() != "<nil>" {
 		t.Fatalf("bad: %v", ui.OutputWriter.String())
 	}
 }

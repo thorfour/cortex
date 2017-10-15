@@ -56,19 +56,6 @@ func BenchmarkFastDecode(b *testing.B) {
 	}
 }
 
-func (a *TestType) Equal(b *TestType) bool {
-	// compare times, then zero out those
-	// fields, perform a DeepEqual, and restore them
-	ta, tb := a.Time, b.Time
-	if !ta.Equal(tb) {
-		return false
-	}
-	a.Time, b.Time = time.Time{}, time.Time{}
-	ok := reflect.DeepEqual(a, b)
-	a.Time, b.Time = ta, tb
-	return ok
-}
-
 // This covers the following cases:
 //  - Recursive types
 //  - Non-builtin identifiers (and recursive types)
@@ -110,7 +97,7 @@ func Test1EncodeDecode(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !tt.Equal(tnew) {
+	if !reflect.DeepEqual(tt, tnew) {
 		t.Logf("in: %v", tt)
 		t.Logf("out: %v", tnew)
 		t.Fatal("objects not equal")
@@ -130,7 +117,7 @@ func Test1EncodeDecode(t *testing.T) {
 		t.Errorf("%d bytes left", len(left))
 	}
 
-	if !tt.Equal(tanother) {
+	if !reflect.DeepEqual(tt, tanother) {
 		t.Logf("in: %v", tt)
 		t.Logf("out: %v", tanother)
 		t.Fatal("objects not equal")

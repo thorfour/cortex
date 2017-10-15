@@ -24,6 +24,7 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/ec2query"
 	"github.com/aws/aws-sdk-go/private/protocol/xml/xmlutil"
 	"github.com/aws/aws-sdk-go/private/util"
+	"github.com/stretchr/testify/assert"
 )
 
 var _ bytes.Buffer // always import bytes
@@ -107,18 +108,19 @@ const opInputService1TestCaseOperation1 = "OperationName"
 
 // InputService1TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the InputService1TestCaseOperation1 operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See InputService1TestCaseOperation1 for usage and error information.
 //
-// See InputService1TestCaseOperation1 for more information on using the InputService1TestCaseOperation1
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the InputService1TestCaseOperation1 method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the InputService1TestCaseOperation1Request method.
 //    req, resp := client.InputService1TestCaseOperation1Request(params)
@@ -260,18 +262,19 @@ const opInputService2TestCaseOperation1 = "OperationName"
 
 // InputService2TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the InputService2TestCaseOperation1 operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See InputService2TestCaseOperation1 for usage and error information.
 //
-// See InputService2TestCaseOperation1 for more information on using the InputService2TestCaseOperation1
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the InputService2TestCaseOperation1 method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the InputService2TestCaseOperation1Request method.
 //    req, resp := client.InputService2TestCaseOperation1Request(params)
@@ -421,18 +424,19 @@ const opInputService3TestCaseOperation1 = "OperationName"
 
 // InputService3TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the InputService3TestCaseOperation1 operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See InputService3TestCaseOperation1 for usage and error information.
 //
-// See InputService3TestCaseOperation1 for more information on using the InputService3TestCaseOperation1
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the InputService3TestCaseOperation1 method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the InputService3TestCaseOperation1Request method.
 //    req, resp := client.InputService3TestCaseOperation1Request(params)
@@ -578,18 +582,19 @@ const opInputService4TestCaseOperation1 = "OperationName"
 
 // InputService4TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the InputService4TestCaseOperation1 operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See InputService4TestCaseOperation1 for usage and error information.
 //
-// See InputService4TestCaseOperation1 for more information on using the InputService4TestCaseOperation1
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the InputService4TestCaseOperation1 method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the InputService4TestCaseOperation1Request method.
 //    req, resp := client.InputService4TestCaseOperation1Request(params)
@@ -723,18 +728,19 @@ const opInputService5TestCaseOperation1 = "OperationName"
 
 // InputService5TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the InputService5TestCaseOperation1 operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See InputService5TestCaseOperation1 for usage and error information.
 //
-// See InputService5TestCaseOperation1 for more information on using the InputService5TestCaseOperation1
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the InputService5TestCaseOperation1 method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the InputService5TestCaseOperation1Request method.
 //    req, resp := client.InputService5TestCaseOperation1Request(params)
@@ -868,18 +874,19 @@ const opInputService6TestCaseOperation1 = "OperationName"
 
 // InputService6TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the InputService6TestCaseOperation1 operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See InputService6TestCaseOperation1 for usage and error information.
 //
-// See InputService6TestCaseOperation1 for more information on using the InputService6TestCaseOperation1
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the InputService6TestCaseOperation1 method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the InputService6TestCaseOperation1Request method.
 //    req, resp := client.InputService6TestCaseOperation1Request(params)
@@ -1013,18 +1020,19 @@ const opInputService7TestCaseOperation1 = "OperationName"
 
 // InputService7TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the InputService7TestCaseOperation1 operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See InputService7TestCaseOperation1 for usage and error information.
 //
-// See InputService7TestCaseOperation1 for more information on using the InputService7TestCaseOperation1
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the InputService7TestCaseOperation1 method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the InputService7TestCaseOperation1Request method.
 //    req, resp := client.InputService7TestCaseOperation1Request(params)
@@ -1159,18 +1167,19 @@ const opInputService8TestCaseOperation1 = "OperationName"
 
 // InputService8TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the InputService8TestCaseOperation1 operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See InputService8TestCaseOperation1 for usage and error information.
 //
-// See InputService8TestCaseOperation1 for more information on using the InputService8TestCaseOperation1
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the InputService8TestCaseOperation1 method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the InputService8TestCaseOperation1Request method.
 //    req, resp := client.InputService8TestCaseOperation1Request(params)
@@ -1304,18 +1313,19 @@ const opInputService9TestCaseOperation1 = "OperationName"
 
 // InputService9TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the InputService9TestCaseOperation1 operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See InputService9TestCaseOperation1 for usage and error information.
 //
-// See InputService9TestCaseOperation1 for more information on using the InputService9TestCaseOperation1
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the InputService9TestCaseOperation1 method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the InputService9TestCaseOperation1Request method.
 //    req, resp := client.InputService9TestCaseOperation1Request(params)
@@ -1374,18 +1384,19 @@ const opInputService9TestCaseOperation2 = "OperationName"
 
 // InputService9TestCaseOperation2Request generates a "aws/request.Request" representing the
 // client's request for the InputService9TestCaseOperation2 operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See InputService9TestCaseOperation2 for usage and error information.
 //
-// See InputService9TestCaseOperation2 for more information on using the InputService9TestCaseOperation2
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the InputService9TestCaseOperation2 method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the InputService9TestCaseOperation2Request method.
 //    req, resp := client.InputService9TestCaseOperation2Request(params)
@@ -1475,14 +1486,10 @@ func TestInputService1ProtocolTestScalarMembersCase1(t *testing.T) {
 
 	// build request
 	ec2query.Build(req)
-	if req.Error != nil {
-		t.Errorf("expect no error, got %v", req.Error)
-	}
+	assert.NoError(t, req.Error)
 
 	// assert body
-	if r.Body == nil {
-		t.Errorf("expect body not to be nil")
-	}
+	assert.NotNil(t, r.Body)
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertQuery(t, `Action=OperationName&Bar=val2&Foo=val1&Version=2014-01-01`, util.Trim(string(body)))
 
@@ -1505,14 +1512,10 @@ func TestInputService2ProtocolTestStructureWithLocationNameAndQueryNameAppliedTo
 
 	// build request
 	ec2query.Build(req)
-	if req.Error != nil {
-		t.Errorf("expect no error, got %v", req.Error)
-	}
+	assert.NoError(t, req.Error)
 
 	// assert body
-	if r.Body == nil {
-		t.Errorf("expect body not to be nil")
-	}
+	assert.NotNil(t, r.Body)
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertQuery(t, `Action=OperationName&BarLocationName=val2&Foo=val1&Version=2014-01-01&yuckQueryName=val3`, util.Trim(string(body)))
 
@@ -1535,14 +1538,10 @@ func TestInputService3ProtocolTestNestedStructureMembersCase1(t *testing.T) {
 
 	// build request
 	ec2query.Build(req)
-	if req.Error != nil {
-		t.Errorf("expect no error, got %v", req.Error)
-	}
+	assert.NoError(t, req.Error)
 
 	// assert body
-	if r.Body == nil {
-		t.Errorf("expect body not to be nil")
-	}
+	assert.NotNil(t, r.Body)
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertQuery(t, `Action=OperationName&Struct.Scalar=foo&Version=2014-01-01`, util.Trim(string(body)))
 
@@ -1567,14 +1566,10 @@ func TestInputService4ProtocolTestListTypesCase1(t *testing.T) {
 
 	// build request
 	ec2query.Build(req)
-	if req.Error != nil {
-		t.Errorf("expect no error, got %v", req.Error)
-	}
+	assert.NoError(t, req.Error)
 
 	// assert body
-	if r.Body == nil {
-		t.Errorf("expect body not to be nil")
-	}
+	assert.NotNil(t, r.Body)
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertQuery(t, `Action=OperationName&ListArg.1=foo&ListArg.2=bar&ListArg.3=baz&Version=2014-01-01`, util.Trim(string(body)))
 
@@ -1599,14 +1594,10 @@ func TestInputService5ProtocolTestListWithLocationNameAppliedToMemberCase1(t *te
 
 	// build request
 	ec2query.Build(req)
-	if req.Error != nil {
-		t.Errorf("expect no error, got %v", req.Error)
-	}
+	assert.NoError(t, req.Error)
 
 	// assert body
-	if r.Body == nil {
-		t.Errorf("expect body not to be nil")
-	}
+	assert.NotNil(t, r.Body)
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertQuery(t, `Action=OperationName&ListMemberName.1=a&ListMemberName.2=b&ListMemberName.3=c&Version=2014-01-01`, util.Trim(string(body)))
 
@@ -1631,14 +1622,10 @@ func TestInputService6ProtocolTestListWithLocationNameAndQueryNameCase1(t *testi
 
 	// build request
 	ec2query.Build(req)
-	if req.Error != nil {
-		t.Errorf("expect no error, got %v", req.Error)
-	}
+	assert.NoError(t, req.Error)
 
 	// assert body
-	if r.Body == nil {
-		t.Errorf("expect body not to be nil")
-	}
+	assert.NotNil(t, r.Body)
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertQuery(t, `Action=OperationName&ListQueryName.1=a&ListQueryName.2=b&ListQueryName.3=c&Version=2014-01-01`, util.Trim(string(body)))
 
@@ -1659,14 +1646,10 @@ func TestInputService7ProtocolTestBase64EncodedBlobsCase1(t *testing.T) {
 
 	// build request
 	ec2query.Build(req)
-	if req.Error != nil {
-		t.Errorf("expect no error, got %v", req.Error)
-	}
+	assert.NoError(t, req.Error)
 
 	// assert body
-	if r.Body == nil {
-		t.Errorf("expect body not to be nil")
-	}
+	assert.NotNil(t, r.Body)
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertQuery(t, `Action=OperationName&BlobArg=Zm9v&Version=2014-01-01`, util.Trim(string(body)))
 
@@ -1687,14 +1670,10 @@ func TestInputService8ProtocolTestTimestampValuesCase1(t *testing.T) {
 
 	// build request
 	ec2query.Build(req)
-	if req.Error != nil {
-		t.Errorf("expect no error, got %v", req.Error)
-	}
+	assert.NoError(t, req.Error)
 
 	// assert body
-	if r.Body == nil {
-		t.Errorf("expect body not to be nil")
-	}
+	assert.NotNil(t, r.Body)
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertQuery(t, `Action=OperationName&TimeArg=2015-01-25T08%3A00%3A00Z&Version=2014-01-01`, util.Trim(string(body)))
 
@@ -1715,14 +1694,10 @@ func TestInputService9ProtocolTestIdempotencyTokenAutoFillCase1(t *testing.T) {
 
 	// build request
 	ec2query.Build(req)
-	if req.Error != nil {
-		t.Errorf("expect no error, got %v", req.Error)
-	}
+	assert.NoError(t, req.Error)
 
 	// assert body
-	if r.Body == nil {
-		t.Errorf("expect body not to be nil")
-	}
+	assert.NotNil(t, r.Body)
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertQuery(t, `Action=OperationName&Token=abc123&Version=2014-01-01`, util.Trim(string(body)))
 
@@ -1741,14 +1716,10 @@ func TestInputService9ProtocolTestIdempotencyTokenAutoFillCase2(t *testing.T) {
 
 	// build request
 	ec2query.Build(req)
-	if req.Error != nil {
-		t.Errorf("expect no error, got %v", req.Error)
-	}
+	assert.NoError(t, req.Error)
 
 	// assert body
-	if r.Body == nil {
-		t.Errorf("expect body not to be nil")
-	}
+	assert.NotNil(t, r.Body)
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertQuery(t, `Action=OperationName&Token=00000000-0000-4000-8000-000000000000&Version=2014-01-01`, util.Trim(string(body)))
 

@@ -48,7 +48,7 @@ The table below shows this endpoint's support for
 - `TaggedAddresses` `(map<string|string>: nil)` - Specifies the tagged
   addresses.
 
-- `NodeMeta` `(map<string|string>: nil)` - Specifies arbitrary KV metadata
+- `Meta` `(map<string|string>: nil)` - Specifies arbitrary KV metadata
   pairs for filtering purposes.
 
 - `Service` `(Service: nil)` - Specifies to register a service. If `ID` is not
@@ -220,7 +220,7 @@ $ curl \
     https://consul.rocks/v1/catalog/datacenters
 ```
 
-### Sample Response
+### Sample Respons
 
 ```json
 ["dc1", "dc2"]
@@ -274,7 +274,6 @@ $ curl \
     "ID": "40e4a748-2192-161a-0510-9bf59fe950b5",
     "Node": "baz",
     "Address": "10.1.10.11",
-    "Datacenter": "dc1",
     "TaggedAddresses": {
       "lan": "10.1.10.11",
       "wan": "10.1.10.11"
@@ -287,7 +286,6 @@ $ curl \
     "ID": "8f246b77-f3e1-ff88-5b48-8ec93abf3e05",
     "Node": "foobar",
     "Address": "10.1.10.12",
-    "Datacenter": "dc2",
     "TaggedAddresses": {
       "lan": "10.1.10.11",
       "wan": "10.1.10.12"
@@ -314,7 +312,7 @@ The table below shows this endpoint's support for
 
 | Blocking Queries | Consistency Modes | ACL Required   |
 | ---------------- | ----------------- | -------------- |
-| `YES`            | `all`             | `service:read` |
+| `TEST`           | `all`             | `service:read` |
 
 ### Parameters
 
@@ -403,7 +401,6 @@ $ curl \
     "ID": "40e4a748-2192-161a-0510-9bf59fe950b5",
     "Node": "foobar",
     "Address": "192.168.10.10",
-    "Datacenter": "dc1",
     "TaggedAddresses": {
       "lan": "192.168.10.10",
       "wan": "10.0.10.10"
@@ -426,9 +423,6 @@ $ curl \
 ```
 
 - `Address` is the IP address of the Consul node on which the service is
-  registered.
-
-- `Datacenter` is the data center of the Consul node on which the service is
   registered.
 
 - `TaggedAddresses` is the list of explicit LAN and WAN IP addresses for the
@@ -501,7 +495,6 @@ $ curl \
     "ID": "40e4a748-2192-161a-0510-9bf59fe950b5",
     "Node": "foobar",
     "Address": "10.1.10.12",
-    "Datacenter": "dc1",
     "TaggedAddresses": {
       "lan": "10.1.10.12",
       "wan": "10.1.10.12"

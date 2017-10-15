@@ -60,6 +60,17 @@ func defaultCallOptions() *CallOptions {
 				})
 			}),
 		},
+		{"default", "non_idempotent"}: {
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnCodes([]codes.Code{
+					codes.Unavailable,
+				}, gax.Backoff{
+					Initial:    100 * time.Millisecond,
+					Max:        60000 * time.Millisecond,
+					Multiplier: 1.3,
+				})
+			}),
+		},
 	}
 	return &CallOptions{
 		Recognize:            retry[[2]string{"default", "idempotent"}],
@@ -102,7 +113,7 @@ func NewClient(ctx context.Context, opts ...option.ClientOption) (*Client, error
 
 		client: speechpb.NewSpeechClient(conn),
 	}
-	c.setGoogleClientInfo()
+	c.SetGoogleClientInfo()
 
 	c.LROClient, err = lroauto.NewOperationsClient(ctx, option.WithGRPCConn(conn))
 	if err != nil {
@@ -128,10 +139,10 @@ func (c *Client) Close() error {
 	return c.conn.Close()
 }
 
-// setGoogleClientInfo sets the name and version of the application in
+// SetGoogleClientInfo sets the name and version of the application in
 // the `x-goog-api-client` header passed on each request. Intended for
 // use by Google-written clients.
-func (c *Client) setGoogleClientInfo(keyval ...string) {
+func (c *Client) SetGoogleClientInfo(keyval ...string) {
 	kv := append([]string{"gl-go", version.Go()}, keyval...)
 	kv = append(kv, "gapic", version.Repo, "gax", gax.Version, "grpc", grpc.Version)
 	c.xGoogHeader = []string{gax.XGoogHeader(kv...)}
@@ -156,8 +167,8 @@ func (c *Client) Recognize(ctx context.Context, req *speechpb.RecognizeRequest, 
 
 // LongRunningRecognize performs asynchronous speech recognition: receive results via the
 // google.longrunning.Operations interface. Returns either an
-// Operation.error or an Operation.response which contains
-// a LongRunningRecognizeResponse message.
+// `Operation.error` or an `Operation.response` which contains
+// a `LongRunningRecognizeResponse` message.
 func (c *Client) LongRunningRecognize(ctx context.Context, req *speechpb.LongRunningRecognizeRequest, opts ...gax.CallOption) (*LongRunningRecognizeOperation, error) {
 	ctx = insertXGoog(ctx, c.xGoogHeader)
 	opts = append(c.CallOptions.LongRunningRecognize[0:len(c.CallOptions.LongRunningRecognize):len(c.CallOptions.LongRunningRecognize)], opts...)
@@ -210,7 +221,7 @@ func (c *Client) LongRunningRecognizeOperation(name string) *LongRunningRecogniz
 // See documentation of Poll for error-handling information.
 func (op *LongRunningRecognizeOperation) Wait(ctx context.Context, opts ...gax.CallOption) (*speechpb.LongRunningRecognizeResponse, error) {
 	var resp speechpb.LongRunningRecognizeResponse
-	if err := op.lro.WaitWithInterval(ctx, &resp, 45000*time.Millisecond, opts...); err != nil {
+	if err := op.lro.Wait(ctx, &resp, opts...); err != nil {
 		return nil, err
 	}
 	return &resp, nil

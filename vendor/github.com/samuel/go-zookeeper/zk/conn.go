@@ -85,7 +85,6 @@ type Conn struct {
 	pingInterval   time.Duration
 	recvTimeout    time.Duration
 	connectTimeout time.Duration
-	maxBufferSize  int
 
 	creds   []authCreds
 	credsMu sync.Mutex // protects server
@@ -98,9 +97,7 @@ type Conn struct {
 	closeChan    chan struct{} // channel to tell send loop stop
 
 	// Debug (used by unit tests)
-	reconnectLatch   chan struct{}
-	setWatchLimit    int
-	setWatchCallback func([]*setWatchesRequest)
+	reconnectDelay time.Duration
 
 	logger Logger
 
@@ -201,6 +198,9 @@ func Connect(servers []string, sessionTimeout time.Duration, options ...connOpti
 		passwd:         emptyPassword,
 		logger:         DefaultLogger,
 		buf:            make([]byte, bufferSize),
+
+		// Debug
+		reconnectDelay: 0,
 	}
 
 	// Set provided options.
@@ -246,36 +246,6 @@ type EventCallback func(Event)
 func WithEventCallback(cb EventCallback) connOption {
 	return func(c *Conn) {
 		c.eventCallback = cb
-	}
-}
-
-// WithMaxBufferSize sets the maximum buffer size used to read and decode
-// packets received from the Zookeeper server. The standard Zookeeper client for
-// Java defaults to a limit of 1mb. For backwards compatibility, this Go client
-// defaults to unbounded unless overridden via this option. A value that is zero
-// or negative indicates that no limit is enforced.
-//
-// This is meant to prevent resource exhaustion in the face of potentially
-// malicious data in ZK. It should generally match the server setting (which
-// also defaults ot 1mb) so that clients and servers agree on the limits for
-// things like the size of data in an individual znode and the total size of a
-// transaction.
-//
-// For production systems, this should be set to a reasonable value (ideally
-// that matches the server configuration). For ops tooling, it is handy to use a
-// much larger limit, in order to do things like clean-up problematic state in
-// the ZK tree. For example, if a single znode has a huge number of children, it
-// is possible for the response to a "list children" operation to exceed this
-// buffer size and cause errors in clients. The only way to subsequently clean
-// up the tree (by removing superfluous children) is to use a client configured
-// with a larger buffer size that can successfully query for all of the child
-// names and then remove them. (Note there are other tools that can list all of
-// the child names without an increased buffer size in the client, but they work
-// by inspecting the servers' transaction logs to enumerate children instead of
-// sending an online request to a server.
-func WithMaxBufferSize(maxBufferSize int) connOption {
-	return func(c *Conn) {
-		c.maxBufferSize = maxBufferSize
 	}
 }
 
@@ -480,11 +450,11 @@ func (c *Conn) loop() {
 		}
 		c.flushRequests(err)
 
-		if c.reconnectLatch != nil {
+		if c.reconnectDelay > 0 {
 			select {
 			case <-c.shouldQuit:
 				return
-			case <-c.reconnectLatch:
+			case <-time.After(c.reconnectDelay):
 			}
 		}
 	}
@@ -536,41 +506,17 @@ func (c *Conn) sendSetWatches() {
 		return
 	}
 
-	// NB: A ZK server, by default, rejects packets >1mb. So, if we have too
-	// many watches to reset, we need to break this up into multiple packets
-	// to avoid hitting that limit. Mirroring the Java client behavior: we are
-	// conservative in that we limit requests to 128kb (since server limit is
-	// is actually configurable and could conceivably be configured smaller
-	// than default of 1mb).
-	limit := 128 * 1024
-	if c.setWatchLimit > 0 {
-		limit = c.setWatchLimit
+	req := &setWatchesRequest{
+		RelativeZxid: c.lastZxid,
+		DataWatches:  make([]string, 0),
+		ExistWatches: make([]string, 0),
+		ChildWatches: make([]string, 0),
 	}
-
-	var reqs []*setWatchesRequest
-	var req *setWatchesRequest
-	var sizeSoFar int
-
 	n := 0
 	for pathType, watchers := range c.watchers {
 		if len(watchers) == 0 {
 			continue
 		}
-		addlLen := 4 + len(pathType.path)
-		if req == nil || sizeSoFar+addlLen > limit {
-			if req != nil {
-				// add to set of requests that we'll send
-				reqs = append(reqs, req)
-			}
-			sizeSoFar = 28 // fixed overhead of a set-watches packet
-			req = &setWatchesRequest{
-				RelativeZxid: c.lastZxid,
-				DataWatches:  make([]string, 0),
-				ExistWatches: make([]string, 0),
-				ChildWatches: make([]string, 0),
-			}
-		}
-		sizeSoFar += addlLen
 		switch pathType.wType {
 		case watchTypeData:
 			req.DataWatches = append(req.DataWatches, pathType.path)
@@ -584,26 +530,12 @@ func (c *Conn) sendSetWatches() {
 	if n == 0 {
 		return
 	}
-	if req != nil { // don't forget any trailing packet we were building
-		reqs = append(reqs, req)
-	}
-
-	if c.setWatchCallback != nil {
-		c.setWatchCallback(reqs)
-	}
 
 	go func() {
 		res := &setWatchesResponse{}
-		// TODO: Pipeline these so queue all of them up before waiting on any
-		// response. That will require some investigation to make sure there
-		// aren't failure modes where a blocking write to the channel of requests
-		// could hang indefinitely and cause this goroutine to leak...
-		for _, req := range reqs {
-			_, err := c.request(opSetWatches, req, res, nil)
-			if err != nil {
-				c.logger.Printf("Failed to set previous watches: %s", err.Error())
-				break
-			}
+		_, err := c.request(opSetWatches, req, res, nil)
+		if err != nil {
+			c.logger.Printf("Failed to set previous watches: %s", err.Error())
 		}
 	}()
 }
@@ -744,11 +676,7 @@ func (c *Conn) sendLoop() error {
 }
 
 func (c *Conn) recvLoop(conn net.Conn) error {
-	sz := bufferSize
-	if c.maxBufferSize > 0 && sz > c.maxBufferSize {
-		sz = c.maxBufferSize
-	}
-	buf := make([]byte, sz)
+	buf := make([]byte, bufferSize)
 	for {
 		// package length
 		conn.SetReadDeadline(time.Now().Add(c.recvTimeout))
@@ -759,9 +687,6 @@ func (c *Conn) recvLoop(conn net.Conn) error {
 
 		blen := int(binary.BigEndian.Uint32(buf[:4]))
 		if cap(buf) < blen {
-			if c.maxBufferSize > 0 && blen > c.maxBufferSize {
-				return fmt.Errorf("received packet from server with length %d, which exceeds max buffer size %d", blen, c.maxBufferSize)
-			}
 			buf = make([]byte, blen)
 		}
 
@@ -906,20 +831,12 @@ func (c *Conn) AddAuth(scheme string, auth []byte) error {
 }
 
 func (c *Conn) Children(path string) ([]string, *Stat, error) {
-	if err := validatePath(path, false); err != nil {
-		return nil, nil, err
-	}
-
 	res := &getChildren2Response{}
 	_, err := c.request(opGetChildren2, &getChildren2Request{Path: path, Watch: false}, res, nil)
 	return res.Children, &res.Stat, err
 }
 
 func (c *Conn) ChildrenW(path string) ([]string, *Stat, <-chan Event, error) {
-	if err := validatePath(path, false); err != nil {
-		return nil, nil, nil, err
-	}
-
 	var ech <-chan Event
 	res := &getChildren2Response{}
 	_, err := c.request(opGetChildren2, &getChildren2Request{Path: path, Watch: true}, res, func(req *request, res *responseHeader, err error) {
@@ -934,10 +851,6 @@ func (c *Conn) ChildrenW(path string) ([]string, *Stat, <-chan Event, error) {
 }
 
 func (c *Conn) Get(path string) ([]byte, *Stat, error) {
-	if err := validatePath(path, false); err != nil {
-		return nil, nil, err
-	}
-
 	res := &getDataResponse{}
 	_, err := c.request(opGetData, &getDataRequest{Path: path, Watch: false}, res, nil)
 	return res.Data, &res.Stat, err
@@ -945,10 +858,6 @@ func (c *Conn) Get(path string) ([]byte, *Stat, error) {
 
 // GetW returns the contents of a znode and sets a watch
 func (c *Conn) GetW(path string) ([]byte, *Stat, <-chan Event, error) {
-	if err := validatePath(path, false); err != nil {
-		return nil, nil, nil, err
-	}
-
 	var ech <-chan Event
 	res := &getDataResponse{}
 	_, err := c.request(opGetData, &getDataRequest{Path: path, Watch: true}, res, func(req *request, res *responseHeader, err error) {
@@ -963,20 +872,15 @@ func (c *Conn) GetW(path string) ([]byte, *Stat, <-chan Event, error) {
 }
 
 func (c *Conn) Set(path string, data []byte, version int32) (*Stat, error) {
-	if err := validatePath(path, false); err != nil {
-		return nil, err
+	if path == "" {
+		return nil, ErrInvalidPath
 	}
-
 	res := &setDataResponse{}
 	_, err := c.request(opSetData, &SetDataRequest{path, data, version}, res, nil)
 	return &res.Stat, err
 }
 
 func (c *Conn) Create(path string, data []byte, flags int32, acl []ACL) (string, error) {
-	if err := validatePath(path, flags&FlagSequence == FlagSequence); err != nil {
-		return "", err
-	}
-
 	res := &createResponse{}
 	_, err := c.request(opCreate, &CreateRequest{path, data, acl, flags}, res, nil)
 	return res.Path, err
@@ -987,10 +891,6 @@ func (c *Conn) Create(path string, data []byte, flags int32, acl []ACL) (string,
 // ephemeral node still exists. Therefore, on reconnect we need to check if a node
 // with a GUID generated on create exists.
 func (c *Conn) CreateProtectedEphemeralSequential(path string, data []byte, acl []ACL) (string, error) {
-	if err := validatePath(path, true); err != nil {
-		return "", err
-	}
-
 	var guid [16]byte
 	_, err := io.ReadFull(rand.Reader, guid[:16])
 	if err != nil {
@@ -1032,19 +932,11 @@ func (c *Conn) CreateProtectedEphemeralSequential(path string, data []byte, acl 
 }
 
 func (c *Conn) Delete(path string, version int32) error {
-	if err := validatePath(path, false); err != nil {
-		return err
-	}
-
 	_, err := c.request(opDelete, &DeleteRequest{path, version}, &deleteResponse{}, nil)
 	return err
 }
 
 func (c *Conn) Exists(path string) (bool, *Stat, error) {
-	if err := validatePath(path, false); err != nil {
-		return false, nil, err
-	}
-
 	res := &existsResponse{}
 	_, err := c.request(opExists, &existsRequest{Path: path, Watch: false}, res, nil)
 	exists := true
@@ -1056,10 +948,6 @@ func (c *Conn) Exists(path string) (bool, *Stat, error) {
 }
 
 func (c *Conn) ExistsW(path string) (bool, *Stat, <-chan Event, error) {
-	if err := validatePath(path, false); err != nil {
-		return false, nil, nil, err
-	}
-
 	var ech <-chan Event
 	res := &existsResponse{}
 	_, err := c.request(opExists, &existsRequest{Path: path, Watch: true}, res, func(req *request, res *responseHeader, err error) {
@@ -1081,29 +969,17 @@ func (c *Conn) ExistsW(path string) (bool, *Stat, <-chan Event, error) {
 }
 
 func (c *Conn) GetACL(path string) ([]ACL, *Stat, error) {
-	if err := validatePath(path, false); err != nil {
-		return nil, nil, err
-	}
-
 	res := &getAclResponse{}
 	_, err := c.request(opGetAcl, &getAclRequest{Path: path}, res, nil)
 	return res.Acl, &res.Stat, err
 }
 func (c *Conn) SetACL(path string, acl []ACL, version int32) (*Stat, error) {
-	if err := validatePath(path, false); err != nil {
-		return nil, err
-	}
-
 	res := &setAclResponse{}
 	_, err := c.request(opSetAcl, &setAclRequest{Path: path, Acl: acl, Version: version}, res, nil)
 	return &res.Stat, err
 }
 
 func (c *Conn) Sync(path string) (string, error) {
-	if err := validatePath(path, false); err != nil {
-		return "", err
-	}
-
 	res := &syncResponse{}
 	_, err := c.request(opSync, &syncRequest{Path: path}, res, nil)
 	return res.Path, err

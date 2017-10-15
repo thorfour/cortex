@@ -6,30 +6,29 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hashicorp/consul/agent"
-	"github.com/hashicorp/consul/agent/structs"
-	"github.com/hashicorp/consul/testutil/retry"
+	"github.com/hashicorp/consul/command/agent"
+	"github.com/hashicorp/consul/command/base"
+	"github.com/hashicorp/consul/consul/structs"
+	"github.com/hashicorp/consul/testutil"
 	"github.com/hashicorp/serf/coordinate"
 	"github.com/mitchellh/cli"
 )
 
 func testRTTCommand(t *testing.T) (*cli.MockUi, *RTTCommand) {
-	ui := cli.NewMockUi()
+	ui := new(cli.MockUi)
 	return ui, &RTTCommand{
-		BaseCommand: BaseCommand{
-			UI:    ui,
-			Flags: FlagSetClientHTTP,
+		Command: base.Command{
+			Ui:    ui,
+			Flags: base.FlagSetClientHTTP,
 		},
 	}
 }
 
 func TestRTTCommand_Implements(t *testing.T) {
-	t.Parallel()
 	var _ cli.Command = &RTTCommand{}
 }
 
 func TestRTTCommand_Run_BadArgs(t *testing.T) {
-	t.Parallel()
 	_, c := testRTTCommand(t)
 
 	if code := c.Run([]string{}); code != 1 {
@@ -54,12 +53,12 @@ func TestRTTCommand_Run_BadArgs(t *testing.T) {
 }
 
 func TestRTTCommand_Run_LAN(t *testing.T) {
-	t.Parallel()
 	updatePeriod := 10 * time.Millisecond
-	cfg := agent.TestConfig()
-	cfg.ConsulConfig.CoordinateUpdatePeriod = updatePeriod
-	a := agent.NewTestAgent(t.Name(), cfg)
+	a := testAgentWithConfig(t, func(c *agent.Config) {
+		c.ConsulConfig.CoordinateUpdatePeriod = updatePeriod
+	})
 	defer a.Shutdown()
+	waitForLeader(t, a.httpAddr)
 
 	// Inject some known coordinates.
 	c1 := coordinate.NewCoordinate(coordinate.DefaultConfig())
@@ -68,34 +67,34 @@ func TestRTTCommand_Run_LAN(t *testing.T) {
 	dist_str := fmt.Sprintf("%.3f ms", c1.DistanceTo(c2).Seconds()*1000.0)
 	{
 		req := structs.CoordinateUpdateRequest{
-			Datacenter: a.Config.Datacenter,
-			Node:       a.Config.NodeName,
+			Datacenter: a.config.Datacenter,
+			Node:       a.config.NodeName,
 			Coord:      c1,
 		}
 		var reply struct{}
-		if err := a.RPC("Coordinate.Update", &req, &reply); err != nil {
+		if err := a.agent.RPC("Coordinate.Update", &req, &reply); err != nil {
 			t.Fatalf("err: %s", err)
 		}
 	}
 	{
 		req := structs.RegisterRequest{
-			Datacenter: a.Config.Datacenter,
+			Datacenter: a.config.Datacenter,
 			Node:       "dogs",
 			Address:    "127.0.0.2",
 		}
 		var reply struct{}
-		if err := a.RPC("Catalog.Register", &req, &reply); err != nil {
+		if err := a.agent.RPC("Catalog.Register", &req, &reply); err != nil {
 			t.Fatalf("err: %s", err)
 		}
 	}
 	{
 		var reply struct{}
 		req := structs.CoordinateUpdateRequest{
-			Datacenter: a.Config.Datacenter,
+			Datacenter: a.config.Datacenter,
 			Node:       "dogs",
 			Coord:      c2,
 		}
-		if err := a.RPC("Coordinate.Update", &req, &reply); err != nil {
+		if err := a.agent.RPC("Coordinate.Update", &req, &reply); err != nil {
 			t.Fatalf("err: %s", err)
 		}
 	}
@@ -103,29 +102,34 @@ func TestRTTCommand_Run_LAN(t *testing.T) {
 	// Ask for the RTT of two known nodes
 	ui, c := testRTTCommand(t)
 	args := []string{
-		"-http-addr=" + a.HTTPAddr(),
-		a.Config.NodeName,
+		"-http-addr=" + a.httpAddr,
+		a.config.NodeName,
 		"dogs",
 	}
+
 	// Wait for the updates to get flushed to the data store.
-	retry.Run(t, func(r *retry.R) {
+	if err := testutil.WaitForResult(func() (bool, error) {
 		code := c.Run(args)
 		if code != 0 {
-			r.Fatalf("bad: %d: %#v", code, ui.ErrorWriter.String())
+			return false, fmt.Errorf("bad: %d: %#v", code, ui.ErrorWriter.String())
 		}
 
 		// Make sure the proper RTT was reported in the output.
 		expected := fmt.Sprintf("rtt: %s", dist_str)
 		if !strings.Contains(ui.OutputWriter.String(), expected) {
-			r.Fatalf("bad: %#v", ui.OutputWriter.String())
+			return false, fmt.Errorf("bad: %#v", ui.OutputWriter.String())
 		}
-	})
+
+		return true, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
 
 	// Default to the agent's node.
 	{
 		ui, c := testRTTCommand(t)
 		args := []string{
-			"-http-addr=" + a.HTTPAddr(),
+			"-http-addr=" + a.httpAddr,
 			"dogs",
 		}
 		code := c.Run(args)
@@ -144,8 +148,8 @@ func TestRTTCommand_Run_LAN(t *testing.T) {
 	{
 		ui, c := testRTTCommand(t)
 		args := []string{
-			"-http-addr=" + a.HTTPAddr(),
-			a.Config.NodeName,
+			"-http-addr=" + a.httpAddr,
+			a.config.NodeName,
 			"nope",
 		}
 		code := c.Run(args)
@@ -156,11 +160,11 @@ func TestRTTCommand_Run_LAN(t *testing.T) {
 }
 
 func TestRTTCommand_Run_WAN(t *testing.T) {
-	t.Parallel()
-	a := agent.NewTestAgent(t.Name(), nil)
+	a := testAgent(t)
 	defer a.Shutdown()
+	waitForLeader(t, a.httpAddr)
 
-	node := fmt.Sprintf("%s.%s", a.Config.NodeName, a.Config.Datacenter)
+	node := fmt.Sprintf("%s.%s", a.config.NodeName, a.config.Datacenter)
 
 	// We can't easily inject WAN coordinates, so we will just query the
 	// node with itself.
@@ -168,7 +172,7 @@ func TestRTTCommand_Run_WAN(t *testing.T) {
 		ui, c := testRTTCommand(t)
 		args := []string{
 			"-wan",
-			"-http-addr=" + a.HTTPAddr(),
+			"-http-addr=" + a.httpAddr,
 			node,
 			node,
 		}
@@ -188,7 +192,7 @@ func TestRTTCommand_Run_WAN(t *testing.T) {
 		ui, c := testRTTCommand(t)
 		args := []string{
 			"-wan",
-			"-http-addr=" + a.HTTPAddr(),
+			"-http-addr=" + a.httpAddr,
 			node,
 		}
 		code := c.Run(args)
@@ -207,7 +211,7 @@ func TestRTTCommand_Run_WAN(t *testing.T) {
 		ui, c := testRTTCommand(t)
 		args := []string{
 			"-wan",
-			"-http-addr=" + a.HTTPAddr(),
+			"-http-addr=" + a.httpAddr,
 			node,
 			"dc1.nope",
 		}

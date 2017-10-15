@@ -88,10 +88,6 @@ func (aller) String() string {
 	return "string"
 }
 
-func (aller) Error() string {
-	return "error"
-}
-
 // textstringer implements encoding.TextMarshaler and fmt.Stringer.
 type textstringer struct{}
 

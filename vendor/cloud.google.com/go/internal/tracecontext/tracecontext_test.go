@@ -15,9 +15,8 @@
 package tracecontext
 
 import (
+	"reflect"
 	"testing"
-
-	"cloud.google.com/go/internal/testutil"
 )
 
 var validData = []byte{0, 0, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 1, 97, 98, 99, 100, 101, 102, 103, 104, 2, 1}
@@ -26,7 +25,7 @@ func TestDecode(t *testing.T) {
 	tests := []struct {
 		name        string
 		data        []byte
-		wantTraceID []byte
+		wantTraceID [2]uint64
 		wantSpanID  uint64
 		wantOpts    byte
 		wantOk      bool
@@ -34,7 +33,7 @@ func TestDecode(t *testing.T) {
 		{
 			name:        "nil data",
 			data:        nil,
-			wantTraceID: nil,
+			wantTraceID: [2]uint64{},
 			wantSpanID:  0,
 			wantOpts:    0,
 			wantOk:      false,
@@ -42,7 +41,7 @@ func TestDecode(t *testing.T) {
 		{
 			name:        "short data",
 			data:        []byte{0, 0, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77},
-			wantTraceID: nil,
+			wantTraceID: [2]uint64{},
 			wantSpanID:  0,
 			wantOpts:    0,
 			wantOk:      false,
@@ -50,7 +49,7 @@ func TestDecode(t *testing.T) {
 		{
 			name:        "wrong field number",
 			data:        []byte{0, 1, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77},
-			wantTraceID: nil,
+			wantTraceID: [2]uint64{},
 			wantSpanID:  0,
 			wantOpts:    0,
 			wantOk:      false,
@@ -58,7 +57,7 @@ func TestDecode(t *testing.T) {
 		{
 			name:        "valid data",
 			data:        validData,
-			wantTraceID: []byte{64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79},
+			wantTraceID: [2]uint64{0x4F4E4D4C4B4A4948, 0x4746454443424140},
 			wantSpanID:  0x6867666564636261,
 			wantOpts:    1,
 			wantOk:      true,
@@ -66,7 +65,7 @@ func TestDecode(t *testing.T) {
 	}
 	for _, tt := range tests {
 		gotTraceID, gotSpanID, gotOpts, gotOk := Decode(tt.data)
-		if !testutil.Equal(gotTraceID, tt.wantTraceID) {
+		if !reflect.DeepEqual(gotTraceID, tt.wantTraceID) {
 			t.Errorf("%s: Decode() gotTraceID = %v, want %v", tt.name, gotTraceID, tt.wantTraceID)
 		}
 		if gotSpanID != tt.wantSpanID {
@@ -85,7 +84,7 @@ func TestEncode(t *testing.T) {
 	tests := []struct {
 		name     string
 		dst      []byte
-		traceID  []byte
+		traceID  [2]uint64
 		spanID   uint64
 		opts     byte
 		wantN    int
@@ -94,7 +93,7 @@ func TestEncode(t *testing.T) {
 		{
 			name:     "short data",
 			dst:      make([]byte, 0),
-			traceID:  []byte("00112233445566"),
+			traceID:  [2]uint64{5714589967255750984, 5135868584551137600},
 			spanID:   0x6867666564636261,
 			opts:     1,
 			wantN:    -1,
@@ -102,11 +101,11 @@ func TestEncode(t *testing.T) {
 		},
 		{
 			name:     "valid data",
-			dst:      make([]byte, Len),
-			traceID:  []byte{64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79},
+			dst:      make([]byte, totalLen),
+			traceID:  [2]uint64{5714589967255750984, 5135868584551137600},
 			spanID:   0x6867666564636261,
 			opts:     1,
-			wantN:    Len,
+			wantN:    totalLen,
 			wantData: validData,
 		},
 	}
@@ -115,7 +114,7 @@ func TestEncode(t *testing.T) {
 		if gotN != tt.wantN {
 			t.Errorf("%s: n = %v, want %v", tt.name, gotN, tt.wantN)
 		}
-		if gotData := tt.dst; !testutil.Equal(gotData, tt.wantData) {
+		if gotData := tt.dst; !reflect.DeepEqual(gotData, tt.wantData) {
 			t.Errorf("%s: dst = %v, want %v", tt.name, gotData, tt.wantData)
 		}
 	}
@@ -129,8 +128,6 @@ func BenchmarkDecode(b *testing.B) {
 
 func BenchmarkEncode(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		traceID := make([]byte, 16)
-		var opts byte
-		Encode(validData, traceID, 0, opts)
+		Encode(validData, [2]uint64{1, 1}, 1, 1)
 	}
 }

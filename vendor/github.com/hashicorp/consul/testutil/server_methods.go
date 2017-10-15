@@ -11,16 +11,8 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/hashicorp/consul/consul/structs"
 	"github.com/pkg/errors"
-)
-
-// copied from testutil to break circular dependency
-const (
-	HealthAny      = "any"
-	HealthPassing  = "passing"
-	HealthWarning  = "warning"
-	HealthCritical = "critical"
-	HealthMaint    = "maintenance"
 )
 
 // JoinLAN is used to join local datacenters together.
@@ -109,20 +101,9 @@ func (s *TestServer) ListKV(t *testing.T, prefix string) []string {
 // automatically adds a health check with the given status, which
 // can be one of "passing", "warning", or "critical".
 func (s *TestServer) AddService(t *testing.T, name, status string, tags []string) {
-	s.AddAddressableService(t, name, status, "", 0, tags) // set empty address and 0 as port for non-accessible service
-}
-
-// AddAddressableService adds a new service to the Consul instance by
-// passing "address" and "port". It is helpful when you need to prepare a fakeService
-// that maybe accessed with in target source code.
-// It also automatically adds a health check with the given status, which
-// can be one of "passing", "warning", or "critical", just like `AddService` does.
-func (s *TestServer) AddAddressableService(t *testing.T, name, status, address string, port int, tags []string) {
 	svc := &TestService{
-		Name:    name,
-		Tags:    tags,
-		Address: address,
-		Port:    port,
+		Name: name,
+		Tags: tags,
 	}
 	payload, err := s.encodePayload(svc)
 	if err != nil {
@@ -143,11 +124,11 @@ func (s *TestServer) AddAddressableService(t *testing.T, name, status, address s
 	s.put(t, "/v1/agent/check/register", payload)
 
 	switch status {
-	case HealthPassing:
+	case structs.HealthPassing:
 		s.put(t, "/v1/agent/check/pass/"+chkName, nil)
-	case HealthWarning:
+	case structs.HealthWarning:
 		s.put(t, "/v1/agent/check/warn/"+chkName, nil)
-	case HealthCritical:
+	case structs.HealthCritical:
 		s.put(t, "/v1/agent/check/fail/"+chkName, nil)
 	default:
 		t.Fatalf("Unrecognized status: %s", status)
@@ -174,11 +155,11 @@ func (s *TestServer) AddCheck(t *testing.T, name, serviceID, status string) {
 	s.put(t, "/v1/agent/check/register", payload)
 
 	switch status {
-	case HealthPassing:
+	case structs.HealthPassing:
 		s.put(t, "/v1/agent/check/pass/"+name, nil)
-	case HealthWarning:
+	case structs.HealthWarning:
 		s.put(t, "/v1/agent/check/warn/"+name, nil)
-	case HealthCritical:
+	case structs.HealthCritical:
 		s.put(t, "/v1/agent/check/fail/"+name, nil)
 	default:
 		t.Fatalf("Unrecognized status: %s", status)
@@ -191,7 +172,7 @@ func (s *TestServer) put(t *testing.T, path string, body io.Reader) *http.Respon
 	if err != nil {
 		t.Fatalf("failed to create PUT request: %s", err)
 	}
-	resp, err := s.HTTPClient.Do(req)
+	resp, err := s.HttpClient.Do(req)
 	if err != nil {
 		t.Fatalf("failed to make PUT request: %s", err)
 	}
@@ -204,7 +185,7 @@ func (s *TestServer) put(t *testing.T, path string, body io.Reader) *http.Respon
 
 // get performs a new HTTP GET request.
 func (s *TestServer) get(t *testing.T, path string) *http.Response {
-	resp, err := s.HTTPClient.Get(s.url(path))
+	resp, err := s.HttpClient.Get(s.url(path))
 	if err != nil {
 		t.Fatalf("failed to create GET request: %s", err)
 	}

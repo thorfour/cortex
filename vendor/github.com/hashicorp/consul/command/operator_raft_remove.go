@@ -6,10 +6,11 @@ import (
 	"strings"
 
 	"github.com/hashicorp/consul/api"
+	"github.com/hashicorp/consul/command/base"
 )
 
 type OperatorRaftRemoveCommand struct {
-	BaseCommand
+	base.Command
 }
 
 func (c *OperatorRaftRemoveCommand) Help() string {
@@ -25,7 +26,7 @@ quorum. If the server still shows in the output of the "consul members" command,
 it is preferable to clean up by simply running "consul force-leave" instead of
 this command.
 
-` + c.BaseCommand.Help()
+` + c.Command.Help()
 
 	return strings.TrimSpace(helpText)
 }
@@ -35,7 +36,7 @@ func (c *OperatorRaftRemoveCommand) Synopsis() string {
 }
 
 func (c *OperatorRaftRemoveCommand) Run(args []string) int {
-	f := c.BaseCommand.NewFlagSet(c)
+	f := c.Command.NewFlagSet(c)
 
 	var address, id string
 	f.StringVar(&address, "address", "",
@@ -43,30 +44,30 @@ func (c *OperatorRaftRemoveCommand) Run(args []string) int {
 	f.StringVar(&id, "id", "",
 		"The ID to remove from the Raft configuration.")
 
-	if err := c.BaseCommand.Parse(args); err != nil {
+	if err := c.Command.Parse(args); err != nil {
 		if err == flag.ErrHelp {
 			return 0
 		}
-		c.UI.Error(fmt.Sprintf("Failed to parse args: %v", err))
+		c.Ui.Error(fmt.Sprintf("Failed to parse args: %v", err))
 		return 1
 	}
 
 	// Set up a client.
-	client, err := c.BaseCommand.HTTPClient()
+	client, err := c.Command.HTTPClient()
 	if err != nil {
-		c.UI.Error(fmt.Sprintf("Error initializing client: %s", err))
+		c.Ui.Error(fmt.Sprintf("Error initializing client: %s", err))
 		return 1
 	}
 
 	// Fetch the current configuration.
 	if err := raftRemovePeers(address, id, client.Operator()); err != nil {
-		c.UI.Error(fmt.Sprintf("Error removing peer: %v", err))
+		c.Ui.Error(fmt.Sprintf("Error removing peer: %v", err))
 		return 1
 	}
 	if address != "" {
-		c.UI.Output(fmt.Sprintf("Removed peer with address %q", address))
+		c.Ui.Output(fmt.Sprintf("Removed peer with address %q", address))
 	} else {
-		c.UI.Output(fmt.Sprintf("Removed peer with id %q", id))
+		c.Ui.Output(fmt.Sprintf("Removed peer with id %q", id))
 	}
 
 	return 0

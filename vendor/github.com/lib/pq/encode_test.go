@@ -37,8 +37,6 @@ var timeTests = []struct {
 }{
 	{"22001-02-03", time.Date(22001, time.February, 3, 0, 0, 0, 0, time.FixedZone("", 0))},
 	{"2001-02-03", time.Date(2001, time.February, 3, 0, 0, 0, 0, time.FixedZone("", 0))},
-	{"0001-12-31 BC", time.Date(0, time.December, 31, 0, 0, 0, 0, time.FixedZone("", 0))},
-	{"2001-02-03 BC", time.Date(-2000, time.February, 3, 0, 0, 0, 0, time.FixedZone("", 0))},
 	{"2001-02-03 04:05:06", time.Date(2001, time.February, 3, 4, 5, 6, 0, time.FixedZone("", 0))},
 	{"2001-02-03 04:05:06.000001", time.Date(2001, time.February, 3, 4, 5, 6, 1000, time.FixedZone("", 0))},
 	{"2001-02-03 04:05:06.00001", time.Date(2001, time.February, 3, 4, 5, 6, 10000, time.FixedZone("", 0))},
@@ -88,22 +86,15 @@ func TestParseTs(t *testing.T) {
 }
 
 var timeErrorTests = []string{
-	"BC",
-	" BC",
 	"2001",
 	"2001-2-03",
 	"2001-02-3",
 	"2001-02-03 ",
-	"2001-02-03 B",
 	"2001-02-03 04",
 	"2001-02-03 04:",
 	"2001-02-03 04:05",
-	"2001-02-03 04:05 B",
-	"2001-02-03 04:05 BC",
 	"2001-02-03 04:05:",
 	"2001-02-03 04:05:6",
-	"2001-02-03 04:05:06 B",
-	"2001-02-03 04:05:06BC",
 	"2001-02-03 04:05:06.123 B",
 }
 
@@ -267,7 +258,9 @@ func TestTimestampWithOutTimezone(t *testing.T) {
 			t.Fatalf("Could not run query: %v", err)
 		}
 
-		if !r.Next() {
+		n := r.Next()
+
+		if n != true {
 			t.Fatal("Expected at least one row")
 		}
 
@@ -287,7 +280,8 @@ func TestTimestampWithOutTimezone(t *testing.T) {
 				expected, result)
 		}
 
-		if r.Next() {
+		n = r.Next()
+		if n != false {
 			t.Fatal("Expected only one row")
 		}
 	}
@@ -376,17 +370,17 @@ func TestInfinityTimestamp(t *testing.T) {
 		t.Errorf("Scanning -infinity, expected time %q, got %q", y1500, resultT.String())
 	}
 
-	ym1500 := time.Date(-1500, time.January, 1, 0, 0, 0, 0, time.UTC)
+	y_1500 := time.Date(-1500, time.January, 1, 0, 0, 0, 0, time.UTC)
 	y11500 := time.Date(11500, time.January, 1, 0, 0, 0, 0, time.UTC)
 	var s string
-	err = db.QueryRow("SELECT $1::timestamp::text", ym1500).Scan(&s)
+	err = db.QueryRow("SELECT $1::timestamp::text", y_1500).Scan(&s)
 	if err != nil {
 		t.Errorf("Encoding -infinity, expected no error, got %q", err)
 	}
 	if s != "-infinity" {
 		t.Errorf("Encoding -infinity, expected %q, got %q", "-infinity", s)
 	}
-	err = db.QueryRow("SELECT $1::timestamptz::text", ym1500).Scan(&s)
+	err = db.QueryRow("SELECT $1::timestamptz::text", y_1500).Scan(&s)
 	if err != nil {
 		t.Errorf("Encoding -infinity, expected no error, got %q", err)
 	}
@@ -728,7 +722,8 @@ func TestAppendEscapedText(t *testing.T) {
 }
 
 func TestAppendEscapedTextExistingBuffer(t *testing.T) {
-	buf := []byte("123\t")
+	var buf []byte
+	buf = []byte("123\t")
 	if esc := appendEscapedText(buf, "hallo\tescape"); string(esc) != "123\thallo\\tescape" {
 		t.Fatal(string(esc))
 	}

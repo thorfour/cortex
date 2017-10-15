@@ -14,18 +14,19 @@ const opGetResources = "GetResources"
 
 // GetResourcesRequest generates a "aws/request.Request" representing the
 // client's request for the GetResources operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetResources for usage and error information.
 //
-// See GetResources for more information on using the GetResources
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetResources method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetResourcesRequest method.
 //    req, resp := client.GetResourcesRequest(params)
@@ -166,18 +167,19 @@ const opGetTagKeys = "GetTagKeys"
 
 // GetTagKeysRequest generates a "aws/request.Request" representing the
 // client's request for the GetTagKeys operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetTagKeys for usage and error information.
 //
-// See GetTagKeys for more information on using the GetTagKeys
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetTagKeys method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetTagKeysRequest method.
 //    req, resp := client.GetTagKeysRequest(params)
@@ -313,18 +315,19 @@ const opGetTagValues = "GetTagValues"
 
 // GetTagValuesRequest generates a "aws/request.Request" representing the
 // client's request for the GetTagValues operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetTagValues for usage and error information.
 //
-// See GetTagValues for more information on using the GetTagValues
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetTagValues method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetTagValuesRequest method.
 //    req, resp := client.GetTagValuesRequest(params)
@@ -461,18 +464,19 @@ const opTagResources = "TagResources"
 
 // TagResourcesRequest generates a "aws/request.Request" representing the
 // client's request for the TagResources operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See TagResources for usage and error information.
 //
-// See TagResources for more information on using the TagResources
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the TagResources method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the TagResourcesRequest method.
 //    req, resp := client.TagResourcesRequest(params)
@@ -564,18 +568,19 @@ const opUntagResources = "UntagResources"
 
 // UntagResourcesRequest generates a "aws/request.Request" representing the
 // client's request for the UntagResources operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UntagResources for usage and error information.
 //
-// See UntagResources for more information on using the UntagResources
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UntagResources method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UntagResourcesRequest method.
 //    req, resp := client.UntagResourcesRequest(params)

@@ -36,12 +36,10 @@ import (
 	"cloud.google.com/go/bigtable/internal/stat"
 	"golang.org/x/net/context"
 	"google.golang.org/api/option"
-	"google.golang.org/grpc"
 )
 
 var (
-	runFor = flag.Duration("run_for", 5*time.Second,
-		"how long to run the load test for; 0 to run forever until SIGTERM")
+	runFor       = flag.Duration("run_for", 5*time.Second, "how long to run the load test for")
 	scratchTable = flag.String("scratch_table", "loadtest-scratch", "name of table to use; should not already exist")
 	csvOutput    = flag.String("csv_output", "",
 		"output path for statistics in .csv format. If this file already exists it will be overwritten.")
@@ -75,12 +73,7 @@ func main() {
 
 	var options []option.ClientOption
 	if *poolSize > 1 {
-		options = append(options,
-			option.WithGRPCConnectionPool(*poolSize),
-
-			// TODO(grpc/grpc-go#1388) using connection pool without WithBlock
-			// can cause RPCs to fail randomly. We can delete this after the issue is fixed.
-			option.WithGRPCDialOption(grpc.WithBlock()))
+		options = append(options, option.WithGRPCConnectionPool(*poolSize))
 	}
 
 	var csvFile *os.File
@@ -132,7 +125,7 @@ func main() {
 	var reads, writes stats
 	stopTime := time.Now().Add(*runFor)
 	var wg sync.WaitGroup
-	for time.Now().Before(stopTime) || *runFor == 0 {
+	for time.Now().Before(stopTime) {
 		sem <- 1
 		wg.Add(1)
 		go func() {

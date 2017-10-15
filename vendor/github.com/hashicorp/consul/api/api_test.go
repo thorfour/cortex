@@ -4,16 +4,17 @@ import (
 	crand "crypto/rand"
 	"crypto/tls"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
 	"reflect"
 	"runtime"
-	"strings"
 	"testing"
 	"time"
 
 	"github.com/hashicorp/consul/testutil"
+	"strings"
 )
 
 type configCallback func(c *Config)
@@ -43,7 +44,7 @@ func makeClientWithConfig(
 		cb1(conf)
 	}
 	// Create server
-	server, err := testutil.NewTestServerConfigT(t, cb2)
+	server, err := testutil.NewTestServerConfig(cb2)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -72,7 +73,7 @@ func testKey() string {
 		buf[10:16])
 }
 
-func TestAPI_DefaultConfig_env(t *testing.T) {
+func TestDefaultConfig_env(t *testing.T) {
 	t.Parallel()
 	addr := "1.2.3.4:5678"
 	token := "abcd1234"
@@ -139,18 +140,18 @@ func TestAPI_DefaultConfig_env(t *testing.T) {
 
 		// Use keep alives as a check for whether pooling is on or off.
 		if pooled := i == 0; pooled {
-			if config.Transport.DisableKeepAlives != false {
+			if config.HttpClient.Transport.(*http.Transport).DisableKeepAlives != false {
 				t.Errorf("expected keep alives to be enabled")
 			}
 		} else {
-			if config.Transport.DisableKeepAlives != true {
+			if config.HttpClient.Transport.(*http.Transport).DisableKeepAlives != true {
 				t.Errorf("expected keep alives to be disabled")
 			}
 		}
 	}
 }
 
-func TestAPI_SetupTLSConfig(t *testing.T) {
+func TestSetupTLSConfig(t *testing.T) {
 	// A default config should result in a clean default client config.
 	tlsConfig := &TLSConfig{}
 	cc, err := SetupTLSConfig(tlsConfig)
@@ -253,116 +254,58 @@ func TestAPI_SetupTLSConfig(t *testing.T) {
 	}
 }
 
-func TestAPI_ClientTLSOptions(t *testing.T) {
+func TestClientTLSOptions(t *testing.T) {
 	t.Parallel()
-	// Start a server that verifies incoming HTTPS connections
-	_, srvVerify := makeClientWithConfig(t, nil, func(conf *testutil.TestServerConfig) {
+	_, s := makeClientWithConfig(t, nil, func(conf *testutil.TestServerConfig) {
 		conf.CAFile = "../test/client_certs/rootca.crt"
 		conf.CertFile = "../test/client_certs/server.crt"
 		conf.KeyFile = "../test/client_certs/server.key"
-		conf.VerifyIncomingHTTPS = true
+		conf.VerifyIncoming = true
 	})
-	defer srvVerify.Stop()
+	defer s.Stop()
 
-	// Start a server without VerifyIncomingHTTPS
-	_, srvNoVerify := makeClientWithConfig(t, nil, func(conf *testutil.TestServerConfig) {
-		conf.CAFile = "../test/client_certs/rootca.crt"
-		conf.CertFile = "../test/client_certs/server.crt"
-		conf.KeyFile = "../test/client_certs/server.key"
-		conf.VerifyIncomingHTTPS = false
+	// Set up a client without certs
+	clientWithoutCerts, err := NewClient(&Config{
+		Address: s.HTTPSAddr,
+		Scheme:  "https",
+		TLSConfig: TLSConfig{
+			Address: "consul.test",
+			CAFile:  "../test/client_certs/rootca.crt",
+		},
 	})
-	defer srvNoVerify.Stop()
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	// Client without a cert
-	t.Run("client without cert, validation", func(t *testing.T) {
-		client, err := NewClient(&Config{
-			Address: srvVerify.HTTPSAddr,
-			Scheme:  "https",
-			TLSConfig: TLSConfig{
-				Address: "consul.test",
-				CAFile:  "../test/client_certs/rootca.crt",
-			},
-		})
-		if err != nil {
-			t.Fatal(err)
-		}
+	// Should fail
+	_, err = clientWithoutCerts.Agent().Self()
+	if err == nil || !strings.Contains(err.Error(), "bad certificate") {
+		t.Fatal(err)
+	}
 
-		// Should fail
-		_, err = client.Agent().Self()
-		if err == nil || !strings.Contains(err.Error(), "bad certificate") {
-			t.Fatal(err)
-		}
+	// Set up a client with valid certs
+	clientWithCerts, err := NewClient(&Config{
+		Address: s.HTTPSAddr,
+		Scheme:  "https",
+		TLSConfig: TLSConfig{
+			Address:  "consul.test",
+			CAFile:   "../test/client_certs/rootca.crt",
+			CertFile: "../test/client_certs/client.crt",
+			KeyFile:  "../test/client_certs/client.key",
+		},
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	// Client with a valid cert
-	t.Run("client with cert, validation", func(t *testing.T) {
-		client, err := NewClient(&Config{
-			Address: srvVerify.HTTPSAddr,
-			Scheme:  "https",
-			TLSConfig: TLSConfig{
-				Address:  "consul.test",
-				CAFile:   "../test/client_certs/rootca.crt",
-				CertFile: "../test/client_certs/client.crt",
-				KeyFile:  "../test/client_certs/client.key",
-			},
-		})
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		// Should succeed
-		_, err = client.Agent().Self()
-		if err != nil {
-			t.Fatal(err)
-		}
-	})
-
-	// Client without a cert
-	t.Run("client without cert, no validation", func(t *testing.T) {
-		client, err := NewClient(&Config{
-			Address: srvNoVerify.HTTPSAddr,
-			Scheme:  "https",
-			TLSConfig: TLSConfig{
-				Address: "consul.test",
-				CAFile:  "../test/client_certs/rootca.crt",
-			},
-		})
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		// Should succeed
-		_, err = client.Agent().Self()
-		if err != nil {
-			t.Fatal(err)
-		}
-	})
-
-	// Client with a valid cert
-	t.Run("client with cert, no validation", func(t *testing.T) {
-		client, err := NewClient(&Config{
-			Address: srvNoVerify.HTTPSAddr,
-			Scheme:  "https",
-			TLSConfig: TLSConfig{
-				Address:  "consul.test",
-				CAFile:   "../test/client_certs/rootca.crt",
-				CertFile: "../test/client_certs/client.crt",
-				KeyFile:  "../test/client_certs/client.key",
-			},
-		})
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		// Should succeed
-		_, err = client.Agent().Self()
-		if err != nil {
-			t.Fatal(err)
-		}
-	})
+	// Should succeed
+	_, err = clientWithCerts.Agent().Self()
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
-func TestAPI_SetQueryOptions(t *testing.T) {
+func TestSetQueryOptions(t *testing.T) {
 	t.Parallel()
 	c, s := makeClient(t)
 	defer s.Stop()
@@ -402,7 +345,7 @@ func TestAPI_SetQueryOptions(t *testing.T) {
 	}
 }
 
-func TestAPI_SetWriteOptions(t *testing.T) {
+func TestSetWriteOptions(t *testing.T) {
 	t.Parallel()
 	c, s := makeClient(t)
 	defer s.Stop()
@@ -422,7 +365,7 @@ func TestAPI_SetWriteOptions(t *testing.T) {
 	}
 }
 
-func TestAPI_RequestToHTTP(t *testing.T) {
+func TestRequestToHTTP(t *testing.T) {
 	t.Parallel()
 	c, s := makeClient(t)
 	defer s.Stop()
@@ -445,7 +388,7 @@ func TestAPI_RequestToHTTP(t *testing.T) {
 	}
 }
 
-func TestAPI_ParseQueryMeta(t *testing.T) {
+func TestParseQueryMeta(t *testing.T) {
 	t.Parallel()
 	resp := &http.Response{
 		Header: make(map[string][]string),
@@ -480,7 +423,10 @@ func TestAPI_UnixSocket(t *testing.T) {
 		t.SkipNow()
 	}
 
-	tempDir := testutil.TempDir(t, "consul")
+	tempDir, err := ioutil.TempDir("", "consul")
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
 	defer os.RemoveAll(tempDir)
 	socket := filepath.Join(tempDir, "test.sock")
 

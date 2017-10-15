@@ -49,20 +49,18 @@ Usage of easyjson:
     	process the whole package instead of just the given file
   -snake_case
     	use snake_case names instead of CamelCase by default
-  -lower_camel_case
-        use lowerCamelCase instead of CamelCase by default
   -stubs
     	only generate stubs for marshaler/unmarshaler funcs
 ```
 
 Using `-all` will generate marshalers/unmarshalers for all Go structs in the
-file. If `-all` is not provided, then only those structs whose preceding
+file. If `-all` is not provided, then only those structs whose preceeding
 comment starts with `easyjson:json` will have marshalers/unmarshalers
 generated. For example:
 
 ```go
 //easyjson:json
-type A struct {}
+struct A{}
 ```
 
 Additional option notes:
@@ -218,7 +216,7 @@ used with a writer.
 
 ### easyjson vs. go/codec
 
-[go/codec](https://github.com/ugorji/go) provides
+[go/codec](https://github.com/ugorji/go/codec) provides
 compile-time helpers for JSON generation. In this case, helpers do not work
 like marshalers as they are encoding-independent.
 

@@ -1,13 +1,13 @@
 package api
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/consul/testutil"
-	"github.com/hashicorp/consul/testutil/retry"
 )
 
-func TestAPI_OperatorAutopilotGetSetConfiguration(t *testing.T) {
+func TestOperator_AutopilotGetSetConfiguration(t *testing.T) {
 	t.Parallel()
 	c, s := makeClient(t)
 	defer s.Stop()
@@ -36,7 +36,7 @@ func TestAPI_OperatorAutopilotGetSetConfiguration(t *testing.T) {
 	}
 }
 
-func TestAPI_OperatorAutopilotCASConfiguration(t *testing.T) {
+func TestOperator_AutopilotCASConfiguration(t *testing.T) {
 	t.Parallel()
 	c, s := makeClient(t)
 	defer s.Stop()
@@ -81,7 +81,7 @@ func TestAPI_OperatorAutopilotCASConfiguration(t *testing.T) {
 	}
 }
 
-func TestAPI_OperatorAutopilotServerHealth(t *testing.T) {
+func TestOperator_AutopilotServerHealth(t *testing.T) {
 	t.Parallel()
 	c, s := makeClientWithConfig(t, nil, func(c *testutil.TestServerConfig) {
 		c.RaftProtocol = 3
@@ -89,16 +89,19 @@ func TestAPI_OperatorAutopilotServerHealth(t *testing.T) {
 	defer s.Stop()
 
 	operator := c.Operator()
-	retry.Run(t, func(r *retry.R) {
+	if err := testutil.WaitForResult(func() (bool, error) {
 		out, err := operator.AutopilotServerHealth(nil)
 		if err != nil {
-			r.Fatalf("err: %v", err)
+			return false, fmt.Errorf("err: %v", err)
 		}
-
 		if len(out.Servers) != 1 ||
 			!out.Servers[0].Healthy ||
 			out.Servers[0].Name != s.Config.NodeName {
-			r.Fatalf("bad: %v", out)
+			return false, fmt.Errorf("bad: %v", out)
 		}
-	})
+
+		return true, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
 }

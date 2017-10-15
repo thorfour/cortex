@@ -4,15 +4,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hashicorp/consul/agent"
+	"github.com/hashicorp/consul/command/base"
 	"github.com/mitchellh/cli"
 )
 
 func TestKVImportCommand_Run(t *testing.T) {
-	t.Parallel()
-	a := agent.NewTestAgent(t.Name(), nil)
-	defer a.Shutdown()
-	client := a.Client()
+	srv, client := testAgentWithAPIClient(t)
+	defer srv.Shutdown()
+	waitForLeader(t, srv.httpAddr)
 
 	const json = `[
 		{
@@ -27,17 +26,17 @@ func TestKVImportCommand_Run(t *testing.T) {
 		}
 	]`
 
-	ui := cli.NewMockUi()
+	ui := new(cli.MockUi)
 	c := &KVImportCommand{
-		BaseCommand: BaseCommand{
-			UI:    ui,
-			Flags: FlagSetHTTP,
+		Command: base.Command{
+			Ui:    ui,
+			Flags: base.FlagSetHTTP,
 		},
 		testStdin: strings.NewReader(json),
 	}
 
 	args := []string{
-		"-http-addr=" + a.HTTPAddr(),
+		"-http-addr=" + srv.httpAddr,
 		"-",
 	}
 

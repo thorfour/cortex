@@ -147,7 +147,7 @@ Examples:
 	toolstash compile x.go
 	toolstash -cmp compile x.go
 
-For details, godoc golang.org/x/tools/cmd/toolstash
+For details, godoc rsc.io/toolstash
 `
 
 func usage() {
@@ -156,7 +156,6 @@ func usage() {
 }
 
 var (
-	goCmd   = flag.String("go", "go", "path to \"go\" command")
 	norun   = flag.Bool("n", false, "print but do not run commands")
 	verbose = flag.Bool("v", false, "print commands being run")
 	cmp     = flag.Bool("cmp", false, "compare tool object files")
@@ -200,11 +199,7 @@ func main() {
 		usage()
 	}
 
-	s, err := exec.Command(*goCmd, "env", "GOROOT").CombinedOutput()
-	if err != nil {
-		log.Fatalf("%s env GOROOT: %v", *goCmd, err)
-	}
-	goroot = strings.TrimSpace(string(s))
+	goroot = runtime.GOROOT()
 	toolDir = filepath.Join(goroot, fmt.Sprintf("pkg/tool/%s_%s", runtime.GOOS, runtime.GOARCH))
 	stashDir = filepath.Join(goroot, "pkg/toolstash")
 
@@ -253,7 +248,7 @@ func main() {
 	xcmd.Stdin = os.Stdin
 	xcmd.Stdout = os.Stdout
 	xcmd.Stderr = os.Stderr
-	err = xcmd.Run()
+	err := xcmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -278,14 +273,11 @@ func compareTool() {
 
 	case tool == "compile" || strings.HasSuffix(tool, "g"): // compiler
 		useDashN := true
-		dashcIndex := -1
-		for i, s := range cmd {
+		for _, s := range cmd {
 			if s == "-+" {
 				// Compiling runtime. Don't use -N.
 				useDashN = false
-			}
-			if strings.HasPrefix(s, "-c=") {
-				dashcIndex = i
+				break
 			}
 		}
 		cmdN := injectflags(cmd, nil, useDashN)
@@ -296,14 +288,8 @@ func compareTool() {
 			} else {
 				log.Printf("compiler output differs")
 			}
-			if dashcIndex >= 0 {
-				cmd[dashcIndex] = "-c=1"
-			}
 			cmd = injectflags(cmd, []string{"-v", "-m=2"}, useDashN)
 			break
-		}
-		if dashcIndex >= 0 {
-			cmd[dashcIndex] = "-c=1"
 		}
 		cmd = injectflags(cmd, []string{"-v", "-m=2"}, false)
 		log.Printf("compiler output differs, only with optimizers enabled")

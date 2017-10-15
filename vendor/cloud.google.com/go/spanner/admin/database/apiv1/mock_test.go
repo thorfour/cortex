@@ -41,7 +41,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	gstatus "google.golang.org/grpc/status"
 )
 
 var _ = io.EOF
@@ -251,7 +250,7 @@ func TestDatabaseAdminListDatabases(t *testing.T) {
 
 func TestDatabaseAdminListDatabasesError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockDatabaseAdmin.err = gstatus.Error(errCode, "test error")
+	mockDatabaseAdmin.err = grpc.Errorf(errCode, "test error")
 
 	var formattedParent string = DatabaseAdminInstancePath("[PROJECT]", "[INSTANCE]")
 	var request = &databasepb.ListDatabasesRequest{
@@ -265,9 +264,7 @@ func TestDatabaseAdminListDatabasesError(t *testing.T) {
 
 	resp, err := c.ListDatabases(context.Background(), request).Next()
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -354,9 +351,7 @@ func TestDatabaseAdminCreateDatabaseError(t *testing.T) {
 	}
 	resp, err := respLRO.Wait(context.Background())
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -399,7 +394,7 @@ func TestDatabaseAdminGetDatabase(t *testing.T) {
 
 func TestDatabaseAdminGetDatabaseError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockDatabaseAdmin.err = gstatus.Error(errCode, "test error")
+	mockDatabaseAdmin.err = grpc.Errorf(errCode, "test error")
 
 	var formattedName string = DatabaseAdminDatabasePath("[PROJECT]", "[INSTANCE]", "[DATABASE]")
 	var request = &databasepb.GetDatabaseRequest{
@@ -413,9 +408,7 @@ func TestDatabaseAdminGetDatabaseError(t *testing.T) {
 
 	resp, err := c.GetDatabase(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -496,9 +489,7 @@ func TestDatabaseAdminUpdateDatabaseDdlError(t *testing.T) {
 	}
 	err = respLRO.Wait(context.Background())
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 }
@@ -534,7 +525,7 @@ func TestDatabaseAdminDropDatabase(t *testing.T) {
 
 func TestDatabaseAdminDropDatabaseError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockDatabaseAdmin.err = gstatus.Error(errCode, "test error")
+	mockDatabaseAdmin.err = grpc.Errorf(errCode, "test error")
 
 	var formattedDatabase string = DatabaseAdminDatabasePath("[PROJECT]", "[INSTANCE]", "[DATABASE]")
 	var request = &databasepb.DropDatabaseRequest{
@@ -548,9 +539,7 @@ func TestDatabaseAdminDropDatabaseError(t *testing.T) {
 
 	err = c.DropDatabase(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 }
@@ -589,7 +578,7 @@ func TestDatabaseAdminGetDatabaseDdl(t *testing.T) {
 
 func TestDatabaseAdminGetDatabaseDdlError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockDatabaseAdmin.err = gstatus.Error(errCode, "test error")
+	mockDatabaseAdmin.err = grpc.Errorf(errCode, "test error")
 
 	var formattedDatabase string = DatabaseAdminDatabasePath("[PROJECT]", "[INSTANCE]", "[DATABASE]")
 	var request = &databasepb.GetDatabaseDdlRequest{
@@ -603,9 +592,7 @@ func TestDatabaseAdminGetDatabaseDdlError(t *testing.T) {
 
 	resp, err := c.GetDatabaseDdl(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -652,7 +639,7 @@ func TestDatabaseAdminSetIamPolicy(t *testing.T) {
 
 func TestDatabaseAdminSetIamPolicyError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockDatabaseAdmin.err = gstatus.Error(errCode, "test error")
+	mockDatabaseAdmin.err = grpc.Errorf(errCode, "test error")
 
 	var formattedResource string = DatabaseAdminDatabasePath("[PROJECT]", "[INSTANCE]", "[DATABASE]")
 	var policy *iampb.Policy = &iampb.Policy{}
@@ -668,9 +655,7 @@ func TestDatabaseAdminSetIamPolicyError(t *testing.T) {
 
 	resp, err := c.SetIamPolicy(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -715,7 +700,7 @@ func TestDatabaseAdminGetIamPolicy(t *testing.T) {
 
 func TestDatabaseAdminGetIamPolicyError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockDatabaseAdmin.err = gstatus.Error(errCode, "test error")
+	mockDatabaseAdmin.err = grpc.Errorf(errCode, "test error")
 
 	var formattedResource string = DatabaseAdminDatabasePath("[PROJECT]", "[INSTANCE]", "[DATABASE]")
 	var request = &iampb.GetIamPolicyRequest{
@@ -729,9 +714,7 @@ func TestDatabaseAdminGetIamPolicyError(t *testing.T) {
 
 	resp, err := c.GetIamPolicy(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -773,7 +756,7 @@ func TestDatabaseAdminTestIamPermissions(t *testing.T) {
 
 func TestDatabaseAdminTestIamPermissionsError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockDatabaseAdmin.err = gstatus.Error(errCode, "test error")
+	mockDatabaseAdmin.err = grpc.Errorf(errCode, "test error")
 
 	var formattedResource string = DatabaseAdminDatabasePath("[PROJECT]", "[INSTANCE]", "[DATABASE]")
 	var permissions []string = nil
@@ -789,9 +772,7 @@ func TestDatabaseAdminTestIamPermissionsError(t *testing.T) {
 
 	resp, err := c.TestIamPermissions(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp

@@ -92,7 +92,7 @@ func NewImageAnnotatorClient(ctx context.Context, opts ...option.ClientOption) (
 
 		imageAnnotatorClient: visionpb.NewImageAnnotatorClient(conn),
 	}
-	c.setGoogleClientInfo()
+	c.SetGoogleClientInfo()
 	return c, nil
 }
 
@@ -107,10 +107,10 @@ func (c *ImageAnnotatorClient) Close() error {
 	return c.conn.Close()
 }
 
-// setGoogleClientInfo sets the name and version of the application in
+// SetGoogleClientInfo sets the name and version of the application in
 // the `x-goog-api-client` header passed on each request. Intended for
 // use by Google-written clients.
-func (c *ImageAnnotatorClient) setGoogleClientInfo(keyval ...string) {
+func (c *ImageAnnotatorClient) SetGoogleClientInfo(keyval ...string) {
 	kv := append([]string{"gl-go", version.Go()}, keyval...)
 	kv = append(kv, "gapic", version.Repo, "gax", gax.Version, "grpc", grpc.Version)
 	c.xGoogHeader = []string{gax.XGoogHeader(kv...)}

@@ -71,13 +71,6 @@ a {
     margin-top: 200px;
 }
 
-.sticky-scroll {
-    top: 15px;
-    position: sticky;
-    position: -webkit-sticky;
-    overflow: scroll;
-}
-
 .row {
     &.colored {
         background-color: $light-pink;

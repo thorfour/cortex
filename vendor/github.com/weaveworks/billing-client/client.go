@@ -1,29 +1,28 @@
 package billing
 
 import (
-	"context"
 	"fmt"
 	"net"
 	"strconv"
 	"sync"
 	"time"
 
-	log "github.com/sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 	"github.com/fluent/fluent-logger-golang/fluent"
 	"github.com/prometheus/client_golang/prometheus"
+	"golang.org/x/net/context"
 
 	"github.com/weaveworks/common/instrument"
 )
 
 var (
-	// requestCollector is the duration of billing client requests
-	requestCollector = instrument.NewHistogramCollector(prometheus.NewHistogramVec(prometheus.HistogramOpts{
+	// RequestDuration is the duration of billing client requests
+	RequestDuration = prometheus.NewHistogramVec(prometheus.HistogramOpts{
 		Namespace: "billing_client",
 		Name:      "request_duration_seconds",
 		Help:      "Time in seconds spent emitting billing info.",
 		Buckets:   prometheus.DefBuckets,
-	}, []string{"method", "status_code"}))
-
+	}, []string{"method", "status_code"})
 	// EventsCounter is the count of billing events
 	EventsCounter = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Namespace: "billing_client",
@@ -40,7 +39,7 @@ var (
 
 // MustRegisterMetrics is a convenience function for registering all the metrics from this package
 func MustRegisterMetrics() {
-	requestCollector.Register()
+	prometheus.MustRegister(RequestDuration)
 	prometheus.MustRegister(EventsCounter)
 	prometheus.MustRegister(AmountsCounter)
 }
@@ -54,7 +53,7 @@ type Client struct {
 	Config
 }
 
-// NewClient creates a new billing client.
+// New creates a new billing client.
 func NewClient(cfg Config) (*Client, error) {
 	host, port, err := net.SplitHostPort(cfg.IngesterHostPort)
 	if err != nil {
@@ -113,9 +112,9 @@ func NewClient(cfg Config) (*Client, error) {
 // here. Prefer including a lookup address over whole data. For example,
 // include a report id or s3 address instead of the information in the report.
 func (c *Client) AddAmounts(uniqueKey, internalInstanceID string, timestamp time.Time, amounts Amounts, metadata map[string]string) error {
-	return instrument.CollectedRequest(context.Background(), "Billing.AddAmounts", requestCollector, nil, func(_ context.Context) error {
+	return instrument.TimeRequestHistogram(context.Background(), "Billing.AddAmounts", RequestDuration, func(_ context.Context) error {
 		if uniqueKey == "" {
-			return fmt.Errorf("billing: units uniqueKey cannot be blank")
+			return fmt.Errorf("billing units uniqueKey cannot be blank")
 		}
 
 		e := Event{
@@ -129,7 +128,7 @@ func (c *Client) AddAmounts(uniqueKey, internalInstanceID string, timestamp time
 		select {
 		case <-c.stop:
 			trackEvent("stopping", e)
-			return fmt.Errorf("billing: stopping, discarding event: %v", e)
+			return fmt.Errorf("stopping, discarding event: %v", e)
 		default:
 		}
 
@@ -140,7 +139,7 @@ func (c *Client) AddAmounts(uniqueKey, internalInstanceID string, timestamp time
 			// full
 		}
 		trackEvent("buffer_full", e)
-		return fmt.Errorf("billing: reached billing event buffer limit (%d), discarding event: %v", c.MaxBufferedEvents, e)
+		return fmt.Errorf("reached billing event buffer limit (%d), discarding event: %v", c.MaxBufferedEvents, e)
 	})
 }
 

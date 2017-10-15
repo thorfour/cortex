@@ -73,7 +73,7 @@ func ServerErrorLogger(logger log.Logger) ServerOption {
 // ServeGRPC implements the Handler interface.
 func (s Server) ServeGRPC(ctx oldcontext.Context, req interface{}) (oldcontext.Context, interface{}, error) {
 	// Retrieve gRPC metadata.
-	md, ok := metadata.FromIncomingContext(ctx)
+	md, ok := metadata.FromContext(ctx)
 	if !ok {
 		md = metadata.MD{}
 	}

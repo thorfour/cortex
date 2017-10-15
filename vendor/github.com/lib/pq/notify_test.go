@@ -123,9 +123,6 @@ func TestConnUnlisten(t *testing.T) {
 	}
 
 	_, err = db.Exec("NOTIFY notify_test")
-	if err != nil {
-		t.Fatal(err)
-	}
 
 	err = expectNotification(t, channel, "notify_test", "")
 	if err != nil {
@@ -162,9 +159,6 @@ func TestConnUnlistenAll(t *testing.T) {
 	}
 
 	_, err = db.Exec("NOTIFY notify_test")
-	if err != nil {
-		t.Fatal(err)
-	}
 
 	err = expectNotification(t, channel, "notify_test", "")
 	if err != nil {

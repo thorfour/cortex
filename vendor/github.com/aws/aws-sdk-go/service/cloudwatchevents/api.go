@@ -17,18 +17,19 @@ const opDeleteRule = "DeleteRule"
 
 // DeleteRuleRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteRule for usage and error information.
 //
-// See DeleteRule for more information on using the DeleteRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteRuleRequest method.
 //    req, resp := client.DeleteRuleRequest(params)
@@ -107,18 +108,19 @@ const opDescribeEventBus = "DescribeEventBus"
 
 // DescribeEventBusRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventBus operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DescribeEventBus for usage and error information.
 //
-// See DescribeEventBus for more information on using the DescribeEventBus
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeEventBus method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DescribeEventBusRequest method.
 //    req, resp := client.DescribeEventBusRequest(params)
@@ -191,18 +193,19 @@ const opDescribeRule = "DescribeRule"
 
 // DescribeRuleRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DescribeRule for usage and error information.
 //
-// See DescribeRule for more information on using the DescribeRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DescribeRuleRequest method.
 //    req, resp := client.DescribeRuleRequest(params)
@@ -273,18 +276,19 @@ const opDisableRule = "DisableRule"
 
 // DisableRuleRequest generates a "aws/request.Request" representing the
 // client's request for the DisableRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DisableRule for usage and error information.
 //
-// See DisableRule for more information on using the DisableRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DisableRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DisableRuleRequest method.
 //    req, resp := client.DisableRuleRequest(params)
@@ -364,18 +368,19 @@ const opEnableRule = "EnableRule"
 
 // EnableRuleRequest generates a "aws/request.Request" representing the
 // client's request for the EnableRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See EnableRule for usage and error information.
 //
-// See EnableRule for more information on using the EnableRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the EnableRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the EnableRuleRequest method.
 //    req, resp := client.EnableRuleRequest(params)
@@ -455,18 +460,19 @@ const opListRuleNamesByTarget = "ListRuleNamesByTarget"
 
 // ListRuleNamesByTargetRequest generates a "aws/request.Request" representing the
 // client's request for the ListRuleNamesByTarget operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListRuleNamesByTarget for usage and error information.
 //
-// See ListRuleNamesByTarget for more information on using the ListRuleNamesByTarget
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListRuleNamesByTarget method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListRuleNamesByTargetRequest method.
 //    req, resp := client.ListRuleNamesByTargetRequest(params)
@@ -535,18 +541,19 @@ const opListRules = "ListRules"
 
 // ListRulesRequest generates a "aws/request.Request" representing the
 // client's request for the ListRules operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListRules for usage and error information.
 //
-// See ListRules for more information on using the ListRules
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListRules method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListRulesRequest method.
 //    req, resp := client.ListRulesRequest(params)
@@ -615,18 +622,19 @@ const opListTargetsByRule = "ListTargetsByRule"
 
 // ListTargetsByRuleRequest generates a "aws/request.Request" representing the
 // client's request for the ListTargetsByRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListTargetsByRule for usage and error information.
 //
-// See ListTargetsByRule for more information on using the ListTargetsByRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListTargetsByRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListTargetsByRuleRequest method.
 //    req, resp := client.ListTargetsByRuleRequest(params)
@@ -697,18 +705,19 @@ const opPutEvents = "PutEvents"
 
 // PutEventsRequest generates a "aws/request.Request" representing the
 // client's request for the PutEvents operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See PutEvents for usage and error information.
 //
-// See PutEvents for more information on using the PutEvents
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the PutEvents method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the PutEventsRequest method.
 //    req, resp := client.PutEventsRequest(params)
@@ -777,18 +786,19 @@ const opPutPermission = "PutPermission"
 
 // PutPermissionRequest generates a "aws/request.Request" representing the
 // client's request for the PutPermission operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See PutPermission for usage and error information.
 //
-// See PutPermission for more information on using the PutPermission
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the PutPermission method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the PutPermissionRequest method.
 //    req, resp := client.PutPermissionRequest(params)
@@ -830,8 +840,6 @@ func (c *CloudWatchEvents) PutPermissionRequest(input *PutPermissionInput) (req 
 // To enable multiple AWS accounts to put events to your default event bus,
 // run PutPermission once for each of these accounts.
 //
-// The permission policy on the default event bus cannot exceed 10KB in size.
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -848,9 +856,6 @@ func (c *CloudWatchEvents) PutPermissionRequest(input *PutPermissionInput) (req 
 //
 //   * ErrCodeInternalException "InternalException"
 //   This exception occurs due to unexpected causes.
-//
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a rule or target.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/PutPermission
 func (c *CloudWatchEvents) PutPermission(input *PutPermissionInput) (*PutPermissionOutput, error) {
@@ -878,18 +883,19 @@ const opPutRule = "PutRule"
 
 // PutRuleRequest generates a "aws/request.Request" representing the
 // client's request for the PutRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See PutRule for usage and error information.
 //
-// See PutRule for more information on using the PutRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the PutRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the PutRuleRequest method.
 //    req, resp := client.PutRuleRequest(params)
@@ -982,18 +988,19 @@ const opPutTargets = "PutTargets"
 
 // PutTargetsRequest generates a "aws/request.Request" representing the
 // client's request for the PutTargets operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See PutTargets for usage and error information.
 //
-// See PutTargets for more information on using the PutTargets
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the PutTargets method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the PutTargetsRequest method.
 //    req, resp := client.PutTargetsRequest(params)
@@ -1041,15 +1048,9 @@ func (c *CloudWatchEvents) PutTargetsRequest(input *PutTargetsInput) (req *reque
 //
 //    * AWS Step Functions state machines
 //
-//    * Pipelines in Amazon Code Pipeline
-//
-//    * Amazon Inspector assessment templates
-//
 //    * Amazon SNS topics
 //
 //    * Amazon SQS queues
-//
-//    * The default event bus of another AWS account
 //
 // Note that creating rules with built-in targets is supported only in the AWS
 // Management Console.
@@ -1069,16 +1070,10 @@ func (c *CloudWatchEvents) PutTargetsRequest(input *PutTargetsInput) (req *reque
 // in the Amazon CloudWatch Events User Guide.
 //
 // If another AWS account is in the same region and has granted you permission
-// (using PutPermission), you can send events to that account by setting that
-// account's event bus as a target of the rules in your account. To send the
-// matched events to the other account, specify that account's event bus as
-// the Arn when you run PutTargets. If your account sends events to another
-// account, your account is charged for each sent event. Each event sent to
-// antoher account is charged as a custom event. The account receiving the event
-// is not charged. For more information on pricing, see Amazon CloudWatch Pricing
-// (https://aws.amazon.com/cloudwatch/pricing/).
-//
-// For more information about enabling cross-account events, see PutPermission.
+// (using PutPermission), you can set that account's event bus as a target of
+// the rules in your account. To send the matched events to the other account,
+// specify that account's event bus as the Arn when you run PutTargets. For
+// more information about enabling cross-account events, see PutPermission.
 //
 // Input, InputPath and InputTransformer are mutually exclusive and optional
 // parameters of a target. When a rule is triggered due to a matched event:
@@ -1157,18 +1152,19 @@ const opRemovePermission = "RemovePermission"
 
 // RemovePermissionRequest generates a "aws/request.Request" representing the
 // client's request for the RemovePermission operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See RemovePermission for usage and error information.
 //
-// See RemovePermission for more information on using the RemovePermission
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RemovePermission method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the RemovePermissionRequest method.
 //    req, resp := client.RemovePermissionRequest(params)
@@ -1218,9 +1214,6 @@ func (c *CloudWatchEvents) RemovePermissionRequest(input *RemovePermissionInput)
 //   * ErrCodeInternalException "InternalException"
 //   This exception occurs due to unexpected causes.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a rule or target.
-//
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/RemovePermission
 func (c *CloudWatchEvents) RemovePermission(input *RemovePermissionInput) (*RemovePermissionOutput, error) {
 	req, out := c.RemovePermissionRequest(input)
@@ -1247,18 +1240,19 @@ const opRemoveTargets = "RemoveTargets"
 
 // RemoveTargetsRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveTargets operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See RemoveTargets for usage and error information.
 //
-// See RemoveTargets for more information on using the RemoveTargets
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RemoveTargets method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the RemoveTargetsRequest method.
 //    req, resp := client.RemoveTargetsRequest(params)
@@ -1342,18 +1336,19 @@ const opTestEventPattern = "TestEventPattern"
 
 // TestEventPatternRequest generates a "aws/request.Request" representing the
 // client's request for the TestEventPattern operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See TestEventPattern for usage and error information.
 //
-// See TestEventPattern for more information on using the TestEventPattern
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the TestEventPattern method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the TestEventPatternRequest method.
 //    req, resp := client.TestEventPatternRequest(params)

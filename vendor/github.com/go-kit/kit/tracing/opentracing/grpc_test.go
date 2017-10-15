@@ -22,7 +22,7 @@ func TestTraceGRPCRequestRoundtrip(t *testing.T) {
 	beforeSpan.SetBaggageItem("baggage", "check")
 	beforeCtx := opentracing.ContextWithSpan(context.Background(), beforeSpan)
 
-	toGRPCFunc := kitot.ContextToGRPC(tracer, logger)
+	toGRPCFunc := kitot.ToGRPCRequest(tracer, logger)
 	md := metadata.Pairs()
 	// Call the RequestFunc.
 	afterCtx := toGRPCFunc(beforeCtx, &md)
@@ -39,8 +39,8 @@ func TestTraceGRPCRequestRoundtrip(t *testing.T) {
 		t.Errorf("Want %v span(s), found %v", want, have)
 	}
 
-	// Use GRPCToContext to verify that we can join with the trace given MD.
-	fromGRPCFunc := kitot.GRPCToContext(tracer, "joined", logger)
+	// Use FromGRPCRequest to verify that we can join with the trace given MD.
+	fromGRPCFunc := kitot.FromGRPCRequest(tracer, "joined", logger)
 	joinCtx := fromGRPCFunc(afterCtx, md)
 	joinedSpan := opentracing.SpanFromContext(joinCtx).(*mocktracer.MockSpan)
 

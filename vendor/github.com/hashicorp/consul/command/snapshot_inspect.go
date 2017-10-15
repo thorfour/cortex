@@ -7,13 +7,14 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	"github.com/hashicorp/consul/command/base"
 	"github.com/hashicorp/consul/snapshot"
 )
 
 // SnapshotInspectCommand is a Command implementation that is used to display
 // metadata about a snapshot file
 type SnapshotInspectCommand struct {
-	BaseCommand
+	base.Command
 }
 
 func (c *SnapshotInspectCommand) Help() string {
@@ -33,9 +34,9 @@ Usage: consul snapshot inspect [options] FILE
 }
 
 func (c *SnapshotInspectCommand) Run(args []string) int {
-	flagSet := c.BaseCommand.NewFlagSet(c)
+	flagSet := c.Command.NewFlagSet(c)
 
-	if err := c.BaseCommand.Parse(args); err != nil {
+	if err := c.Command.Parse(args); err != nil {
 		return 1
 	}
 
@@ -44,26 +45,26 @@ func (c *SnapshotInspectCommand) Run(args []string) int {
 	args = flagSet.Args()
 	switch len(args) {
 	case 0:
-		c.UI.Error("Missing FILE argument")
+		c.Ui.Error("Missing FILE argument")
 		return 1
 	case 1:
 		file = args[0]
 	default:
-		c.UI.Error(fmt.Sprintf("Too many arguments (expected 1, got %d)", len(args)))
+		c.Ui.Error(fmt.Sprintf("Too many arguments (expected 1, got %d)", len(args)))
 		return 1
 	}
 
 	// Open the file.
 	f, err := os.Open(file)
 	if err != nil {
-		c.UI.Error(fmt.Sprintf("Error opening snapshot file: %s", err))
+		c.Ui.Error(fmt.Sprintf("Error opening snapshot file: %s", err))
 		return 1
 	}
 	defer f.Close()
 
 	meta, err := snapshot.Verify(f)
 	if err != nil {
-		c.UI.Error(fmt.Sprintf("Error verifying snapshot: %s", err))
+		c.Ui.Error(fmt.Sprintf("Error verifying snapshot: %s", err))
 	}
 
 	var b bytes.Buffer
@@ -74,10 +75,10 @@ func (c *SnapshotInspectCommand) Run(args []string) int {
 	fmt.Fprintf(tw, "Term\t%d\n", meta.Term)
 	fmt.Fprintf(tw, "Version\t%d\n", meta.Version)
 	if err = tw.Flush(); err != nil {
-		c.UI.Error(fmt.Sprintf("Error rendering snapshot info: %s", err))
+		c.Ui.Error(fmt.Sprintf("Error rendering snapshot info: %s", err))
 	}
 
-	c.UI.Info(b.String())
+	c.Ui.Info(b.String())
 
 	return 0
 }

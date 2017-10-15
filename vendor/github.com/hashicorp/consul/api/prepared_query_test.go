@@ -4,10 +4,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/hashicorp/consul/testutil/retry"
+	"github.com/hashicorp/consul/testutil"
 )
 
-func TestAPI_PreparedQuery(t *testing.T) {
+func TestPreparedQuery(t *testing.T) {
 	t.Parallel()
 	c, s := makeClient(t)
 	defer s.Stop()
@@ -30,14 +30,19 @@ func TestAPI_PreparedQuery(t *testing.T) {
 	}
 
 	catalog := c.Catalog()
-	retry.Run(t, func(r *retry.R) {
+	if err := testutil.WaitForResult(func() (bool, error) {
 		if _, err := catalog.Register(reg, nil); err != nil {
-			r.Fatal(err)
+			return false, err
 		}
+
 		if _, _, err := catalog.Node("foobar", nil); err != nil {
-			r.Fatal(err)
+			return false, err
 		}
-	})
+
+		return true, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
 
 	// Create a simple prepared query.
 	def := &PreparedQueryDefinition{
@@ -111,9 +116,6 @@ func TestAPI_PreparedQuery(t *testing.T) {
 	}
 	if wan, ok := results.Nodes[0].Node.TaggedAddresses["wan"]; !ok || wan != "127.0.0.1" {
 		t.Fatalf("bad: %v", results)
-	}
-	if results.Nodes[0].Node.Datacenter != "dc1" {
-		t.Fatalf("bad datacenter: %v", results)
 	}
 
 	// Delete it.

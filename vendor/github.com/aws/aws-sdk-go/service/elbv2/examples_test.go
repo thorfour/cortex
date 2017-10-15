@@ -118,8 +118,6 @@ func ExampleELBV2_CreateListener_shared00() {
 				fmt.Println(elbv2.ErrCodeUnsupportedProtocolException, aerr.Error())
 			case elbv2.ErrCodeTooManyRegistrationsForTargetIdException:
 				fmt.Println(elbv2.ErrCodeTooManyRegistrationsForTargetIdException, aerr.Error())
-			case elbv2.ErrCodeTooManyTargetsException:
-				fmt.Println(elbv2.ErrCodeTooManyTargetsException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -190,8 +188,6 @@ func ExampleELBV2_CreateListener_shared01() {
 				fmt.Println(elbv2.ErrCodeUnsupportedProtocolException, aerr.Error())
 			case elbv2.ErrCodeTooManyRegistrationsForTargetIdException:
 				fmt.Println(elbv2.ErrCodeTooManyRegistrationsForTargetIdException, aerr.Error())
-			case elbv2.ErrCodeTooManyTargetsException:
-				fmt.Println(elbv2.ErrCodeTooManyTargetsException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -242,12 +238,6 @@ func ExampleELBV2_CreateLoadBalancer_shared00() {
 				fmt.Println(elbv2.ErrCodeTooManyTagsException, aerr.Error())
 			case elbv2.ErrCodeDuplicateTagKeysException:
 				fmt.Println(elbv2.ErrCodeDuplicateTagKeysException, aerr.Error())
-			case elbv2.ErrCodeResourceInUseException:
-				fmt.Println(elbv2.ErrCodeResourceInUseException, aerr.Error())
-			case elbv2.ErrCodeAllocationIdNotFoundException:
-				fmt.Println(elbv2.ErrCodeAllocationIdNotFoundException, aerr.Error())
-			case elbv2.ErrCodeAvailabilityZoneNotSupportedException:
-				fmt.Println(elbv2.ErrCodeAvailabilityZoneNotSupportedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -299,12 +289,6 @@ func ExampleELBV2_CreateLoadBalancer_shared01() {
 				fmt.Println(elbv2.ErrCodeTooManyTagsException, aerr.Error())
 			case elbv2.ErrCodeDuplicateTagKeysException:
 				fmt.Println(elbv2.ErrCodeDuplicateTagKeysException, aerr.Error())
-			case elbv2.ErrCodeResourceInUseException:
-				fmt.Println(elbv2.ErrCodeResourceInUseException, aerr.Error())
-			case elbv2.ErrCodeAllocationIdNotFoundException:
-				fmt.Println(elbv2.ErrCodeAllocationIdNotFoundException, aerr.Error())
-			case elbv2.ErrCodeAvailabilityZoneNotSupportedException:
-				fmt.Println(elbv2.ErrCodeAvailabilityZoneNotSupportedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -356,8 +340,6 @@ func ExampleELBV2_CreateRule_shared00() {
 				fmt.Println(elbv2.ErrCodeTooManyRulesException, aerr.Error())
 			case elbv2.ErrCodeTargetGroupAssociationLimitException:
 				fmt.Println(elbv2.ErrCodeTargetGroupAssociationLimitException, aerr.Error())
-			case elbv2.ErrCodeIncompatibleProtocolsException:
-				fmt.Println(elbv2.ErrCodeIncompatibleProtocolsException, aerr.Error())
 			case elbv2.ErrCodeListenerNotFoundException:
 				fmt.Println(elbv2.ErrCodeListenerNotFoundException, aerr.Error())
 			case elbv2.ErrCodeTargetGroupNotFoundException:
@@ -366,8 +348,6 @@ func ExampleELBV2_CreateRule_shared00() {
 				fmt.Println(elbv2.ErrCodeInvalidConfigurationRequestException, aerr.Error())
 			case elbv2.ErrCodeTooManyRegistrationsForTargetIdException:
 				fmt.Println(elbv2.ErrCodeTooManyRegistrationsForTargetIdException, aerr.Error())
-			case elbv2.ErrCodeTooManyTargetsException:
-				fmt.Println(elbv2.ErrCodeTooManyTargetsException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -403,8 +383,6 @@ func ExampleELBV2_CreateTargetGroup_shared00() {
 				fmt.Println(elbv2.ErrCodeDuplicateTargetGroupNameException, aerr.Error())
 			case elbv2.ErrCodeTooManyTargetGroupsException:
 				fmt.Println(elbv2.ErrCodeTooManyTargetGroupsException, aerr.Error())
-			case elbv2.ErrCodeInvalidConfigurationRequestException:
-				fmt.Println(elbv2.ErrCodeInvalidConfigurationRequestException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -948,8 +926,6 @@ func ExampleELBV2_ModifyListener_shared00() {
 				fmt.Println(elbv2.ErrCodeUnsupportedProtocolException, aerr.Error())
 			case elbv2.ErrCodeTooManyRegistrationsForTargetIdException:
 				fmt.Println(elbv2.ErrCodeTooManyRegistrationsForTargetIdException, aerr.Error())
-			case elbv2.ErrCodeTooManyTargetsException:
-				fmt.Println(elbv2.ErrCodeTooManyTargetsException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1006,8 +982,6 @@ func ExampleELBV2_ModifyListener_shared01() {
 				fmt.Println(elbv2.ErrCodeUnsupportedProtocolException, aerr.Error())
 			case elbv2.ErrCodeTooManyRegistrationsForTargetIdException:
 				fmt.Println(elbv2.ErrCodeTooManyRegistrationsForTargetIdException, aerr.Error())
-			case elbv2.ErrCodeTooManyTargetsException:
-				fmt.Println(elbv2.ErrCodeTooManyTargetsException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1166,8 +1140,6 @@ func ExampleELBV2_ModifyRule_shared00() {
 			switch aerr.Code() {
 			case elbv2.ErrCodeTargetGroupAssociationLimitException:
 				fmt.Println(elbv2.ErrCodeTargetGroupAssociationLimitException, aerr.Error())
-			case elbv2.ErrCodeIncompatibleProtocolsException:
-				fmt.Println(elbv2.ErrCodeIncompatibleProtocolsException, aerr.Error())
 			case elbv2.ErrCodeRuleNotFoundException:
 				fmt.Println(elbv2.ErrCodeRuleNotFoundException, aerr.Error())
 			case elbv2.ErrCodeOperationNotPermittedException:
@@ -1210,8 +1182,6 @@ func ExampleELBV2_ModifyTargetGroup_shared00() {
 			switch aerr.Code() {
 			case elbv2.ErrCodeTargetGroupNotFoundException:
 				fmt.Println(elbv2.ErrCodeTargetGroupNotFoundException, aerr.Error())
-			case elbv2.ErrCodeInvalidConfigurationRequestException:
-				fmt.Println(elbv2.ErrCodeInvalidConfigurationRequestException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1248,8 +1218,6 @@ func ExampleELBV2_ModifyTargetGroupAttributes_shared00() {
 			switch aerr.Code() {
 			case elbv2.ErrCodeTargetGroupNotFoundException:
 				fmt.Println(elbv2.ErrCodeTargetGroupNotFoundException, aerr.Error())
-			case elbv2.ErrCodeInvalidConfigurationRequestException:
-				fmt.Println(elbv2.ErrCodeInvalidConfigurationRequestException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1497,10 +1465,6 @@ func ExampleELBV2_SetSubnets_shared00() {
 				fmt.Println(elbv2.ErrCodeSubnetNotFoundException, aerr.Error())
 			case elbv2.ErrCodeInvalidSubnetException:
 				fmt.Println(elbv2.ErrCodeInvalidSubnetException, aerr.Error())
-			case elbv2.ErrCodeAllocationIdNotFoundException:
-				fmt.Println(elbv2.ErrCodeAllocationIdNotFoundException, aerr.Error())
-			case elbv2.ErrCodeAvailabilityZoneNotSupportedException:
-				fmt.Println(elbv2.ErrCodeAvailabilityZoneNotSupportedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

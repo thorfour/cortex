@@ -12,18 +12,19 @@ const opCompareFaces = "CompareFaces"
 
 // CompareFacesRequest generates a "aws/request.Request" representing the
 // client's request for the CompareFaces operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CompareFaces for usage and error information.
 //
-// See CompareFaces for more information on using the CompareFaces
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CompareFaces method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CompareFacesRequest method.
 //    req, resp := client.CompareFacesRequest(params)
@@ -146,18 +147,19 @@ const opCreateCollection = "CreateCollection"
 
 // CreateCollectionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCollection operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateCollection for usage and error information.
 //
-// See CreateCollection for more information on using the CreateCollection
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateCollection method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateCollectionRequest method.
 //    req, resp := client.CreateCollectionRequest(params)
@@ -253,18 +255,19 @@ const opDeleteCollection = "DeleteCollection"
 
 // DeleteCollectionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteCollection operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteCollection for usage and error information.
 //
-// See DeleteCollection for more information on using the DeleteCollection
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteCollection method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteCollectionRequest method.
 //    req, resp := client.DeleteCollectionRequest(params)
@@ -351,18 +354,19 @@ const opDeleteFaces = "DeleteFaces"
 
 // DeleteFacesRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteFaces operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteFaces for usage and error information.
 //
-// See DeleteFaces for more information on using the DeleteFaces
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteFaces method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteFacesRequest method.
 //    req, resp := client.DeleteFacesRequest(params)
@@ -449,18 +453,19 @@ const opDetectFaces = "DetectFaces"
 
 // DetectFacesRequest generates a "aws/request.Request" representing the
 // client's request for the DetectFaces operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DetectFaces for usage and error information.
 //
-// See DetectFaces for more information on using the DetectFaces
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DetectFaces method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DetectFacesRequest method.
 //    req, resp := client.DetectFacesRequest(params)
@@ -567,18 +572,19 @@ const opDetectLabels = "DetectLabels"
 
 // DetectLabelsRequest generates a "aws/request.Request" representing the
 // client's request for the DetectLabels operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DetectLabels for usage and error information.
 //
-// See DetectLabels for more information on using the DetectLabels
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DetectLabels method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DetectLabelsRequest method.
 //    req, resp := client.DetectLabelsRequest(params)
@@ -713,18 +719,19 @@ const opDetectModerationLabels = "DetectModerationLabels"
 
 // DetectModerationLabelsRequest generates a "aws/request.Request" representing the
 // client's request for the DetectModerationLabels operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DetectModerationLabels for usage and error information.
 //
-// See DetectModerationLabels for more information on using the DetectModerationLabels
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DetectModerationLabels method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DetectModerationLabelsRequest method.
 //    req, resp := client.DetectModerationLabelsRequest(params)
@@ -821,18 +828,19 @@ const opGetCelebrityInfo = "GetCelebrityInfo"
 
 // GetCelebrityInfoRequest generates a "aws/request.Request" representing the
 // client's request for the GetCelebrityInfo operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetCelebrityInfo for usage and error information.
 //
-// See GetCelebrityInfo for more information on using the GetCelebrityInfo
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetCelebrityInfo method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetCelebrityInfoRequest method.
 //    req, resp := client.GetCelebrityInfoRequest(params)
@@ -921,18 +929,19 @@ const opIndexFaces = "IndexFaces"
 
 // IndexFacesRequest generates a "aws/request.Request" representing the
 // client's request for the IndexFaces operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See IndexFaces for usage and error information.
 //
-// See IndexFaces for more information on using the IndexFaces
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the IndexFaces method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the IndexFacesRequest method.
 //    req, resp := client.IndexFacesRequest(params)
@@ -1053,18 +1062,19 @@ const opListCollections = "ListCollections"
 
 // ListCollectionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListCollections operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListCollections for usage and error information.
 //
-// See ListCollections for more information on using the ListCollections
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListCollections method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListCollectionsRequest method.
 //    req, resp := client.ListCollectionsRequest(params)
@@ -1213,18 +1223,19 @@ const opListFaces = "ListFaces"
 
 // ListFacesRequest generates a "aws/request.Request" representing the
 // client's request for the ListFaces operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListFaces for usage and error information.
 //
-// See ListFaces for more information on using the ListFaces
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListFaces method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListFacesRequest method.
 //    req, resp := client.ListFacesRequest(params)
@@ -1371,18 +1382,19 @@ const opRecognizeCelebrities = "RecognizeCelebrities"
 
 // RecognizeCelebritiesRequest generates a "aws/request.Request" representing the
 // client's request for the RecognizeCelebrities operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See RecognizeCelebrities for usage and error information.
 //
-// See RecognizeCelebrities for more information on using the RecognizeCelebrities
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RecognizeCelebrities method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the RecognizeCelebritiesRequest method.
 //    req, resp := client.RecognizeCelebritiesRequest(params)
@@ -1500,18 +1512,19 @@ const opSearchFaces = "SearchFaces"
 
 // SearchFacesRequest generates a "aws/request.Request" representing the
 // client's request for the SearchFaces operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See SearchFaces for usage and error information.
 //
-// See SearchFaces for more information on using the SearchFaces
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the SearchFaces method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the SearchFacesRequest method.
 //    req, resp := client.SearchFacesRequest(params)
@@ -1611,18 +1624,19 @@ const opSearchFacesByImage = "SearchFacesByImage"
 
 // SearchFacesByImageRequest generates a "aws/request.Request" representing the
 // client's request for the SearchFacesByImage operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See SearchFacesByImage for usage and error information.
 //
-// See SearchFacesByImage for more information on using the SearchFacesByImage
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the SearchFacesByImage method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the SearchFacesByImageRequest method.
 //    req, resp := client.SearchFacesByImageRequest(params)
@@ -3518,12 +3532,12 @@ type Landmark struct {
 	// Type of the landmark.
 	Type *string `type:"string" enum:"LandmarkType"`
 
-	// x-coordinate from the top left of the landmark expressed as the ratio of
+	// x-coordinate from the top left of the landmark expressed as the ration of
 	// the width of the image. For example, if the images is 700x200 and the x-coordinate
 	// of the landmark is at 350 pixels, this value is 0.5.
 	X *float64 `type:"float"`
 
-	// y-coordinate from the top left of the landmark expressed as the ratio of
+	// y-coordinate from the top left of the landmark expressed as the ration of
 	// the height of the image. For example, if the images is 700x200 and the y-coordinate
 	// of the landmark is at 100 pixels, this value is 0.5.
 	Y *float64 `type:"float"`
@@ -4382,87 +4396,87 @@ const (
 
 const (
 	// GenderTypeMale is a GenderType enum value
-	GenderTypeMale = "Male"
+	GenderTypeMale = "MALE"
 
 	// GenderTypeFemale is a GenderType enum value
-	GenderTypeFemale = "Female"
+	GenderTypeFemale = "FEMALE"
 )
 
 const (
 	// LandmarkTypeEyeLeft is a LandmarkType enum value
-	LandmarkTypeEyeLeft = "eyeLeft"
+	LandmarkTypeEyeLeft = "EYE_LEFT"
 
 	// LandmarkTypeEyeRight is a LandmarkType enum value
-	LandmarkTypeEyeRight = "eyeRight"
+	LandmarkTypeEyeRight = "EYE_RIGHT"
 
 	// LandmarkTypeNose is a LandmarkType enum value
-	LandmarkTypeNose = "nose"
+	LandmarkTypeNose = "NOSE"
 
 	// LandmarkTypeMouthLeft is a LandmarkType enum value
-	LandmarkTypeMouthLeft = "mouthLeft"
+	LandmarkTypeMouthLeft = "MOUTH_LEFT"
 
 	// LandmarkTypeMouthRight is a LandmarkType enum value
-	LandmarkTypeMouthRight = "mouthRight"
+	LandmarkTypeMouthRight = "MOUTH_RIGHT"
 
-	// LandmarkTypeLeftEyeBrowLeft is a LandmarkType enum value
-	LandmarkTypeLeftEyeBrowLeft = "leftEyeBrowLeft"
+	// LandmarkTypeLeftEyebrowLeft is a LandmarkType enum value
+	LandmarkTypeLeftEyebrowLeft = "LEFT_EYEBROW_LEFT"
 
-	// LandmarkTypeLeftEyeBrowRight is a LandmarkType enum value
-	LandmarkTypeLeftEyeBrowRight = "leftEyeBrowRight"
+	// LandmarkTypeLeftEyebrowRight is a LandmarkType enum value
+	LandmarkTypeLeftEyebrowRight = "LEFT_EYEBROW_RIGHT"
 
-	// LandmarkTypeLeftEyeBrowUp is a LandmarkType enum value
-	LandmarkTypeLeftEyeBrowUp = "leftEyeBrowUp"
+	// LandmarkTypeLeftEyebrowUp is a LandmarkType enum value
+	LandmarkTypeLeftEyebrowUp = "LEFT_EYEBROW_UP"
 
-	// LandmarkTypeRightEyeBrowLeft is a LandmarkType enum value
-	LandmarkTypeRightEyeBrowLeft = "rightEyeBrowLeft"
+	// LandmarkTypeRightEyebrowLeft is a LandmarkType enum value
+	LandmarkTypeRightEyebrowLeft = "RIGHT_EYEBROW_LEFT"
 
-	// LandmarkTypeRightEyeBrowRight is a LandmarkType enum value
-	LandmarkTypeRightEyeBrowRight = "rightEyeBrowRight"
+	// LandmarkTypeRightEyebrowRight is a LandmarkType enum value
+	LandmarkTypeRightEyebrowRight = "RIGHT_EYEBROW_RIGHT"
 
-	// LandmarkTypeRightEyeBrowUp is a LandmarkType enum value
-	LandmarkTypeRightEyeBrowUp = "rightEyeBrowUp"
+	// LandmarkTypeRightEyebrowUp is a LandmarkType enum value
+	LandmarkTypeRightEyebrowUp = "RIGHT_EYEBROW_UP"
 
 	// LandmarkTypeLeftEyeLeft is a LandmarkType enum value
-	LandmarkTypeLeftEyeLeft = "leftEyeLeft"
+	LandmarkTypeLeftEyeLeft = "LEFT_EYE_LEFT"
 
 	// LandmarkTypeLeftEyeRight is a LandmarkType enum value
-	LandmarkTypeLeftEyeRight = "leftEyeRight"
+	LandmarkTypeLeftEyeRight = "LEFT_EYE_RIGHT"
 
 	// LandmarkTypeLeftEyeUp is a LandmarkType enum value
-	LandmarkTypeLeftEyeUp = "leftEyeUp"
+	LandmarkTypeLeftEyeUp = "LEFT_EYE_UP"
 
 	// LandmarkTypeLeftEyeDown is a LandmarkType enum value
-	LandmarkTypeLeftEyeDown = "leftEyeDown"
+	LandmarkTypeLeftEyeDown = "LEFT_EYE_DOWN"
 
 	// LandmarkTypeRightEyeLeft is a LandmarkType enum value
-	LandmarkTypeRightEyeLeft = "rightEyeLeft"
+	LandmarkTypeRightEyeLeft = "RIGHT_EYE_LEFT"
 
 	// LandmarkTypeRightEyeRight is a LandmarkType enum value
-	LandmarkTypeRightEyeRight = "rightEyeRight"
+	LandmarkTypeRightEyeRight = "RIGHT_EYE_RIGHT"
 
 	// LandmarkTypeRightEyeUp is a LandmarkType enum value
-	LandmarkTypeRightEyeUp = "rightEyeUp"
+	LandmarkTypeRightEyeUp = "RIGHT_EYE_UP"
 
 	// LandmarkTypeRightEyeDown is a LandmarkType enum value
-	LandmarkTypeRightEyeDown = "rightEyeDown"
+	LandmarkTypeRightEyeDown = "RIGHT_EYE_DOWN"
 
 	// LandmarkTypeNoseLeft is a LandmarkType enum value
-	LandmarkTypeNoseLeft = "noseLeft"
+	LandmarkTypeNoseLeft = "NOSE_LEFT"
 
 	// LandmarkTypeNoseRight is a LandmarkType enum value
-	LandmarkTypeNoseRight = "noseRight"
+	LandmarkTypeNoseRight = "NOSE_RIGHT"
 
 	// LandmarkTypeMouthUp is a LandmarkType enum value
-	LandmarkTypeMouthUp = "mouthUp"
+	LandmarkTypeMouthUp = "MOUTH_UP"
 
 	// LandmarkTypeMouthDown is a LandmarkType enum value
-	LandmarkTypeMouthDown = "mouthDown"
+	LandmarkTypeMouthDown = "MOUTH_DOWN"
 
 	// LandmarkTypeLeftPupil is a LandmarkType enum value
-	LandmarkTypeLeftPupil = "leftPupil"
+	LandmarkTypeLeftPupil = "LEFT_PUPIL"
 
 	// LandmarkTypeRightPupil is a LandmarkType enum value
-	LandmarkTypeRightPupil = "rightPupil"
+	LandmarkTypeRightPupil = "RIGHT_PUPIL"
 )
 
 const (

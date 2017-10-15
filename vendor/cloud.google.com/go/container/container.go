@@ -25,7 +25,7 @@ import (
 	"golang.org/x/net/context"
 	raw "google.golang.org/api/container/v1"
 	"google.golang.org/api/option"
-	htransport "google.golang.org/api/transport/http"
+	"google.golang.org/api/transport"
 )
 
 type Type string
@@ -64,7 +64,7 @@ func NewClient(ctx context.Context, projectID string, opts ...option.ClientOptio
 		option.WithUserAgent(userAgent),
 	}
 	o = append(o, opts...)
-	httpClient, endpoint, err := htransport.NewClient(ctx, o...)
+	httpClient, endpoint, err := transport.NewHTTPClient(ctx, o...)
 	if err != nil {
 		return nil, fmt.Errorf("dialing: %v", err)
 	}

@@ -31,6 +31,10 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
+var (
+	errorStatsProjectPathTemplate = gax.MustCompilePathTemplate("projects/{project}")
+)
+
 // ErrorStatsCallOptions contains the retry settings for each method of ErrorStatsClient.
 type ErrorStatsCallOptions struct {
 	ListGroupStats []gax.CallOption
@@ -123,10 +127,13 @@ func (c *ErrorStatsClient) SetGoogleClientInfo(keyval ...string) {
 
 // ErrorStatsProjectPath returns the path for the project resource.
 func ErrorStatsProjectPath(project string) string {
-	return "" +
-		"projects/" +
-		project +
-		""
+	path, err := errorStatsProjectPathTemplate.Render(map[string]string{
+		"project": project,
+	})
+	if err != nil {
+		panic(err)
+	}
+	return path
 }
 
 // ListGroupStats lists the specified groups.

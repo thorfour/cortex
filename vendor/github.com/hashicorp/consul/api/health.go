@@ -33,7 +33,6 @@ type HealthCheck struct {
 	Output      string
 	ServiceID   string
 	ServiceName string
-	ServiceTags []string
 }
 
 // HealthChecks is a collection of HealthCheck structs.

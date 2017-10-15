@@ -2,7 +2,6 @@ package jwt
 
 import (
 	"context"
-	"sync"
 	"testing"
 	"time"
 
@@ -74,7 +73,7 @@ func TestJWTParser(t *testing.T) {
 		return key, nil
 	}
 
-	parser := NewParser(keys, method, MapClaimsFactory)(e)
+	parser := NewParser(keys, method, jwt.MapClaims{})(e)
 
 	// No Token is passed into the parser
 	_, err := parser(context.Background(), struct{}{})
@@ -94,7 +93,7 @@ func TestJWTParser(t *testing.T) {
 	}
 
 	// Invalid Method is used in the parser
-	badParser := NewParser(keys, invalidMethod, MapClaimsFactory)(e)
+	badParser := NewParser(keys, invalidMethod, jwt.MapClaims{})(e)
 	ctx = context.WithValue(context.Background(), JWTTokenContextKey, signedKey)
 	_, err = badParser(ctx, struct{}{})
 	if err == nil {
@@ -110,7 +109,7 @@ func TestJWTParser(t *testing.T) {
 		return []byte("bad"), nil
 	}
 
-	badParser = NewParser(invalidKeys, method, MapClaimsFactory)(e)
+	badParser = NewParser(invalidKeys, method, jwt.MapClaims{})(e)
 	ctx = context.WithValue(context.Background(), JWTTokenContextKey, signedKey)
 	_, err = badParser(ctx, struct{}{})
 	if err == nil {
@@ -134,7 +133,7 @@ func TestJWTParser(t *testing.T) {
 	}
 
 	// Test for malformed token error response
-	parser = NewParser(keys, method, StandardClaimsFactory)(e)
+	parser = NewParser(keys, method, &jwt.StandardClaims{})(e)
 	ctx = context.WithValue(context.Background(), JWTTokenContextKey, malformedKey)
 	ctx1, err = parser(ctx, struct{}{})
 	if want, have := ErrTokenMalformed, err; want != have {
@@ -142,7 +141,7 @@ func TestJWTParser(t *testing.T) {
 	}
 
 	// Test for expired token error response
-	parser = NewParser(keys, method, StandardClaimsFactory)(e)
+	parser = NewParser(keys, method, &jwt.StandardClaims{})(e)
 	expired := jwt.NewWithClaims(method, jwt.StandardClaims{ExpiresAt: time.Now().Unix() - 100})
 	token, err := expired.SignedString(key)
 	if err != nil {
@@ -155,7 +154,7 @@ func TestJWTParser(t *testing.T) {
 	}
 
 	// Test for not activated token error response
-	parser = NewParser(keys, method, StandardClaimsFactory)(e)
+	parser = NewParser(keys, method, &jwt.StandardClaims{})(e)
 	notactive := jwt.NewWithClaims(method, jwt.StandardClaims{NotBefore: time.Now().Unix() + 100})
 	token, err = notactive.SignedString(key)
 	if err != nil {
@@ -168,7 +167,7 @@ func TestJWTParser(t *testing.T) {
 	}
 
 	// test valid standard claims token
-	parser = NewParser(keys, method, StandardClaimsFactory)(e)
+	parser = NewParser(keys, method, &jwt.StandardClaims{})(e)
 	ctx = context.WithValue(context.Background(), JWTTokenContextKey, standardSignedKey)
 	ctx1, err = parser(ctx, struct{}{})
 	if err != nil {
@@ -183,7 +182,7 @@ func TestJWTParser(t *testing.T) {
 	}
 
 	// test valid customized claims token
-	parser = NewParser(keys, method, func() jwt.Claims { return &customClaims{} })(e)
+	parser = NewParser(keys, method, &customClaims{})(e)
 	ctx = context.WithValue(context.Background(), JWTTokenContextKey, customSignedKey)
 	ctx1, err = parser(ctx, struct{}{})
 	if err != nil {
@@ -199,23 +198,4 @@ func TestJWTParser(t *testing.T) {
 	if !custCl.VerifyMyProperty(myProperty) {
 		t.Fatalf("JWT customClaims.MyProperty did not match: expecting %s got %s", myProperty, custCl.MyProperty)
 	}
-}
-
-func TestIssue562(t *testing.T) {
-	var (
-		kf  = func(token *jwt.Token) (interface{}, error) { return []byte("secret"), nil }
-		e   = NewParser(kf, jwt.SigningMethodHS256, MapClaimsFactory)(endpoint.Nop)
-		key = JWTTokenContextKey
-		val = "eyJhbGciOiJIUzI1NiIsImtpZCI6ImtpZCIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZ28ta2l0In0.14M2VmYyApdSlV_LZ88ajjwuaLeIFplB8JpyNy0A19E"
-		ctx = context.WithValue(context.Background(), key, val)
-	)
-	wg := sync.WaitGroup{}
-	for i := 0; i < 100; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			e(ctx, struct{}{}) // fatal error: concurrent map read and map write
-		}()
-	}
-	wg.Wait()
 }

@@ -1,60 +1,55 @@
 package command
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 
-	"github.com/hashicorp/consul/agent"
+	"github.com/hashicorp/consul/command/base"
 	"github.com/mitchellh/cli"
 )
 
 func TestOperator_Raft_ListPeers_Implements(t *testing.T) {
-	t.Parallel()
 	var _ cli.Command = &OperatorRaftListCommand{}
 }
 
 func TestOperator_Raft_ListPeers(t *testing.T) {
-	t.Parallel()
-	a := agent.NewTestAgent(t.Name(), nil)
-	defer a.Shutdown()
-
-	expected := fmt.Sprintf("%s  127.0.0.1:%d  127.0.0.1:%d  leader  true   2",
-		a.Config.NodeName, a.Config.Ports.Server, a.Config.Ports.Server)
+	a1 := testAgent(t)
+	defer a1.Shutdown()
+	waitForLeader(t, a1.httpAddr)
 
 	// Test the legacy mode with 'consul operator raft -list-peers'
 	{
 		ui, c := testOperatorRaftCommand(t)
-		args := []string{"-http-addr=" + a.HTTPAddr(), "-list-peers"}
+		args := []string{"-http-addr=" + a1.httpAddr, "-list-peers"}
 
 		code := c.Run(args)
 		if code != 0 {
 			t.Fatalf("bad: %d. %#v", code, ui.ErrorWriter.String())
 		}
 		output := strings.TrimSpace(ui.OutputWriter.String())
-		if !strings.Contains(output, expected) {
-			t.Fatalf("bad: %q, %q", output, expected)
+		if !strings.Contains(output, "leader") {
+			t.Fatalf("bad: %s", output)
 		}
 	}
 
 	// Test the list-peers subcommand directly
 	{
-		ui := cli.NewMockUi()
+		ui := new(cli.MockUi)
 		c := OperatorRaftListCommand{
-			BaseCommand: BaseCommand{
-				UI:    ui,
-				Flags: FlagSetHTTP,
+			Command: base.Command{
+				Ui:    ui,
+				Flags: base.FlagSetHTTP,
 			},
 		}
-		args := []string{"-http-addr=" + a.HTTPAddr()}
+		args := []string{"-http-addr=" + a1.httpAddr}
 
 		code := c.Run(args)
 		if code != 0 {
 			t.Fatalf("bad: %d. %#v", code, ui.ErrorWriter.String())
 		}
 		output := strings.TrimSpace(ui.OutputWriter.String())
-		if !strings.Contains(output, expected) {
-			t.Fatalf("bad: %q, %q", output, expected)
+		if !strings.Contains(output, "leader") {
+			t.Fatalf("bad: %s", output)
 		}
 	}
 }

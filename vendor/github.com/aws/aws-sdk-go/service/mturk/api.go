@@ -15,18 +15,19 @@ const opAcceptQualificationRequest = "AcceptQualificationRequest"
 
 // AcceptQualificationRequestRequest generates a "aws/request.Request" representing the
 // client's request for the AcceptQualificationRequest operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See AcceptQualificationRequest for usage and error information.
 //
-// See AcceptQualificationRequest for more information on using the AcceptQualificationRequest
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the AcceptQualificationRequest method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the AcceptQualificationRequestRequest method.
 //    req, resp := client.AcceptQualificationRequestRequest(params)
@@ -105,18 +106,19 @@ const opApproveAssignment = "ApproveAssignment"
 
 // ApproveAssignmentRequest generates a "aws/request.Request" representing the
 // client's request for the ApproveAssignment operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ApproveAssignment for usage and error information.
 //
-// See ApproveAssignment for more information on using the ApproveAssignment
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ApproveAssignment method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ApproveAssignmentRequest method.
 //    req, resp := client.ApproveAssignmentRequest(params)
@@ -206,18 +208,19 @@ const opAssociateQualificationWithWorker = "AssociateQualificationWithWorker"
 
 // AssociateQualificationWithWorkerRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateQualificationWithWorker operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See AssociateQualificationWithWorker for usage and error information.
 //
-// See AssociateQualificationWithWorker for more information on using the AssociateQualificationWithWorker
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the AssociateQualificationWithWorker method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the AssociateQualificationWithWorkerRequest method.
 //    req, resp := client.AssociateQualificationWithWorkerRequest(params)
@@ -301,18 +304,19 @@ const opCreateAdditionalAssignmentsForHIT = "CreateAdditionalAssignmentsForHIT"
 
 // CreateAdditionalAssignmentsForHITRequest generates a "aws/request.Request" representing the
 // client's request for the CreateAdditionalAssignmentsForHIT operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateAdditionalAssignmentsForHIT for usage and error information.
 //
-// See CreateAdditionalAssignmentsForHIT for more information on using the CreateAdditionalAssignmentsForHIT
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateAdditionalAssignmentsForHIT method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateAdditionalAssignmentsForHITRequest method.
 //    req, resp := client.CreateAdditionalAssignmentsForHITRequest(params)
@@ -398,18 +402,19 @@ const opCreateHIT = "CreateHIT"
 
 // CreateHITRequest generates a "aws/request.Request" representing the
 // client's request for the CreateHIT operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateHIT for usage and error information.
 //
-// See CreateHIT for more information on using the CreateHIT
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateHIT method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateHITRequest method.
 //    req, resp := client.CreateHITRequest(params)
@@ -502,18 +507,19 @@ const opCreateHITType = "CreateHITType"
 
 // CreateHITTypeRequest generates a "aws/request.Request" representing the
 // client's request for the CreateHITType operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateHITType for usage and error information.
 //
-// See CreateHITType for more information on using the CreateHITType
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateHITType method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateHITTypeRequest method.
 //    req, resp := client.CreateHITTypeRequest(params)
@@ -588,18 +594,19 @@ const opCreateHITWithHITType = "CreateHITWithHITType"
 
 // CreateHITWithHITTypeRequest generates a "aws/request.Request" representing the
 // client's request for the CreateHITWithHITType operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateHITWithHITType for usage and error information.
 //
-// See CreateHITWithHITType for more information on using the CreateHITWithHITType
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateHITWithHITType method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateHITWithHITTypeRequest method.
 //    req, resp := client.CreateHITWithHITTypeRequest(params)
@@ -683,18 +690,19 @@ const opCreateQualificationType = "CreateQualificationType"
 
 // CreateQualificationTypeRequest generates a "aws/request.Request" representing the
 // client's request for the CreateQualificationType operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateQualificationType for usage and error information.
 //
-// See CreateQualificationType for more information on using the CreateQualificationType
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateQualificationType method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateQualificationTypeRequest method.
 //    req, resp := client.CreateQualificationTypeRequest(params)
@@ -767,18 +775,19 @@ const opCreateWorkerBlock = "CreateWorkerBlock"
 
 // CreateWorkerBlockRequest generates a "aws/request.Request" representing the
 // client's request for the CreateWorkerBlock operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateWorkerBlock for usage and error information.
 //
-// See CreateWorkerBlock for more information on using the CreateWorkerBlock
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateWorkerBlock method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateWorkerBlockRequest method.
 //    req, resp := client.CreateWorkerBlockRequest(params)
@@ -852,18 +861,19 @@ const opDeleteHIT = "DeleteHIT"
 
 // DeleteHITRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteHIT operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteHIT for usage and error information.
 //
-// See DeleteHIT for more information on using the DeleteHIT
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteHIT method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteHITRequest method.
 //    req, resp := client.DeleteHITRequest(params)
@@ -953,18 +963,19 @@ const opDeleteQualificationType = "DeleteQualificationType"
 
 // DeleteQualificationTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteQualificationType operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteQualificationType for usage and error information.
 //
-// See DeleteQualificationType for more information on using the DeleteQualificationType
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteQualificationType method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteQualificationTypeRequest method.
 //    req, resp := client.DeleteQualificationTypeRequest(params)
@@ -1048,18 +1059,19 @@ const opDeleteWorkerBlock = "DeleteWorkerBlock"
 
 // DeleteWorkerBlockRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteWorkerBlock operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteWorkerBlock for usage and error information.
 //
-// See DeleteWorkerBlock for more information on using the DeleteWorkerBlock
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteWorkerBlock method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteWorkerBlockRequest method.
 //    req, resp := client.DeleteWorkerBlockRequest(params)
@@ -1136,18 +1148,19 @@ const opDisassociateQualificationFromWorker = "DisassociateQualificationFromWork
 
 // DisassociateQualificationFromWorkerRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateQualificationFromWorker operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DisassociateQualificationFromWorker for usage and error information.
 //
-// See DisassociateQualificationFromWorker for more information on using the DisassociateQualificationFromWorker
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DisassociateQualificationFromWorker method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DisassociateQualificationFromWorkerRequest method.
 //    req, resp := client.DisassociateQualificationFromWorkerRequest(params)
@@ -1223,18 +1236,19 @@ const opGetAccountBalance = "GetAccountBalance"
 
 // GetAccountBalanceRequest generates a "aws/request.Request" representing the
 // client's request for the GetAccountBalance operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetAccountBalance for usage and error information.
 //
-// See GetAccountBalance for more information on using the GetAccountBalance
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetAccountBalance method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetAccountBalanceRequest method.
 //    req, resp := client.GetAccountBalanceRequest(params)
@@ -1307,18 +1321,19 @@ const opGetAssignment = "GetAssignment"
 
 // GetAssignmentRequest generates a "aws/request.Request" representing the
 // client's request for the GetAssignment operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetAssignment for usage and error information.
 //
-// See GetAssignment for more information on using the GetAssignment
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetAssignment method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetAssignmentRequest method.
 //    req, resp := client.GetAssignmentRequest(params)
@@ -1390,18 +1405,19 @@ const opGetFileUploadURL = "GetFileUploadURL"
 
 // GetFileUploadURLRequest generates a "aws/request.Request" representing the
 // client's request for the GetFileUploadURL operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetFileUploadURL for usage and error information.
 //
-// See GetFileUploadURL for more information on using the GetFileUploadURL
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetFileUploadURL method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetFileUploadURLRequest method.
 //    req, resp := client.GetFileUploadURLRequest(params)
@@ -1479,18 +1495,19 @@ const opGetHIT = "GetHIT"
 
 // GetHITRequest generates a "aws/request.Request" representing the
 // client's request for the GetHIT operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetHIT for usage and error information.
 //
-// See GetHIT for more information on using the GetHIT
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetHIT method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetHITRequest method.
 //    req, resp := client.GetHITRequest(params)
@@ -1562,18 +1579,19 @@ const opGetQualificationScore = "GetQualificationScore"
 
 // GetQualificationScoreRequest generates a "aws/request.Request" representing the
 // client's request for the GetQualificationScore operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetQualificationScore for usage and error information.
 //
-// See GetQualificationScore for more information on using the GetQualificationScore
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetQualificationScore method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetQualificationScoreRequest method.
 //    req, resp := client.GetQualificationScoreRequest(params)
@@ -1653,18 +1671,19 @@ const opGetQualificationType = "GetQualificationType"
 
 // GetQualificationTypeRequest generates a "aws/request.Request" representing the
 // client's request for the GetQualificationType operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetQualificationType for usage and error information.
 //
-// See GetQualificationType for more information on using the GetQualificationType
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetQualificationType method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetQualificationTypeRequest method.
 //    req, resp := client.GetQualificationTypeRequest(params)
@@ -1737,18 +1756,19 @@ const opListAssignmentsForHIT = "ListAssignmentsForHIT"
 
 // ListAssignmentsForHITRequest generates a "aws/request.Request" representing the
 // client's request for the ListAssignmentsForHIT operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListAssignmentsForHIT for usage and error information.
 //
-// See ListAssignmentsForHIT for more information on using the ListAssignmentsForHIT
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListAssignmentsForHIT method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListAssignmentsForHITRequest method.
 //    req, resp := client.ListAssignmentsForHITRequest(params)
@@ -1896,18 +1916,19 @@ const opListBonusPayments = "ListBonusPayments"
 
 // ListBonusPaymentsRequest generates a "aws/request.Request" representing the
 // client's request for the ListBonusPayments operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListBonusPayments for usage and error information.
 //
-// See ListBonusPayments for more information on using the ListBonusPayments
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListBonusPayments method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListBonusPaymentsRequest method.
 //    req, resp := client.ListBonusPaymentsRequest(params)
@@ -2036,18 +2057,19 @@ const opListHITs = "ListHITs"
 
 // ListHITsRequest generates a "aws/request.Request" representing the
 // client's request for the ListHITs operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListHITs for usage and error information.
 //
-// See ListHITs for more information on using the ListHITs
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListHITs method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListHITsRequest method.
 //    req, resp := client.ListHITsRequest(params)
@@ -2177,18 +2199,19 @@ const opListHITsForQualificationType = "ListHITsForQualificationType"
 
 // ListHITsForQualificationTypeRequest generates a "aws/request.Request" representing the
 // client's request for the ListHITsForQualificationType operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListHITsForQualificationType for usage and error information.
 //
-// See ListHITsForQualificationType for more information on using the ListHITsForQualificationType
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListHITsForQualificationType method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListHITsForQualificationTypeRequest method.
 //    req, resp := client.ListHITsForQualificationTypeRequest(params)
@@ -2319,18 +2342,19 @@ const opListQualificationRequests = "ListQualificationRequests"
 
 // ListQualificationRequestsRequest generates a "aws/request.Request" representing the
 // client's request for the ListQualificationRequests operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListQualificationRequests for usage and error information.
 //
-// See ListQualificationRequests for more information on using the ListQualificationRequests
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListQualificationRequests method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListQualificationRequestsRequest method.
 //    req, resp := client.ListQualificationRequestsRequest(params)
@@ -2461,18 +2485,19 @@ const opListQualificationTypes = "ListQualificationTypes"
 
 // ListQualificationTypesRequest generates a "aws/request.Request" representing the
 // client's request for the ListQualificationTypes operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListQualificationTypes for usage and error information.
 //
-// See ListQualificationTypes for more information on using the ListQualificationTypes
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListQualificationTypes method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListQualificationTypesRequest method.
 //    req, resp := client.ListQualificationTypesRequest(params)
@@ -2603,18 +2628,19 @@ const opListReviewPolicyResultsForHIT = "ListReviewPolicyResultsForHIT"
 
 // ListReviewPolicyResultsForHITRequest generates a "aws/request.Request" representing the
 // client's request for the ListReviewPolicyResultsForHIT operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListReviewPolicyResultsForHIT for usage and error information.
 //
-// See ListReviewPolicyResultsForHIT for more information on using the ListReviewPolicyResultsForHIT
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListReviewPolicyResultsForHIT method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListReviewPolicyResultsForHITRequest method.
 //    req, resp := client.ListReviewPolicyResultsForHITRequest(params)
@@ -2746,18 +2772,19 @@ const opListReviewableHITs = "ListReviewableHITs"
 
 // ListReviewableHITsRequest generates a "aws/request.Request" representing the
 // client's request for the ListReviewableHITs operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListReviewableHITs for usage and error information.
 //
-// See ListReviewableHITs for more information on using the ListReviewableHITs
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListReviewableHITs method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListReviewableHITsRequest method.
 //    req, resp := client.ListReviewableHITsRequest(params)
@@ -2887,18 +2914,19 @@ const opListWorkerBlocks = "ListWorkerBlocks"
 
 // ListWorkerBlocksRequest generates a "aws/request.Request" representing the
 // client's request for the ListWorkerBlocks operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListWorkerBlocks for usage and error information.
 //
-// See ListWorkerBlocks for more information on using the ListWorkerBlocks
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListWorkerBlocks method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListWorkerBlocksRequest method.
 //    req, resp := client.ListWorkerBlocksRequest(params)
@@ -3027,18 +3055,19 @@ const opListWorkersWithQualificationType = "ListWorkersWithQualificationType"
 
 // ListWorkersWithQualificationTypeRequest generates a "aws/request.Request" representing the
 // client's request for the ListWorkersWithQualificationType operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListWorkersWithQualificationType for usage and error information.
 //
-// See ListWorkersWithQualificationType for more information on using the ListWorkersWithQualificationType
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListWorkersWithQualificationType method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListWorkersWithQualificationTypeRequest method.
 //    req, resp := client.ListWorkersWithQualificationTypeRequest(params)
@@ -3167,18 +3196,19 @@ const opNotifyWorkers = "NotifyWorkers"
 
 // NotifyWorkersRequest generates a "aws/request.Request" representing the
 // client's request for the NotifyWorkers operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See NotifyWorkers for usage and error information.
 //
-// See NotifyWorkers for more information on using the NotifyWorkers
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the NotifyWorkers method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the NotifyWorkersRequest method.
 //    req, resp := client.NotifyWorkersRequest(params)
@@ -3254,18 +3284,19 @@ const opRejectAssignment = "RejectAssignment"
 
 // RejectAssignmentRequest generates a "aws/request.Request" representing the
 // client's request for the RejectAssignment operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See RejectAssignment for usage and error information.
 //
-// See RejectAssignment for more information on using the RejectAssignment
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RejectAssignment method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the RejectAssignmentRequest method.
 //    req, resp := client.RejectAssignmentRequest(params)
@@ -3345,18 +3376,19 @@ const opRejectQualificationRequest = "RejectQualificationRequest"
 
 // RejectQualificationRequestRequest generates a "aws/request.Request" representing the
 // client's request for the RejectQualificationRequest operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See RejectQualificationRequest for usage and error information.
 //
-// See RejectQualificationRequest for more information on using the RejectQualificationRequest
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RejectQualificationRequest method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the RejectQualificationRequestRequest method.
 //    req, resp := client.RejectQualificationRequestRequest(params)
@@ -3431,18 +3463,19 @@ const opSendBonus = "SendBonus"
 
 // SendBonusRequest generates a "aws/request.Request" representing the
 // client's request for the SendBonus operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See SendBonus for usage and error information.
 //
-// See SendBonus for more information on using the SendBonus
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the SendBonus method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the SendBonusRequest method.
 //    req, resp := client.SendBonusRequest(params)
@@ -3522,18 +3555,19 @@ const opSendTestEventNotification = "SendTestEventNotification"
 
 // SendTestEventNotificationRequest generates a "aws/request.Request" representing the
 // client's request for the SendTestEventNotification operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See SendTestEventNotification for usage and error information.
 //
-// See SendTestEventNotification for more information on using the SendTestEventNotification
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the SendTestEventNotification method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the SendTestEventNotificationRequest method.
 //    req, resp := client.SendTestEventNotificationRequest(params)
@@ -3610,18 +3644,19 @@ const opUpdateExpirationForHIT = "UpdateExpirationForHIT"
 
 // UpdateExpirationForHITRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateExpirationForHIT operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateExpirationForHIT for usage and error information.
 //
-// See UpdateExpirationForHIT for more information on using the UpdateExpirationForHIT
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateExpirationForHIT method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateExpirationForHITRequest method.
 //    req, resp := client.UpdateExpirationForHITRequest(params)
@@ -3695,18 +3730,19 @@ const opUpdateHITReviewStatus = "UpdateHITReviewStatus"
 
 // UpdateHITReviewStatusRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateHITReviewStatus operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateHITReviewStatus for usage and error information.
 //
-// See UpdateHITReviewStatus for more information on using the UpdateHITReviewStatus
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateHITReviewStatus method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateHITReviewStatusRequest method.
 //    req, resp := client.UpdateHITReviewStatusRequest(params)
@@ -3780,18 +3816,19 @@ const opUpdateHITTypeOfHIT = "UpdateHITTypeOfHIT"
 
 // UpdateHITTypeOfHITRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateHITTypeOfHIT operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateHITTypeOfHIT for usage and error information.
 //
-// See UpdateHITTypeOfHIT for more information on using the UpdateHITTypeOfHIT
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateHITTypeOfHIT method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateHITTypeOfHITRequest method.
 //    req, resp := client.UpdateHITTypeOfHITRequest(params)
@@ -3866,18 +3903,19 @@ const opUpdateNotificationSettings = "UpdateNotificationSettings"
 
 // UpdateNotificationSettingsRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateNotificationSettings operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateNotificationSettings for usage and error information.
 //
-// See UpdateNotificationSettings for more information on using the UpdateNotificationSettings
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateNotificationSettings method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateNotificationSettingsRequest method.
 //    req, resp := client.UpdateNotificationSettingsRequest(params)
@@ -3958,18 +3996,19 @@ const opUpdateQualificationType = "UpdateQualificationType"
 
 // UpdateQualificationTypeRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateQualificationType operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateQualificationType for usage and error information.
 //
-// See UpdateQualificationType for more information on using the UpdateQualificationType
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateQualificationType method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateQualificationTypeRequest method.
 //    req, resp := client.UpdateQualificationTypeRequest(params)
@@ -4457,7 +4496,7 @@ type BonusPayment struct {
 	// The ID of the assignment associated with this bonus payment.
 	AssignmentId *string `min:"1" type:"string"`
 
-	// A string representing a currency amount.
+	// A string representing a numeric value.
 	BonusAmount *string `type:"string"`
 
 	// The date and time of when the bonus was granted.
@@ -4520,9 +4559,7 @@ type CreateAdditionalAssignmentsForHITInput struct {
 	HITId *string `min:"1" type:"string" required:"true"`
 
 	// The number of additional assignments to request for this HIT.
-	//
-	// NumberOfAdditionalAssignments is a required field
-	NumberOfAdditionalAssignments *int64 `type:"integer" required:"true"`
+	NumberOfAdditionalAssignments *int64 `type:"integer"`
 
 	// A unique identifier for this request, which allows you to retry the call
 	// on error without extending the HIT multiple times. This is useful in cases
@@ -4551,9 +4588,6 @@ func (s *CreateAdditionalAssignmentsForHITInput) Validate() error {
 	}
 	if s.HITId != nil && len(*s.HITId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("HITId", 1))
-	}
-	if s.NumberOfAdditionalAssignments == nil {
-		invalidParams.Add(request.NewErrParamRequired("NumberOfAdditionalAssignments"))
 	}
 	if s.UniqueRequestToken != nil && len(*s.UniqueRequestToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("UniqueRequestToken", 1))
@@ -4746,26 +4780,6 @@ func (s *CreateHITInput) Validate() error {
 	}
 	if s.UniqueRequestToken != nil && len(*s.UniqueRequestToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("UniqueRequestToken", 1))
-	}
-	if s.AssignmentReviewPolicy != nil {
-		if err := s.AssignmentReviewPolicy.Validate(); err != nil {
-			invalidParams.AddNested("AssignmentReviewPolicy", err.(request.ErrInvalidParams))
-		}
-	}
-	if s.HITLayoutParameters != nil {
-		for i, v := range s.HITLayoutParameters {
-			if v == nil {
-				continue
-			}
-			if err := v.Validate(); err != nil {
-				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "HITLayoutParameters", i), err.(request.ErrInvalidParams))
-			}
-		}
-	}
-	if s.HITReviewPolicy != nil {
-		if err := s.HITReviewPolicy.Validate(); err != nil {
-			invalidParams.AddNested("HITReviewPolicy", err.(request.ErrInvalidParams))
-		}
 	}
 	if s.QualificationRequirements != nil {
 		for i, v := range s.QualificationRequirements {
@@ -5165,26 +5179,6 @@ func (s *CreateHITWithHITTypeInput) Validate() error {
 	}
 	if s.UniqueRequestToken != nil && len(*s.UniqueRequestToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("UniqueRequestToken", 1))
-	}
-	if s.AssignmentReviewPolicy != nil {
-		if err := s.AssignmentReviewPolicy.Validate(); err != nil {
-			invalidParams.AddNested("AssignmentReviewPolicy", err.(request.ErrInvalidParams))
-		}
-	}
-	if s.HITLayoutParameters != nil {
-		for i, v := range s.HITLayoutParameters {
-			if v == nil {
-				continue
-			}
-			if err := v.Validate(); err != nil {
-				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "HITLayoutParameters", i), err.(request.ErrInvalidParams))
-			}
-		}
-	}
-	if s.HITReviewPolicy != nil {
-		if err := s.HITReviewPolicy.Validate(); err != nil {
-			invalidParams.AddNested("HITReviewPolicy", err.(request.ErrInvalidParams))
-		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -5823,10 +5817,10 @@ func (s GetAccountBalanceInput) GoString() string {
 type GetAccountBalanceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A string representing a currency amount.
+	// A string representing a numeric value.
 	AvailableBalance *string `type:"string"`
 
-	// A string representing a currency amount.
+	// A string representing a numeric value.
 	OnHoldBalance *string `type:"string"`
 }
 
@@ -6304,7 +6298,7 @@ type HIT struct {
 	// is visible only to the creator of the HIT.
 	RequesterAnnotation *string `type:"string"`
 
-	// A string representing a currency amount.
+	// A string representing a numeric value.
 	Reward *string `type:"string"`
 
 	// The title of the HIT.
@@ -6455,14 +6449,10 @@ type HITLayoutParameter struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the parameter in the HITLayout.
-	//
-	// Name is a required field
-	Name *string `type:"string" required:"true"`
+	Name *string `type:"string"`
 
 	// The value substituted for the parameter referenced in the HITLayout.
-	//
-	// Value is a required field
-	Value *string `type:"string" required:"true"`
+	Value *string `type:"string"`
 }
 
 // String returns the string representation
@@ -6473,22 +6463,6 @@ func (s HITLayoutParameter) String() string {
 // GoString returns the string representation
 func (s HITLayoutParameter) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *HITLayoutParameter) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "HITLayoutParameter"}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
-	if s.Value == nil {
-		invalidParams.Add(request.NewErrParamRequired("Value"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // SetName sets the Name field's value.
@@ -7755,14 +7729,10 @@ func (s *Locale) SetSubdivision(v string) *Locale {
 type NotificationSpecification struct {
 	_ struct{} `type:"structure"`
 
-	// The target for notification messages. The Destination’s format is determined
-	// by the specified Transport:
-	//
-	//    * When Transport is Email, the Destination is your email address.
-	//
-	//    * When Transport is SQS, the Destination is your queue URL.
-	//
-	//    * When Transport is SNS, the Destination is the ARN of your topic.
+	// The destination for notification messages. or email notifications (if Transport
+	// is Email), this is an email address. For Amazon Simple Queue Service (Amazon
+	// SQS) notifications (if Transport is SQS), this is the URL for your Amazon
+	// SQS queue.
 	//
 	// Destination is a required field
 	Destination *string `type:"string" required:"true"`
@@ -7772,20 +7742,16 @@ type NotificationSpecification struct {
 	// | AssignmentRejected | AssignmentApproved | HITCreated | HITExtended | HITDisposed
 	// | HITReviewable | HITExpired | Ping. The Ping event is only valid for the
 	// SendTestEventNotification operation.
-	//
-	// EventTypes is a required field
-	EventTypes []*string `type:"list" required:"true"`
+	EventTypes []*string `type:"list"`
 
 	// The method Amazon Mechanical Turk uses to send the notification. Valid Values:
-	// Email | SQS | SNS.
+	// Email | SQS.
 	//
 	// Transport is a required field
 	Transport *string `type:"string" required:"true" enum:"NotificationTransport"`
 
 	// The version of the Notification API to use. Valid value is 2006-05-05.
-	//
-	// Version is a required field
-	Version *string `type:"string" required:"true"`
+	Version *string `type:"string"`
 }
 
 // String returns the string representation
@@ -7804,14 +7770,8 @@ func (s *NotificationSpecification) Validate() error {
 	if s.Destination == nil {
 		invalidParams.Add(request.NewErrParamRequired("Destination"))
 	}
-	if s.EventTypes == nil {
-		invalidParams.Add(request.NewErrParamRequired("EventTypes"))
-	}
 	if s.Transport == nil {
 		invalidParams.Add(request.NewErrParamRequired("Transport"))
-	}
-	if s.Version == nil {
-		invalidParams.Add(request.NewErrParamRequired("Version"))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8508,9 +8468,7 @@ type RejectAssignmentInput struct {
 
 	// A message for the Worker, which the Worker can see in the Status section
 	// of the web site.
-	//
-	// RequesterFeedback is a required field
-	RequesterFeedback *string `type:"string" required:"true"`
+	RequesterFeedback *string `type:"string"`
 }
 
 // String returns the string representation
@@ -8531,9 +8489,6 @@ func (s *RejectAssignmentInput) Validate() error {
 	}
 	if s.AssignmentId != nil && len(*s.AssignmentId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("AssignmentId", 1))
-	}
-	if s.RequesterFeedback == nil {
-		invalidParams.Add(request.NewErrParamRequired("RequesterFeedback"))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8736,9 +8691,7 @@ type ReviewPolicy struct {
 	Parameters []*PolicyParameter `type:"list"`
 
 	// Name of a Review Policy: SimplePlurality/2011-09-01 or ScoreMyKnownAnswers/2011-09-01
-	//
-	// PolicyName is a required field
-	PolicyName *string `type:"string" required:"true"`
+	PolicyName *string `type:"string"`
 }
 
 // String returns the string representation
@@ -8749,19 +8702,6 @@ func (s ReviewPolicy) String() string {
 // GoString returns the string representation
 func (s ReviewPolicy) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *ReviewPolicy) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "ReviewPolicy"}
-	if s.PolicyName == nil {
-		invalidParams.Add(request.NewErrParamRequired("PolicyName"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // SetParameters sets the Parameters field's value.
@@ -8907,9 +8847,7 @@ type SendBonusInput struct {
 
 	// A message that explains the reason for the bonus payment. The Worker receiving
 	// the bonus can see this message.
-	//
-	// Reason is a required field
-	Reason *string `type:"string" required:"true"`
+	Reason *string `type:"string"`
 
 	// A unique identifier for this request, which allows you to retry the call
 	// on error without granting multiple bonuses. This is useful in cases such
@@ -8946,9 +8884,6 @@ func (s *SendBonusInput) Validate() error {
 	}
 	if s.BonusAmount == nil {
 		invalidParams.Add(request.NewErrParamRequired("BonusAmount"))
-	}
-	if s.Reason == nil {
-		invalidParams.Add(request.NewErrParamRequired("Reason"))
 	}
 	if s.UniqueRequestToken != nil && len(*s.UniqueRequestToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("UniqueRequestToken", 1))
@@ -9094,9 +9029,7 @@ type UpdateExpirationForHITInput struct {
 	_ struct{} `type:"structure"`
 
 	// The date and time at which you want the HIT to expire
-	//
-	// ExpireAt is a required field
-	ExpireAt *time.Time `type:"timestamp" timestampFormat:"unix" required:"true"`
+	ExpireAt *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// The HIT to update.
 	//
@@ -9117,9 +9050,6 @@ func (s UpdateExpirationForHITInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateExpirationForHITInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateExpirationForHITInput"}
-	if s.ExpireAt == nil {
-		invalidParams.Add(request.NewErrParamRequired("ExpireAt"))
-	}
 	if s.HITId == nil {
 		invalidParams.Add(request.NewErrParamRequired("HITId"))
 	}
@@ -9700,9 +9630,6 @@ const (
 
 	// NotificationTransportSqs is a NotificationTransport enum value
 	NotificationTransportSqs = "SQS"
-
-	// NotificationTransportSns is a NotificationTransport enum value
-	NotificationTransportSns = "SNS"
 )
 
 const (

@@ -155,10 +155,10 @@ func (key Key) String() string {
 }
 
 // AsPrefix returns a KeyRange for all keys where k is the prefix.
-func (key Key) AsPrefix() KeyRange {
+func (k Key) AsPrefix() KeyRange {
 	return KeyRange{
-		Start: key,
-		End:   key,
+		Start: k,
+		End:   k,
 		Kind:  ClosedClosed,
 	}
 }

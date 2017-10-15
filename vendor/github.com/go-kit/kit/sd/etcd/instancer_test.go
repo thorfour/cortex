@@ -10,8 +10,6 @@ import (
 	"github.com/go-kit/kit/sd"
 )
 
-var _ sd.Instancer = (*Instancer)(nil) // API check
-
 var (
 	node = &stdetcd.Node{
 		Key: "/foo",

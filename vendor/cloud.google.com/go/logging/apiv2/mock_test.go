@@ -40,7 +40,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	gstatus "google.golang.org/grpc/status"
 )
 
 var _ = io.EOF
@@ -313,7 +312,7 @@ func TestLoggingServiceV2DeleteLog(t *testing.T) {
 
 	mockLogging.resps = append(mockLogging.resps[:0], expectedResponse)
 
-	var formattedLogName string = LogPath("[PROJECT]", "[LOG]")
+	var formattedLogName string = LoggingLogPath("[PROJECT]", "[LOG]")
 	var request = &loggingpb.DeleteLogRequest{
 		LogName: formattedLogName,
 	}
@@ -337,9 +336,9 @@ func TestLoggingServiceV2DeleteLog(t *testing.T) {
 
 func TestLoggingServiceV2DeleteLogError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockLogging.err = gstatus.Error(errCode, "test error")
+	mockLogging.err = grpc.Errorf(errCode, "test error")
 
-	var formattedLogName string = LogPath("[PROJECT]", "[LOG]")
+	var formattedLogName string = LoggingLogPath("[PROJECT]", "[LOG]")
 	var request = &loggingpb.DeleteLogRequest{
 		LogName: formattedLogName,
 	}
@@ -351,9 +350,7 @@ func TestLoggingServiceV2DeleteLogError(t *testing.T) {
 
 	err = c.DeleteLog(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 }
@@ -392,7 +389,7 @@ func TestLoggingServiceV2WriteLogEntries(t *testing.T) {
 
 func TestLoggingServiceV2WriteLogEntriesError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockLogging.err = gstatus.Error(errCode, "test error")
+	mockLogging.err = grpc.Errorf(errCode, "test error")
 
 	var entries []*loggingpb.LogEntry = nil
 	var request = &loggingpb.WriteLogEntriesRequest{
@@ -406,9 +403,7 @@ func TestLoggingServiceV2WriteLogEntriesError(t *testing.T) {
 
 	resp, err := c.WriteLogEntries(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -464,7 +459,7 @@ func TestLoggingServiceV2ListLogEntries(t *testing.T) {
 
 func TestLoggingServiceV2ListLogEntriesError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockLogging.err = gstatus.Error(errCode, "test error")
+	mockLogging.err = grpc.Errorf(errCode, "test error")
 
 	var resourceNames []string = nil
 	var request = &loggingpb.ListLogEntriesRequest{
@@ -478,9 +473,7 @@ func TestLoggingServiceV2ListLogEntriesError(t *testing.T) {
 
 	resp, err := c.ListLogEntries(context.Background(), request).Next()
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -533,7 +526,7 @@ func TestLoggingServiceV2ListMonitoredResourceDescriptors(t *testing.T) {
 
 func TestLoggingServiceV2ListMonitoredResourceDescriptorsError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockLogging.err = gstatus.Error(errCode, "test error")
+	mockLogging.err = grpc.Errorf(errCode, "test error")
 
 	var request *loggingpb.ListMonitoredResourceDescriptorsRequest = &loggingpb.ListMonitoredResourceDescriptorsRequest{}
 
@@ -544,9 +537,7 @@ func TestLoggingServiceV2ListMonitoredResourceDescriptorsError(t *testing.T) {
 
 	resp, err := c.ListMonitoredResourceDescriptors(context.Background(), request).Next()
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -565,7 +556,7 @@ func TestLoggingServiceV2ListLogs(t *testing.T) {
 
 	mockLogging.resps = append(mockLogging.resps[:0], expectedResponse)
 
-	var formattedParent string = ProjectPath("[PROJECT]")
+	var formattedParent string = LoggingProjectPath("[PROJECT]")
 	var request = &loggingpb.ListLogsRequest{
 		Parent: formattedParent,
 	}
@@ -602,9 +593,9 @@ func TestLoggingServiceV2ListLogs(t *testing.T) {
 
 func TestLoggingServiceV2ListLogsError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockLogging.err = gstatus.Error(errCode, "test error")
+	mockLogging.err = grpc.Errorf(errCode, "test error")
 
-	var formattedParent string = ProjectPath("[PROJECT]")
+	var formattedParent string = LoggingProjectPath("[PROJECT]")
 	var request = &loggingpb.ListLogsRequest{
 		Parent: formattedParent,
 	}
@@ -616,9 +607,7 @@ func TestLoggingServiceV2ListLogsError(t *testing.T) {
 
 	resp, err := c.ListLogs(context.Background(), request).Next()
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -674,7 +663,7 @@ func TestConfigServiceV2ListSinks(t *testing.T) {
 
 func TestConfigServiceV2ListSinksError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockConfig.err = gstatus.Error(errCode, "test error")
+	mockConfig.err = grpc.Errorf(errCode, "test error")
 
 	var formattedParent string = ConfigProjectPath("[PROJECT]")
 	var request = &loggingpb.ListSinksRequest{
@@ -688,9 +677,7 @@ func TestConfigServiceV2ListSinksError(t *testing.T) {
 
 	resp, err := c.ListSinks(context.Background(), request).Next()
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -741,7 +728,7 @@ func TestConfigServiceV2GetSink(t *testing.T) {
 
 func TestConfigServiceV2GetSinkError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockConfig.err = gstatus.Error(errCode, "test error")
+	mockConfig.err = grpc.Errorf(errCode, "test error")
 
 	var formattedSinkName string = ConfigSinkPath("[PROJECT]", "[SINK]")
 	var request = &loggingpb.GetSinkRequest{
@@ -755,9 +742,7 @@ func TestConfigServiceV2GetSinkError(t *testing.T) {
 
 	resp, err := c.GetSink(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -810,7 +795,7 @@ func TestConfigServiceV2CreateSink(t *testing.T) {
 
 func TestConfigServiceV2CreateSinkError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockConfig.err = gstatus.Error(errCode, "test error")
+	mockConfig.err = grpc.Errorf(errCode, "test error")
 
 	var formattedParent string = ConfigProjectPath("[PROJECT]")
 	var sink *loggingpb.LogSink = &loggingpb.LogSink{}
@@ -826,9 +811,7 @@ func TestConfigServiceV2CreateSinkError(t *testing.T) {
 
 	resp, err := c.CreateSink(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -881,7 +864,7 @@ func TestConfigServiceV2UpdateSink(t *testing.T) {
 
 func TestConfigServiceV2UpdateSinkError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockConfig.err = gstatus.Error(errCode, "test error")
+	mockConfig.err = grpc.Errorf(errCode, "test error")
 
 	var formattedSinkName string = ConfigSinkPath("[PROJECT]", "[SINK]")
 	var sink *loggingpb.LogSink = &loggingpb.LogSink{}
@@ -897,9 +880,7 @@ func TestConfigServiceV2UpdateSinkError(t *testing.T) {
 
 	resp, err := c.UpdateSink(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -936,7 +917,7 @@ func TestConfigServiceV2DeleteSink(t *testing.T) {
 
 func TestConfigServiceV2DeleteSinkError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockConfig.err = gstatus.Error(errCode, "test error")
+	mockConfig.err = grpc.Errorf(errCode, "test error")
 
 	var formattedSinkName string = ConfigSinkPath("[PROJECT]", "[SINK]")
 	var request = &loggingpb.DeleteSinkRequest{
@@ -950,9 +931,7 @@ func TestConfigServiceV2DeleteSinkError(t *testing.T) {
 
 	err = c.DeleteSink(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 }
@@ -1007,7 +986,7 @@ func TestMetricsServiceV2ListLogMetrics(t *testing.T) {
 
 func TestMetricsServiceV2ListLogMetricsError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockMetrics.err = gstatus.Error(errCode, "test error")
+	mockMetrics.err = grpc.Errorf(errCode, "test error")
 
 	var formattedParent string = MetricsProjectPath("[PROJECT]")
 	var request = &loggingpb.ListLogMetricsRequest{
@@ -1021,9 +1000,7 @@ func TestMetricsServiceV2ListLogMetricsError(t *testing.T) {
 
 	resp, err := c.ListLogMetrics(context.Background(), request).Next()
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -1070,7 +1047,7 @@ func TestMetricsServiceV2GetLogMetric(t *testing.T) {
 
 func TestMetricsServiceV2GetLogMetricError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockMetrics.err = gstatus.Error(errCode, "test error")
+	mockMetrics.err = grpc.Errorf(errCode, "test error")
 
 	var formattedMetricName string = MetricsMetricPath("[PROJECT]", "[METRIC]")
 	var request = &loggingpb.GetLogMetricRequest{
@@ -1084,9 +1061,7 @@ func TestMetricsServiceV2GetLogMetricError(t *testing.T) {
 
 	resp, err := c.GetLogMetric(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -1135,7 +1110,7 @@ func TestMetricsServiceV2CreateLogMetric(t *testing.T) {
 
 func TestMetricsServiceV2CreateLogMetricError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockMetrics.err = gstatus.Error(errCode, "test error")
+	mockMetrics.err = grpc.Errorf(errCode, "test error")
 
 	var formattedParent string = MetricsProjectPath("[PROJECT]")
 	var metric *loggingpb.LogMetric = &loggingpb.LogMetric{}
@@ -1151,9 +1126,7 @@ func TestMetricsServiceV2CreateLogMetricError(t *testing.T) {
 
 	resp, err := c.CreateLogMetric(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -1202,7 +1175,7 @@ func TestMetricsServiceV2UpdateLogMetric(t *testing.T) {
 
 func TestMetricsServiceV2UpdateLogMetricError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockMetrics.err = gstatus.Error(errCode, "test error")
+	mockMetrics.err = grpc.Errorf(errCode, "test error")
 
 	var formattedMetricName string = MetricsMetricPath("[PROJECT]", "[METRIC]")
 	var metric *loggingpb.LogMetric = &loggingpb.LogMetric{}
@@ -1218,9 +1191,7 @@ func TestMetricsServiceV2UpdateLogMetricError(t *testing.T) {
 
 	resp, err := c.UpdateLogMetric(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -1257,7 +1228,7 @@ func TestMetricsServiceV2DeleteLogMetric(t *testing.T) {
 
 func TestMetricsServiceV2DeleteLogMetricError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockMetrics.err = gstatus.Error(errCode, "test error")
+	mockMetrics.err = grpc.Errorf(errCode, "test error")
 
 	var formattedMetricName string = MetricsMetricPath("[PROJECT]", "[METRIC]")
 	var request = &loggingpb.DeleteLogMetricRequest{
@@ -1271,9 +1242,7 @@ func TestMetricsServiceV2DeleteLogMetricError(t *testing.T) {
 
 	err = c.DeleteLogMetric(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 }

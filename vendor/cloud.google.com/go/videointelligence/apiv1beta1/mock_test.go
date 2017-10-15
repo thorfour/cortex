@@ -39,7 +39,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	gstatus "google.golang.org/grpc/status"
 )
 
 var _ = io.EOF
@@ -125,7 +124,7 @@ func TestVideoIntelligenceServiceAnnotateVideo(t *testing.T) {
 		Features: features,
 	}
 
-	c, err := NewClient(context.Background(), clientOpt)
+	c, err := NewVideoIntelligenceClient(context.Background(), clientOpt)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -170,7 +169,7 @@ func TestVideoIntelligenceServiceAnnotateVideoError(t *testing.T) {
 		Features: features,
 	}
 
-	c, err := NewClient(context.Background(), clientOpt)
+	c, err := NewVideoIntelligenceClient(context.Background(), clientOpt)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -181,9 +180,7 @@ func TestVideoIntelligenceServiceAnnotateVideoError(t *testing.T) {
 	}
 	resp, err := respLRO.Wait(context.Background())
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp

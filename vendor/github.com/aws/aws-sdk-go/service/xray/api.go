@@ -14,18 +14,19 @@ const opBatchGetTraces = "BatchGetTraces"
 
 // BatchGetTracesRequest generates a "aws/request.Request" representing the
 // client's request for the BatchGetTraces operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See BatchGetTraces for usage and error information.
 //
-// See BatchGetTraces for more information on using the BatchGetTraces
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the BatchGetTraces method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the BatchGetTracesRequest method.
 //    req, resp := client.BatchGetTracesRequest(params)
@@ -98,18 +99,19 @@ const opGetServiceGraph = "GetServiceGraph"
 
 // GetServiceGraphRequest generates a "aws/request.Request" representing the
 // client's request for the GetServiceGraph operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetServiceGraph for usage and error information.
 //
-// See GetServiceGraph for more information on using the GetServiceGraph
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetServiceGraph method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetServiceGraphRequest method.
 //    req, resp := client.GetServiceGraphRequest(params)
@@ -184,18 +186,19 @@ const opGetTraceGraph = "GetTraceGraph"
 
 // GetTraceGraphRequest generates a "aws/request.Request" representing the
 // client's request for the GetTraceGraph operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetTraceGraph for usage and error information.
 //
-// See GetTraceGraph for more information on using the GetTraceGraph
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetTraceGraph method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetTraceGraphRequest method.
 //    req, resp := client.GetTraceGraphRequest(params)
@@ -266,18 +269,19 @@ const opGetTraceSummaries = "GetTraceSummaries"
 
 // GetTraceSummariesRequest generates a "aws/request.Request" representing the
 // client's request for the GetTraceSummaries operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetTraceSummaries for usage and error information.
 //
-// See GetTraceSummaries for more information on using the GetTraceSummaries
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetTraceSummaries method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetTraceSummariesRequest method.
 //    req, resp := client.GetTraceSummariesRequest(params)
@@ -364,18 +368,19 @@ const opPutTelemetryRecords = "PutTelemetryRecords"
 
 // PutTelemetryRecordsRequest generates a "aws/request.Request" representing the
 // client's request for the PutTelemetryRecords operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See PutTelemetryRecords for usage and error information.
 //
-// See PutTelemetryRecords for more information on using the PutTelemetryRecords
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the PutTelemetryRecords method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the PutTelemetryRecordsRequest method.
 //    req, resp := client.PutTelemetryRecordsRequest(params)
@@ -446,18 +451,19 @@ const opPutTraceSegments = "PutTraceSegments"
 
 // PutTraceSegmentsRequest generates a "aws/request.Request" representing the
 // client's request for the PutTraceSegments operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See PutTraceSegments for usage and error information.
 //
-// See PutTraceSegments for more information on using the PutTraceSegments
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the PutTraceSegments method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the PutTraceSegmentsRequest method.
 //    req, resp := client.PutTraceSegmentsRequest(params)

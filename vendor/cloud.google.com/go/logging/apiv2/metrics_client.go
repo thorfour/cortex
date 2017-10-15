@@ -31,6 +31,11 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
+var (
+	metricsProjectPathTemplate = gax.MustCompilePathTemplate("projects/{project}")
+	metricsMetricPathTemplate  = gax.MustCompilePathTemplate("projects/{project}/metrics/{metric}")
+)
+
 // MetricsCallOptions contains the retry settings for each method of MetricsClient.
 type MetricsCallOptions struct {
 	ListLogMetrics  []gax.CallOption
@@ -53,7 +58,17 @@ func defaultMetricsCallOptions() *MetricsCallOptions {
 			gax.WithRetry(func() gax.Retryer {
 				return gax.OnCodes([]codes.Code{
 					codes.DeadlineExceeded,
-					codes.Internal,
+					codes.Unavailable,
+				}, gax.Backoff{
+					Initial:    100 * time.Millisecond,
+					Max:        1000 * time.Millisecond,
+					Multiplier: 1.2,
+				})
+			}),
+		},
+		{"default", "non_idempotent"}: {
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnCodes([]codes.Code{
 					codes.Unavailable,
 				}, gax.Backoff{
 					Initial:    100 * time.Millisecond,
@@ -127,20 +142,25 @@ func (c *MetricsClient) SetGoogleClientInfo(keyval ...string) {
 
 // MetricsProjectPath returns the path for the project resource.
 func MetricsProjectPath(project string) string {
-	return "" +
-		"projects/" +
-		project +
-		""
+	path, err := metricsProjectPathTemplate.Render(map[string]string{
+		"project": project,
+	})
+	if err != nil {
+		panic(err)
+	}
+	return path
 }
 
 // MetricsMetricPath returns the path for the metric resource.
 func MetricsMetricPath(project, metric string) string {
-	return "" +
-		"projects/" +
-		project +
-		"/metrics/" +
-		metric +
-		""
+	path, err := metricsMetricPathTemplate.Render(map[string]string{
+		"project": project,
+		"metric":  metric,
+	})
+	if err != nil {
+		panic(err)
+	}
+	return path
 }
 
 // ListLogMetrics lists logs-based metrics.

@@ -7,11 +7,9 @@ import (
 )
 
 func TestSnapshotCommand_implements(t *testing.T) {
-	t.Parallel()
 	var _ cli.Command = &SnapshotCommand{}
 }
 
 func TestSnapshotCommand_noTabs(t *testing.T) {
-	t.Parallel()
 	assertNoTabs(t, new(SnapshotCommand))
 }

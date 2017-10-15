@@ -9,7 +9,7 @@ import (
 // SnapshotCommand is a Command implementation that just shows help for
 // the subcommands nested below it.
 type SnapshotCommand struct {
-	UI cli.Ui
+	Ui cli.Ui
 }
 
 func (c *SnapshotCommand) Run(args []string) int {

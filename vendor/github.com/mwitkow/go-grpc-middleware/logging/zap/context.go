@@ -26,16 +26,12 @@ func Extract(ctx context.Context) *zap.Logger {
 		return nullLogger
 	}
 	// Add grpc_ctxtags tags metadata until now.
-	return l.With(tagsFieldsToZapFields(ctx)...)
-}
-
-func tagsFieldsToZapFields(ctx context.Context) []zapcore.Field {
 	fields := []zapcore.Field{}
 	tags := grpc_ctxtags.Extract(ctx)
 	for k, v := range tags.Values() {
 		fields = append(fields, zap.Any(k, v))
 	}
-	return fields
+	return l.With(fields...)
 }
 
 func toContext(ctx context.Context, logger *zap.Logger) context.Context {

@@ -50,11 +50,7 @@ func testVersionDecodable(t *testing.T, name string, out versionedDecoder, in []
 }
 
 func testRequest(t *testing.T, name string, rb protocolBody, expected []byte) {
-	packet := testRequestEncode(t, name, rb, expected)
-	testRequestDecode(t, name, rb, packet)
-}
-
-func testRequestEncode(t *testing.T, name string, rb protocolBody, expected []byte) []byte {
+	// Encoder request
 	req := &request{correlationID: 123, clientID: "foo", body: rb}
 	packet, err := encode(req, nil)
 	headerSize := 14 + len("foo")
@@ -63,10 +59,7 @@ func testRequestEncode(t *testing.T, name string, rb protocolBody, expected []by
 	} else if !bytes.Equal(packet[headerSize:], expected) {
 		t.Error("Encoding", name, "failed\ngot ", packet[headerSize:], "\nwant", expected)
 	}
-	return packet
-}
-
-func testRequestDecode(t *testing.T, name string, rb protocolBody, packet []byte) {
+	// Decoder request
 	decoded, n, err := decodeRequest(bytes.NewReader(packet))
 	if err != nil {
 		t.Error("Failed to decode request", err)

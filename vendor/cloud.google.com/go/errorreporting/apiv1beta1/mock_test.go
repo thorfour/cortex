@@ -38,7 +38,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	gstatus "google.golang.org/grpc/status"
 )
 
 var _ = io.EOF
@@ -235,7 +234,7 @@ func TestErrorGroupServiceGetGroup(t *testing.T) {
 
 func TestErrorGroupServiceGetGroupError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockErrorGroup.err = gstatus.Error(errCode, "test error")
+	mockErrorGroup.err = grpc.Errorf(errCode, "test error")
 
 	var formattedGroupName string = ErrorGroupGroupPath("[PROJECT]", "[GROUP]")
 	var request = &clouderrorreportingpb.GetGroupRequest{
@@ -249,9 +248,7 @@ func TestErrorGroupServiceGetGroupError(t *testing.T) {
 
 	resp, err := c.GetGroup(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -296,7 +293,7 @@ func TestErrorGroupServiceUpdateGroup(t *testing.T) {
 
 func TestErrorGroupServiceUpdateGroupError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockErrorGroup.err = gstatus.Error(errCode, "test error")
+	mockErrorGroup.err = grpc.Errorf(errCode, "test error")
 
 	var group *clouderrorreportingpb.ErrorGroup = &clouderrorreportingpb.ErrorGroup{}
 	var request = &clouderrorreportingpb.UpdateGroupRequest{
@@ -310,9 +307,7 @@ func TestErrorGroupServiceUpdateGroupError(t *testing.T) {
 
 	resp, err := c.UpdateGroup(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -370,7 +365,7 @@ func TestErrorStatsServiceListGroupStats(t *testing.T) {
 
 func TestErrorStatsServiceListGroupStatsError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockErrorStats.err = gstatus.Error(errCode, "test error")
+	mockErrorStats.err = grpc.Errorf(errCode, "test error")
 
 	var formattedProjectName string = ErrorStatsProjectPath("[PROJECT]")
 	var timeRange *clouderrorreportingpb.QueryTimeRange = &clouderrorreportingpb.QueryTimeRange{}
@@ -386,9 +381,7 @@ func TestErrorStatsServiceListGroupStatsError(t *testing.T) {
 
 	resp, err := c.ListGroupStats(context.Background(), request).Next()
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -446,7 +439,7 @@ func TestErrorStatsServiceListEvents(t *testing.T) {
 
 func TestErrorStatsServiceListEventsError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockErrorStats.err = gstatus.Error(errCode, "test error")
+	mockErrorStats.err = grpc.Errorf(errCode, "test error")
 
 	var formattedProjectName string = ErrorStatsProjectPath("[PROJECT]")
 	var groupId string = "groupId506361563"
@@ -462,9 +455,7 @@ func TestErrorStatsServiceListEventsError(t *testing.T) {
 
 	resp, err := c.ListEvents(context.Background(), request).Next()
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -504,7 +495,7 @@ func TestErrorStatsServiceDeleteEvents(t *testing.T) {
 
 func TestErrorStatsServiceDeleteEventsError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockErrorStats.err = gstatus.Error(errCode, "test error")
+	mockErrorStats.err = grpc.Errorf(errCode, "test error")
 
 	var formattedProjectName string = ErrorStatsProjectPath("[PROJECT]")
 	var request = &clouderrorreportingpb.DeleteEventsRequest{
@@ -518,9 +509,7 @@ func TestErrorStatsServiceDeleteEventsError(t *testing.T) {
 
 	resp, err := c.DeleteEvents(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -562,7 +551,7 @@ func TestReportErrorsServiceReportErrorEvent(t *testing.T) {
 
 func TestReportErrorsServiceReportErrorEventError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockReportErrors.err = gstatus.Error(errCode, "test error")
+	mockReportErrors.err = grpc.Errorf(errCode, "test error")
 
 	var formattedProjectName string = ReportErrorsProjectPath("[PROJECT]")
 	var event *clouderrorreportingpb.ReportedErrorEvent = &clouderrorreportingpb.ReportedErrorEvent{}
@@ -578,9 +567,7 @@ func TestReportErrorsServiceReportErrorEventError(t *testing.T) {
 
 	resp, err := c.ReportErrorEvent(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp

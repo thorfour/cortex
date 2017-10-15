@@ -39,7 +39,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	gstatus "google.golang.org/grpc/status"
 )
 
 var _ = io.EOF
@@ -242,7 +241,7 @@ func TestDebugger2SetBreakpoint(t *testing.T) {
 
 func TestDebugger2SetBreakpointError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockDebugger2.err = gstatus.Error(errCode, "test error")
+	mockDebugger2.err = grpc.Errorf(errCode, "test error")
 
 	var debuggeeId string = "debuggeeId-997255898"
 	var breakpoint *clouddebuggerpb.Breakpoint = &clouddebuggerpb.Breakpoint{}
@@ -260,9 +259,7 @@ func TestDebugger2SetBreakpointError(t *testing.T) {
 
 	resp, err := c.SetBreakpoint(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -306,7 +303,7 @@ func TestDebugger2GetBreakpoint(t *testing.T) {
 
 func TestDebugger2GetBreakpointError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockDebugger2.err = gstatus.Error(errCode, "test error")
+	mockDebugger2.err = grpc.Errorf(errCode, "test error")
 
 	var debuggeeId string = "debuggeeId-997255898"
 	var breakpointId string = "breakpointId498424873"
@@ -324,9 +321,7 @@ func TestDebugger2GetBreakpointError(t *testing.T) {
 
 	resp, err := c.GetBreakpoint(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -367,7 +362,7 @@ func TestDebugger2DeleteBreakpoint(t *testing.T) {
 
 func TestDebugger2DeleteBreakpointError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockDebugger2.err = gstatus.Error(errCode, "test error")
+	mockDebugger2.err = grpc.Errorf(errCode, "test error")
 
 	var debuggeeId string = "debuggeeId-997255898"
 	var breakpointId string = "breakpointId498424873"
@@ -385,9 +380,7 @@ func TestDebugger2DeleteBreakpointError(t *testing.T) {
 
 	err = c.DeleteBreakpoint(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 }
@@ -431,7 +424,7 @@ func TestDebugger2ListBreakpoints(t *testing.T) {
 
 func TestDebugger2ListBreakpointsError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockDebugger2.err = gstatus.Error(errCode, "test error")
+	mockDebugger2.err = grpc.Errorf(errCode, "test error")
 
 	var debuggeeId string = "debuggeeId-997255898"
 	var clientVersion string = "clientVersion-1506231196"
@@ -447,9 +440,7 @@ func TestDebugger2ListBreakpointsError(t *testing.T) {
 
 	resp, err := c.ListBreakpoints(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -491,7 +482,7 @@ func TestDebugger2ListDebuggees(t *testing.T) {
 
 func TestDebugger2ListDebuggeesError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockDebugger2.err = gstatus.Error(errCode, "test error")
+	mockDebugger2.err = grpc.Errorf(errCode, "test error")
 
 	var project string = "project-309310695"
 	var clientVersion string = "clientVersion-1506231196"
@@ -507,9 +498,7 @@ func TestDebugger2ListDebuggeesError(t *testing.T) {
 
 	resp, err := c.ListDebuggees(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -549,7 +538,7 @@ func TestController2RegisterDebuggee(t *testing.T) {
 
 func TestController2RegisterDebuggeeError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockController2.err = gstatus.Error(errCode, "test error")
+	mockController2.err = grpc.Errorf(errCode, "test error")
 
 	var debuggee *clouddebuggerpb.Debuggee = &clouddebuggerpb.Debuggee{}
 	var request = &clouddebuggerpb.RegisterDebuggeeRequest{
@@ -563,9 +552,7 @@ func TestController2RegisterDebuggeeError(t *testing.T) {
 
 	resp, err := c.RegisterDebuggee(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -610,7 +597,7 @@ func TestController2ListActiveBreakpoints(t *testing.T) {
 
 func TestController2ListActiveBreakpointsError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockController2.err = gstatus.Error(errCode, "test error")
+	mockController2.err = grpc.Errorf(errCode, "test error")
 
 	var debuggeeId string = "debuggeeId-997255898"
 	var request = &clouddebuggerpb.ListActiveBreakpointsRequest{
@@ -624,9 +611,7 @@ func TestController2ListActiveBreakpointsError(t *testing.T) {
 
 	resp, err := c.ListActiveBreakpoints(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
@@ -668,7 +653,7 @@ func TestController2UpdateActiveBreakpoint(t *testing.T) {
 
 func TestController2UpdateActiveBreakpointError(t *testing.T) {
 	errCode := codes.PermissionDenied
-	mockController2.err = gstatus.Error(errCode, "test error")
+	mockController2.err = grpc.Errorf(errCode, "test error")
 
 	var debuggeeId string = "debuggeeId-997255898"
 	var breakpoint *clouddebuggerpb.Breakpoint = &clouddebuggerpb.Breakpoint{}
@@ -684,9 +669,7 @@ func TestController2UpdateActiveBreakpointError(t *testing.T) {
 
 	resp, err := c.UpdateActiveBreakpoint(context.Background(), request)
 
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
+	if c := grpc.Code(err); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp

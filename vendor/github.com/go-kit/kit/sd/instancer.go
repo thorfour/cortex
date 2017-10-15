@@ -22,7 +22,6 @@ type Event struct {
 type Instancer interface {
 	Register(chan<- Event)
 	Deregister(chan<- Event)
-	Stop()
 }
 
 // FixedInstancer yields a fixed set of instances.
@@ -33,6 +32,3 @@ func (d FixedInstancer) Register(ch chan<- Event) { ch <- Event{Instances: d} }
 
 // Deregister implements Instancer.
 func (d FixedInstancer) Deregister(ch chan<- Event) {}
-
-// Stop implements Instancer.
-func (d FixedInstancer) Stop() {}

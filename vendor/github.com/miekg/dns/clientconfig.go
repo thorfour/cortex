@@ -2,7 +2,6 @@ package dns
 
 import (
 	"bufio"
-	"io"
 	"os"
 	"strconv"
 	"strings"
@@ -26,13 +25,8 @@ func ClientConfigFromFile(resolvconf string) (*ClientConfig, error) {
 		return nil, err
 	}
 	defer file.Close()
-	return ClientConfigFromReader(file)
-}
-
-// ClientConfigFromReader works like ClientConfigFromFile but takes an io.Reader as argument
-func ClientConfigFromReader(resolvconf io.Reader) (*ClientConfig, error) {
 	c := new(ClientConfig)
-	scanner := bufio.NewScanner(resolvconf)
+	scanner := bufio.NewScanner(file)
 	c.Servers = make([]string, 0)
 	c.Search = make([]string, 0)
 	c.Port = "53"

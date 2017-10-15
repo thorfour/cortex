@@ -5,33 +5,30 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hashicorp/consul/agent"
 	"github.com/hashicorp/consul/api"
+	"github.com/hashicorp/consul/command/base"
 	"github.com/mitchellh/cli"
 )
 
 func testKVGetCommand(t *testing.T) (*cli.MockUi, *KVGetCommand) {
-	ui := cli.NewMockUi()
+	ui := new(cli.MockUi)
 	return ui, &KVGetCommand{
-		BaseCommand: BaseCommand{
-			UI:    ui,
-			Flags: FlagSetHTTP,
+		Command: base.Command{
+			Ui:    ui,
+			Flags: base.FlagSetHTTP,
 		},
 	}
 }
 
 func TestKVGetCommand_implements(t *testing.T) {
-	t.Parallel()
 	var _ cli.Command = &KVGetCommand{}
 }
 
 func TestKVGetCommand_noTabs(t *testing.T) {
-	t.Parallel()
 	assertNoTabs(t, new(KVGetCommand))
 }
 
 func TestKVGetCommand_Validation(t *testing.T) {
-	t.Parallel()
 	ui, c := testKVGetCommand(t)
 
 	cases := map[string]struct {
@@ -70,10 +67,9 @@ func TestKVGetCommand_Validation(t *testing.T) {
 }
 
 func TestKVGetCommand_Run(t *testing.T) {
-	t.Parallel()
-	a := agent.NewTestAgent(t.Name(), nil)
-	defer a.Shutdown()
-	client := a.Client()
+	srv, client := testAgentWithAPIClient(t)
+	defer srv.Shutdown()
+	waitForLeader(t, srv.httpAddr)
 
 	ui, c := testKVGetCommand(t)
 
@@ -87,7 +83,7 @@ func TestKVGetCommand_Run(t *testing.T) {
 	}
 
 	args := []string{
-		"-http-addr=" + a.HTTPAddr(),
+		"-http-addr=" + srv.httpAddr,
 		"foo",
 	}
 
@@ -103,14 +99,14 @@ func TestKVGetCommand_Run(t *testing.T) {
 }
 
 func TestKVGetCommand_Missing(t *testing.T) {
-	t.Parallel()
-	a := agent.NewTestAgent(t.Name(), nil)
-	defer a.Shutdown()
+	srv, _ := testAgentWithAPIClient(t)
+	defer srv.Shutdown()
+	waitForLeader(t, srv.httpAddr)
 
 	_, c := testKVGetCommand(t)
 
 	args := []string{
-		"-http-addr=" + a.HTTPAddr(),
+		"-http-addr=" + srv.httpAddr,
 		"not-a-real-key",
 	}
 
@@ -121,10 +117,9 @@ func TestKVGetCommand_Missing(t *testing.T) {
 }
 
 func TestKVGetCommand_Empty(t *testing.T) {
-	t.Parallel()
-	a := agent.NewTestAgent(t.Name(), nil)
-	defer a.Shutdown()
-	client := a.Client()
+	srv, client := testAgentWithAPIClient(t)
+	defer srv.Shutdown()
+	waitForLeader(t, srv.httpAddr)
 
 	ui, c := testKVGetCommand(t)
 
@@ -138,7 +133,7 @@ func TestKVGetCommand_Empty(t *testing.T) {
 	}
 
 	args := []string{
-		"-http-addr=" + a.HTTPAddr(),
+		"-http-addr=" + srv.httpAddr,
 		"empty",
 	}
 
@@ -149,10 +144,9 @@ func TestKVGetCommand_Empty(t *testing.T) {
 }
 
 func TestKVGetCommand_Detailed(t *testing.T) {
-	t.Parallel()
-	a := agent.NewTestAgent(t.Name(), nil)
-	defer a.Shutdown()
-	client := a.Client()
+	srv, client := testAgentWithAPIClient(t)
+	defer srv.Shutdown()
+	waitForLeader(t, srv.httpAddr)
 
 	ui, c := testKVGetCommand(t)
 
@@ -166,7 +160,7 @@ func TestKVGetCommand_Detailed(t *testing.T) {
 	}
 
 	args := []string{
-		"-http-addr=" + a.HTTPAddr(),
+		"-http-addr=" + srv.httpAddr,
 		"-detailed",
 		"foo",
 	}
@@ -192,10 +186,9 @@ func TestKVGetCommand_Detailed(t *testing.T) {
 }
 
 func TestKVGetCommand_Keys(t *testing.T) {
-	t.Parallel()
-	a := agent.NewTestAgent(t.Name(), nil)
-	defer a.Shutdown()
-	client := a.Client()
+	srv, client := testAgentWithAPIClient(t)
+	defer srv.Shutdown()
+	waitForLeader(t, srv.httpAddr)
 
 	ui, c := testKVGetCommand(t)
 
@@ -207,7 +200,7 @@ func TestKVGetCommand_Keys(t *testing.T) {
 	}
 
 	args := []string{
-		"-http-addr=" + a.HTTPAddr(),
+		"-http-addr=" + srv.httpAddr,
 		"-keys",
 		"foo/",
 	}
@@ -226,10 +219,9 @@ func TestKVGetCommand_Keys(t *testing.T) {
 }
 
 func TestKVGetCommand_Recurse(t *testing.T) {
-	t.Parallel()
-	a := agent.NewTestAgent(t.Name(), nil)
-	defer a.Shutdown()
-	client := a.Client()
+	srv, client := testAgentWithAPIClient(t)
+	defer srv.Shutdown()
+	waitForLeader(t, srv.httpAddr)
 
 	ui, c := testKVGetCommand(t)
 
@@ -246,7 +238,7 @@ func TestKVGetCommand_Recurse(t *testing.T) {
 	}
 
 	args := []string{
-		"-http-addr=" + a.HTTPAddr(),
+		"-http-addr=" + srv.httpAddr,
 		"-recurse",
 		"foo",
 	}
@@ -265,10 +257,9 @@ func TestKVGetCommand_Recurse(t *testing.T) {
 }
 
 func TestKVGetCommand_RecurseBase64(t *testing.T) {
-	t.Parallel()
-	a := agent.NewTestAgent(t.Name(), nil)
-	defer a.Shutdown()
-	client := a.Client()
+	srv, client := testAgentWithAPIClient(t)
+	defer srv.Shutdown()
+	waitForLeader(t, srv.httpAddr)
 
 	ui, c := testKVGetCommand(t)
 
@@ -285,7 +276,7 @@ func TestKVGetCommand_RecurseBase64(t *testing.T) {
 	}
 
 	args := []string{
-		"-http-addr=" + a.HTTPAddr(),
+		"-http-addr=" + srv.httpAddr,
 		"-recurse",
 		"-base64",
 		"foo",
@@ -305,10 +296,9 @@ func TestKVGetCommand_RecurseBase64(t *testing.T) {
 }
 
 func TestKVGetCommand_DetailedBase64(t *testing.T) {
-	t.Parallel()
-	a := agent.NewTestAgent(t.Name(), nil)
-	defer a.Shutdown()
-	client := a.Client()
+	srv, client := testAgentWithAPIClient(t)
+	defer srv.Shutdown()
+	waitForLeader(t, srv.httpAddr)
 
 	ui, c := testKVGetCommand(t)
 
@@ -322,7 +312,7 @@ func TestKVGetCommand_DetailedBase64(t *testing.T) {
 	}
 
 	args := []string{
-		"-http-addr=" + a.HTTPAddr(),
+		"-http-addr=" + srv.httpAddr,
 		"-detailed",
 		"-base64",
 		"foo",

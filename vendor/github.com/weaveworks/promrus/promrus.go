@@ -1,8 +1,8 @@
 package promrus
 
 import (
+	"github.com/Sirupsen/logrus"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/sirupsen/logrus"
 )
 
 // PrometheusHook exposes Prometheus counters for each of logrus' log levels.
@@ -22,11 +22,8 @@ func NewPrometheusHook() (*PrometheusHook, error) {
 	}, []string{"level"})
 	// Initialise counters for all supported levels:
 	for _, level := range supportedLevels {
-		counterVec.WithLabelValues(level.String())
+		counterVec.WithLabelValues(level.String()).Set(0)
 	}
-	// Try to unregister the counter vector, in case already registered for some reason,
-	// e.g. double initialisation/configuration done by mistake by the end-user.
-	prometheus.Unregister(counterVec)
 	// Try to register the counter vector:
 	err := prometheus.Register(counterVec)
 	if err != nil {

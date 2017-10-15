@@ -14,16 +14,6 @@ import (
 // TestCounter puts some deltas through the counter, and then calls the value
 // func to check that the counter has the correct final value.
 func TestCounter(counter metrics.Counter, value func() float64) error {
-	want := FillCounter(counter)
-	if have := value(); want != have {
-		return fmt.Errorf("want %f, have %f", want, have)
-	}
-
-	return nil
-}
-
-// FillCounter puts some deltas through the counter and returns the total value.
-func FillCounter(counter metrics.Counter) float64 {
 	a := rand.Perm(100)
 	n := rand.Intn(len(a))
 
@@ -33,7 +23,12 @@ func FillCounter(counter metrics.Counter) float64 {
 		counter.Add(f)
 		want += f
 	}
-	return want
+
+	if have := value(); want != have {
+		return fmt.Errorf("want %f, have %f", want, have)
+	}
+
+	return nil
 }
 
 // TestGauge puts some values through the gauge, and then calls the value func

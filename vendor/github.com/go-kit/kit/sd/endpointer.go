@@ -78,7 +78,7 @@ func (de *DefaultEndpointer) receive() {
 	}
 }
 
-// Close deregisters DefaultEndpointer from the Instancer and stops the internal go-routine.
+// Close de-registeres DefaultEndpointer from the Instancer and stops the internal go-routine.
 func (de *DefaultEndpointer) Close() {
 	de.instancer.Deregister(de.ch)
 	close(de.ch)

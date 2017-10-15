@@ -32,6 +32,12 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
+var (
+	iamProjectPathTemplate        = gax.MustCompilePathTemplate("projects/{project}")
+	iamServiceAccountPathTemplate = gax.MustCompilePathTemplate("projects/{project}/serviceAccounts/{service_account}")
+	iamKeyPathTemplate            = gax.MustCompilePathTemplate("projects/{project}/serviceAccounts/{service_account}/keys/{key}")
+)
+
 // IamCallOptions contains the retry settings for each method of IamClient.
 type IamCallOptions struct {
 	ListServiceAccounts     []gax.CallOption
@@ -63,6 +69,17 @@ func defaultIamCallOptions() *IamCallOptions {
 			gax.WithRetry(func() gax.Retryer {
 				return gax.OnCodes([]codes.Code{
 					codes.DeadlineExceeded,
+					codes.Unavailable,
+				}, gax.Backoff{
+					Initial:    100 * time.Millisecond,
+					Max:        60000 * time.Millisecond,
+					Multiplier: 1.3,
+				})
+			}),
+		},
+		{"default", "non_idempotent"}: {
+			gax.WithRetry(func() gax.Retryer {
+				return gax.OnCodes([]codes.Code{
 					codes.Unavailable,
 				}, gax.Backoff{
 					Initial:    100 * time.Millisecond,
@@ -113,16 +130,16 @@ type IamClient struct {
 // of to an individual end user. It is used to authenticate calls
 // to a Google API.
 //
-// To create a service account, specify the project_id and account_id
-// for the account.  The account_id is unique within the project, and used
+// To create a service account, specify the `project_id` and `account_id`
+// for the account.  The `account_id` is unique within the project, and used
 // to generate the service account email address and a stable
-// unique_id.
+// `unique_id`.
 //
 // All other methods can identify accounts using the format
-// projects/{project}/serviceAccounts/{account}.
-// Using - as a wildcard for the project will infer the project from
-// the account. The account value can be the email address or the
-// unique_id of the service account.
+// `projects/{project}/serviceAccounts/{account}`.
+// Using `-` as a wildcard for the project will infer the project from
+// the account. The `account` value can be the `email` address or the
+// `unique_id` of the service account.
 func NewIamClient(ctx context.Context, opts ...option.ClientOption) (*IamClient, error) {
 	conn, err := transport.DialGRPC(ctx, append(defaultIamClientOptions(), opts...)...)
 	if err != nil {
@@ -134,7 +151,7 @@ func NewIamClient(ctx context.Context, opts ...option.ClientOption) (*IamClient,
 
 		iamClient: adminpb.NewIAMClient(conn),
 	}
-	c.setGoogleClientInfo()
+	c.SetGoogleClientInfo()
 	return c, nil
 }
 
@@ -149,10 +166,10 @@ func (c *IamClient) Close() error {
 	return c.conn.Close()
 }
 
-// setGoogleClientInfo sets the name and version of the application in
+// SetGoogleClientInfo sets the name and version of the application in
 // the `x-goog-api-client` header passed on each request. Intended for
 // use by Google-written clients.
-func (c *IamClient) setGoogleClientInfo(keyval ...string) {
+func (c *IamClient) SetGoogleClientInfo(keyval ...string) {
 	kv := append([]string{"gl-go", version.Go()}, keyval...)
 	kv = append(kv, "gapic", version.Repo, "gax", gax.Version, "grpc", grpc.Version)
 	c.xGoogHeader = []string{gax.XGoogHeader(kv...)}
@@ -160,32 +177,38 @@ func (c *IamClient) setGoogleClientInfo(keyval ...string) {
 
 // IamProjectPath returns the path for the project resource.
 func IamProjectPath(project string) string {
-	return "" +
-		"projects/" +
-		project +
-		""
+	path, err := iamProjectPathTemplate.Render(map[string]string{
+		"project": project,
+	})
+	if err != nil {
+		panic(err)
+	}
+	return path
 }
 
 // IamServiceAccountPath returns the path for the service account resource.
 func IamServiceAccountPath(project, serviceAccount string) string {
-	return "" +
-		"projects/" +
-		project +
-		"/serviceAccounts/" +
-		serviceAccount +
-		""
+	path, err := iamServiceAccountPathTemplate.Render(map[string]string{
+		"project":         project,
+		"service_account": serviceAccount,
+	})
+	if err != nil {
+		panic(err)
+	}
+	return path
 }
 
 // IamKeyPath returns the path for the key resource.
 func IamKeyPath(project, serviceAccount, key string) string {
-	return "" +
-		"projects/" +
-		project +
-		"/serviceAccounts/" +
-		serviceAccount +
-		"/keys/" +
-		key +
-		""
+	path, err := iamKeyPathTemplate.Render(map[string]string{
+		"project":         project,
+		"service_account": serviceAccount,
+		"key":             key,
+	})
+	if err != nil {
+		panic(err)
+	}
+	return path
 }
 
 // ListServiceAccounts lists [ServiceAccounts][google.iam.admin.v1.ServiceAccount] for a project.
@@ -259,8 +282,8 @@ func (c *IamClient) CreateServiceAccount(ctx context.Context, req *adminpb.Creat
 // UpdateServiceAccount updates a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
 //
 // Currently, only the following fields are updatable:
-// display_name .
-// The etag is mandatory.
+// `display_name` .
+// The `etag` is mandatory.
 func (c *IamClient) UpdateServiceAccount(ctx context.Context, req *adminpb.ServiceAccount, opts ...gax.CallOption) (*adminpb.ServiceAccount, error) {
 	ctx = insertXGoog(ctx, c.xGoogHeader)
 	opts = append(c.CallOptions.UpdateServiceAccount[0:len(c.CallOptions.UpdateServiceAccount):len(c.CallOptions.UpdateServiceAccount)], opts...)

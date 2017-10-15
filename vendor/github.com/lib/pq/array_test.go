@@ -89,7 +89,9 @@ func TestParseArrayError(t *testing.T) {
 }
 
 func TestArrayScanner(t *testing.T) {
-	var s sql.Scanner = Array(&[]bool{})
+	var s sql.Scanner
+
+	s = Array(&[]bool{})
 	if _, ok := s.(*BoolArray); !ok {
 		t.Errorf("Expected *BoolArray, got %T", s)
 	}
@@ -124,7 +126,9 @@ func TestArrayScanner(t *testing.T) {
 }
 
 func TestArrayValuer(t *testing.T) {
-	var v driver.Valuer = Array([]bool{})
+	var v driver.Valuer
+
+	v = Array([]bool{})
 	if _, ok := v.(*BoolArray); !ok {
 		t.Errorf("Expected *BoolArray, got %T", v)
 	}
@@ -1189,7 +1193,9 @@ func TestGenericArrayValue(t *testing.T) {
 }
 
 func TestGenericArrayValueErrors(t *testing.T) {
-	v := []interface{}{func() {}}
+	var v []interface{}
+
+	v = []interface{}{func() {}}
 	if _, err := (GenericArray{v}).Value(); err == nil {
 		t.Errorf("Expected error for %q, got nil", v)
 	}

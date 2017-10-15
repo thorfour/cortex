@@ -15,7 +15,9 @@
 // Package tracecontext provides encoders and decoders for Stackdriver Trace contexts.
 package tracecontext
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+)
 
 const (
 	versionID    = 0
@@ -27,15 +29,19 @@ const (
 	spanIDLen  = 8
 	optsLen    = 1
 
-	// Len represents the length of trace context.
-	Len = 1 + 1 + traceIDLen + 1 + spanIDLen + 1 + optsLen
+	versionOffset = 0
+	traceIDOffset = 1
+	spanIDOffset  = traceIDOffset + 1 + traceIDLen
+	optsOffset    = spanIDOffset + 1 + spanIDLen
+
+	totalLen = optsOffset + 1 + optsLen
 )
 
 // Encode encodes trace ID, span ID and options into dst. The number of bytes
 // written will be returned. If len(dst) isn't big enough to fit the trace context,
 // a negative number is returned.
-func Encode(dst []byte, traceID []byte, spanID uint64, opts byte) (n int) {
-	if len(dst) < Len {
+func Encode(dst []byte, traceID [2]uint64, spanID uint64, opts byte) (n int) {
+	if len(dst) < totalLen {
 		return -1
 	}
 	var offset = 0
@@ -44,9 +50,8 @@ func Encode(dst []byte, traceID []byte, spanID uint64, opts byte) (n int) {
 
 	putByte(versionID)
 	putByte(traceIDField)
-	for _, b := range traceID {
-		putByte(b)
-	}
+	putUint64(traceID[1])
+	putUint64(traceID[0])
 	putByte(spanIDField)
 	putUint64(spanID)
 	putByte(optsField)
@@ -57,22 +62,21 @@ func Encode(dst []byte, traceID []byte, spanID uint64, opts byte) (n int) {
 
 // Decode decodes the src into a trace ID, span ID and options. If src doesn't
 // contain a valid trace context, ok = false is returned.
-func Decode(src []byte) (traceID []byte, spanID uint64, opts byte, ok bool) {
-	if len(src) < Len {
-		return traceID, spanID, 0, false
+func Decode(src []byte) (traceID [2]uint64, spanID uint64, opts byte, ok bool) {
+	if len(src) < totalLen {
+		return traceID, 0, 0, false
 	}
 	var offset = 0
 	readByte := func() byte { b := src[offset]; offset++; return b }
 	readUint64 := func() uint64 { v := binary.LittleEndian.Uint64(src[offset:]); offset += 8; return v }
-
 	if readByte() != versionID {
-		return traceID, spanID, 0, false
+		return traceID, 0, 0, false
 	}
 	for offset < len(src) {
 		switch readByte() {
 		case traceIDField:
-			traceID = src[offset : offset+traceIDLen]
-			offset += traceIDLen
+			traceID[1] = readUint64()
+			traceID[0] = readUint64()
 		case spanIDField:
 			spanID = readUint64()
 		case optsField:

@@ -740,6 +740,68 @@ func (s *Colors) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+type DeepLinkData struct {
+	Links []*Link `json:"links,omitempty"`
+
+	Url string `json:"url,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Links") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Links") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *DeepLinkData) MarshalJSON() ([]byte, error) {
+	type noMethod DeepLinkData
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type DisplayInfo struct {
+	AppIconUrl string `json:"appIconUrl,omitempty"`
+
+	AppShortTitle string `json:"appShortTitle,omitempty"`
+
+	AppTitle string `json:"appTitle,omitempty"`
+
+	LinkShortTitle string `json:"linkShortTitle,omitempty"`
+
+	LinkTitle string `json:"linkTitle,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "AppIconUrl") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AppIconUrl") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *DisplayInfo) MarshalJSON() ([]byte, error) {
+	type noMethod DisplayInfo
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 type Error struct {
 	// Domain: Domain, or broad category, of the error.
 	Domain string `json:"domain,omitempty"`
@@ -959,11 +1021,9 @@ type Event struct {
 
 	// Transparency: Whether the event blocks time on the calendar.
 	// Optional. Possible values are:
-	// - "opaque" - Default value. The event does block time on the
-	// calendar. This is equivalent to setting Show me as to Busy in the
-	// Calendar UI.
-	// - "transparent" - The event does not block time on the calendar. This
-	// is equivalent to setting Show me as to Available in the Calendar UI.
+	// - "opaque" - The event blocks time on the calendar. This is the
+	// default value.
+	// - "transparent" - The event does not block time on the calendar.
 	Transparency string `json:"transparency,omitempty"`
 
 	// Updated: Last modification time of the event (as a RFC3339
@@ -1405,6 +1465,36 @@ func (s *EventDateTime) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+type EventHabitInstance struct {
+	// Data: Metadata specific to this instance.
+	Data *HabitInstanceData `json:"data,omitempty"`
+
+	// ParentId: Id of the habit this instance belongs to.
+	ParentId string `json:"parentId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Data") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Data") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *EventHabitInstance) MarshalJSON() ([]byte, error) {
+	type noMethod EventHabitInstance
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 type EventReminder struct {
 	// Method: The method used by this reminder. Possible values are:
 	// - "email" - Reminders are sent via email.
@@ -1700,6 +1790,103 @@ type FreeBusyResponse struct {
 
 func (s *FreeBusyResponse) MarshalJSON() ([]byte, error) {
 	type noMethod FreeBusyResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type HabitInstanceData struct {
+	Status string `json:"status,omitempty"`
+
+	StatusInferred bool `json:"statusInferred,omitempty"`
+
+	Type string `json:"type,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Status") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Status") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *HabitInstanceData) MarshalJSON() ([]byte, error) {
+	type noMethod HabitInstanceData
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type LaunchInfo struct {
+	AppId string `json:"appId,omitempty"`
+
+	InstallUrl string `json:"installUrl,omitempty"`
+
+	IntentAction string `json:"intentAction,omitempty"`
+
+	Uri string `json:"uri,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "AppId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AppId") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *LaunchInfo) MarshalJSON() ([]byte, error) {
+	type noMethod LaunchInfo
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type Link struct {
+	ApplinkingSource string `json:"applinkingSource,omitempty"`
+
+	DisplayInfo *DisplayInfo `json:"displayInfo,omitempty"`
+
+	LaunchInfo *LaunchInfo `json:"launchInfo,omitempty"`
+
+	Platform string `json:"platform,omitempty"`
+
+	Url string `json:"url,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ApplinkingSource") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "ApplinkingSource") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Link) MarshalJSON() ([]byte, error) {
+	type noMethod Link
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -2096,14 +2283,6 @@ func (r *AclService) Insert(calendarId string, aclrule *AclRule) *AclInsertCall 
 	return c
 }
 
-// SendNotifications sets the optional parameter "sendNotifications":
-// Whether to send notifications about the calendar sharing change.  The
-// default is True.
-func (c *AclInsertCall) SendNotifications(sendNotifications bool) *AclInsertCall {
-	c.urlParams_.Set("sendNotifications", fmt.Sprint(sendNotifications))
-	return c
-}
-
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -2202,11 +2381,6 @@ func (c *AclInsertCall) Do(opts ...googleapi.CallOption) (*AclRule, error) {
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
-	//     },
-	//     "sendNotifications": {
-	//       "description": "Whether to send notifications about the calendar sharing change. Optional. The default is True.",
-	//       "location": "query",
-	//       "type": "boolean"
 	//     }
 	//   },
 	//   "path": "calendars/{calendarId}/acl",
@@ -2466,15 +2640,6 @@ func (r *AclService) Patch(calendarId string, ruleId string, aclrule *AclRule) *
 	return c
 }
 
-// SendNotifications sets the optional parameter "sendNotifications":
-// Whether to send notifications about the calendar sharing change. Note
-// that there are no notifications on access removal.  The default is
-// True.
-func (c *AclPatchCall) SendNotifications(sendNotifications bool) *AclPatchCall {
-	c.urlParams_.Set("sendNotifications", fmt.Sprint(sendNotifications))
-	return c
-}
-
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -2581,11 +2746,6 @@ func (c *AclPatchCall) Do(opts ...googleapi.CallOption) (*AclRule, error) {
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
-	//     },
-	//     "sendNotifications": {
-	//       "description": "Whether to send notifications about the calendar sharing change. Note that there are no notifications on access removal. Optional. The default is True.",
-	//       "location": "query",
-	//       "type": "boolean"
 	//     }
 	//   },
 	//   "path": "calendars/{calendarId}/acl/{ruleId}",
@@ -2620,15 +2780,6 @@ func (r *AclService) Update(calendarId string, ruleId string, aclrule *AclRule) 
 	c.calendarId = calendarId
 	c.ruleId = ruleId
 	c.aclrule = aclrule
-	return c
-}
-
-// SendNotifications sets the optional parameter "sendNotifications":
-// Whether to send notifications about the calendar sharing change. Note
-// that there are no notifications on access removal.  The default is
-// True.
-func (c *AclUpdateCall) SendNotifications(sendNotifications bool) *AclUpdateCall {
-	c.urlParams_.Set("sendNotifications", fmt.Sprint(sendNotifications))
 	return c
 }
 
@@ -2738,11 +2889,6 @@ func (c *AclUpdateCall) Do(opts ...googleapi.CallOption) (*AclRule, error) {
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
-	//     },
-	//     "sendNotifications": {
-	//       "description": "Whether to send notifications about the calendar sharing change. Note that there are no notifications on access removal. Optional. The default is True.",
-	//       "location": "query",
-	//       "type": "boolean"
 	//     }
 	//   },
 	//   "path": "calendars/{calendarId}/acl/{ruleId}",
@@ -6011,12 +6157,8 @@ func (c *EventsListCall) MaxAttendees(maxAttendees int64) *EventsListCall {
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum number
-// of events returned on one result page. The number of events in the
-// resulting page may be less than this value, or none at all, even if
-// there are more events matching the query. Incomplete pages can be
-// detected by a non-empty nextPageToken field in the response. By
-// default the value is 250 events. The page size can never be larger
-// than 2500 events.
+// of events returned on one result page. By default the value is 250
+// events. The page size can never be larger than 2500 events.
 func (c *EventsListCall) MaxResults(maxResults int64) *EventsListCall {
 	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
 	return c
@@ -6132,7 +6274,7 @@ func (c *EventsListCall) SyncToken(syncToken string) *EventsListCall {
 // not to filter by start time. Must be an RFC3339 timestamp with
 // mandatory time zone offset, e.g., 2011-06-03T10:00:00-07:00,
 // 2011-06-03T10:00:00Z. Milliseconds may be provided but will be
-// ignored. If timeMin is set, timeMax must be greater than timeMin.
+// ignored.
 func (c *EventsListCall) TimeMax(timeMax string) *EventsListCall {
 	c.urlParams_.Set("timeMax", timeMax)
 	return c
@@ -6143,7 +6285,7 @@ func (c *EventsListCall) TimeMax(timeMax string) *EventsListCall {
 // to filter by end time. Must be an RFC3339 timestamp with mandatory
 // time zone offset, e.g., 2011-06-03T10:00:00-07:00,
 // 2011-06-03T10:00:00Z. Milliseconds may be provided but will be
-// ignored. If timeMax is set, timeMin must be smaller than timeMax.
+// ignored.
 func (c *EventsListCall) TimeMin(timeMin string) *EventsListCall {
 	c.urlParams_.Set("timeMin", timeMin)
 	return c
@@ -6292,7 +6434,7 @@ func (c *EventsListCall) Do(opts ...googleapi.CallOption) (*Events, error) {
 	//     },
 	//     "maxResults": {
 	//       "default": "250",
-	//       "description": "Maximum number of events returned on one result page. The number of events in the resulting page may be less than this value, or none at all, even if there are more events matching the query. Incomplete pages can be detected by a non-empty nextPageToken field in the response. By default the value is 250 events. The page size can never be larger than 2500 events. Optional.",
+	//       "description": "Maximum number of events returned on one result page. By default the value is 250 events. The page size can never be larger than 2500 events. Optional.",
 	//       "format": "int32",
 	//       "location": "query",
 	//       "minimum": "1",
@@ -6354,13 +6496,13 @@ func (c *EventsListCall) Do(opts ...googleapi.CallOption) (*Events, error) {
 	//       "type": "string"
 	//     },
 	//     "timeMax": {
-	//       "description": "Upper bound (exclusive) for an event's start time to filter by. Optional. The default is not to filter by start time. Must be an RFC3339 timestamp with mandatory time zone offset, e.g., 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds may be provided but will be ignored. If timeMin is set, timeMax must be greater than timeMin.",
+	//       "description": "Upper bound (exclusive) for an event's start time to filter by. Optional. The default is not to filter by start time. Must be an RFC3339 timestamp with mandatory time zone offset, e.g., 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds may be provided but will be ignored.",
 	//       "format": "date-time",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "timeMin": {
-	//       "description": "Lower bound (inclusive) for an event's end time to filter by. Optional. The default is not to filter by end time. Must be an RFC3339 timestamp with mandatory time zone offset, e.g., 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds may be provided but will be ignored. If timeMax is set, timeMin must be smaller than timeMax.",
+	//       "description": "Lower bound (inclusive) for an event's end time to filter by. Optional. The default is not to filter by end time. Must be an RFC3339 timestamp with mandatory time zone offset, e.g., 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds may be provided but will be ignored.",
 	//       "format": "date-time",
 	//       "location": "query",
 	//       "type": "string"
@@ -7162,12 +7304,8 @@ func (c *EventsWatchCall) MaxAttendees(maxAttendees int64) *EventsWatchCall {
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum number
-// of events returned on one result page. The number of events in the
-// resulting page may be less than this value, or none at all, even if
-// there are more events matching the query. Incomplete pages can be
-// detected by a non-empty nextPageToken field in the response. By
-// default the value is 250 events. The page size can never be larger
-// than 2500 events.
+// of events returned on one result page. By default the value is 250
+// events. The page size can never be larger than 2500 events.
 func (c *EventsWatchCall) MaxResults(maxResults int64) *EventsWatchCall {
 	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
 	return c
@@ -7283,7 +7421,7 @@ func (c *EventsWatchCall) SyncToken(syncToken string) *EventsWatchCall {
 // not to filter by start time. Must be an RFC3339 timestamp with
 // mandatory time zone offset, e.g., 2011-06-03T10:00:00-07:00,
 // 2011-06-03T10:00:00Z. Milliseconds may be provided but will be
-// ignored. If timeMin is set, timeMax must be greater than timeMin.
+// ignored.
 func (c *EventsWatchCall) TimeMax(timeMax string) *EventsWatchCall {
 	c.urlParams_.Set("timeMax", timeMax)
 	return c
@@ -7294,7 +7432,7 @@ func (c *EventsWatchCall) TimeMax(timeMax string) *EventsWatchCall {
 // to filter by end time. Must be an RFC3339 timestamp with mandatory
 // time zone offset, e.g., 2011-06-03T10:00:00-07:00,
 // 2011-06-03T10:00:00Z. Milliseconds may be provided but will be
-// ignored. If timeMax is set, timeMin must be smaller than timeMax.
+// ignored.
 func (c *EventsWatchCall) TimeMin(timeMin string) *EventsWatchCall {
 	c.urlParams_.Set("timeMin", timeMin)
 	return c
@@ -7435,7 +7573,7 @@ func (c *EventsWatchCall) Do(opts ...googleapi.CallOption) (*Channel, error) {
 	//     },
 	//     "maxResults": {
 	//       "default": "250",
-	//       "description": "Maximum number of events returned on one result page. The number of events in the resulting page may be less than this value, or none at all, even if there are more events matching the query. Incomplete pages can be detected by a non-empty nextPageToken field in the response. By default the value is 250 events. The page size can never be larger than 2500 events. Optional.",
+	//       "description": "Maximum number of events returned on one result page. By default the value is 250 events. The page size can never be larger than 2500 events. Optional.",
 	//       "format": "int32",
 	//       "location": "query",
 	//       "minimum": "1",
@@ -7497,13 +7635,13 @@ func (c *EventsWatchCall) Do(opts ...googleapi.CallOption) (*Channel, error) {
 	//       "type": "string"
 	//     },
 	//     "timeMax": {
-	//       "description": "Upper bound (exclusive) for an event's start time to filter by. Optional. The default is not to filter by start time. Must be an RFC3339 timestamp with mandatory time zone offset, e.g., 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds may be provided but will be ignored. If timeMin is set, timeMax must be greater than timeMin.",
+	//       "description": "Upper bound (exclusive) for an event's start time to filter by. Optional. The default is not to filter by start time. Must be an RFC3339 timestamp with mandatory time zone offset, e.g., 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds may be provided but will be ignored.",
 	//       "format": "date-time",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "timeMin": {
-	//       "description": "Lower bound (inclusive) for an event's end time to filter by. Optional. The default is not to filter by end time. Must be an RFC3339 timestamp with mandatory time zone offset, e.g., 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds may be provided but will be ignored. If timeMax is set, timeMin must be smaller than timeMax.",
+	//       "description": "Lower bound (inclusive) for an event's end time to filter by. Optional. The default is not to filter by end time. Must be an RFC3339 timestamp with mandatory time zone offset, e.g., 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds may be provided but will be ignored.",
 	//       "format": "date-time",
 	//       "location": "query",
 	//       "type": "string"

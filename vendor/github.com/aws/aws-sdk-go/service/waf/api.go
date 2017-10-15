@@ -15,18 +15,19 @@ const opCreateByteMatchSet = "CreateByteMatchSet"
 
 // CreateByteMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateByteMatchSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateByteMatchSet for usage and error information.
 //
-// See CreateByteMatchSet for more information on using the CreateByteMatchSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateByteMatchSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateByteMatchSetRequest method.
 //    req, resp := client.CreateByteMatchSetRequest(params)
@@ -162,18 +163,19 @@ const opCreateIPSet = "CreateIPSet"
 
 // CreateIPSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateIPSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateIPSet for usage and error information.
 //
-// See CreateIPSet for more information on using the CreateIPSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateIPSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateIPSetRequest method.
 //    req, resp := client.CreateIPSetRequest(params)
@@ -309,18 +311,19 @@ const opCreateRateBasedRule = "CreateRateBasedRule"
 
 // CreateRateBasedRuleRequest generates a "aws/request.Request" representing the
 // client's request for the CreateRateBasedRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateRateBasedRule for usage and error information.
 //
-// See CreateRateBasedRule for more information on using the CreateRateBasedRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateRateBasedRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateRateBasedRuleRequest method.
 //    req, resp := client.CreateRateBasedRuleRequest(params)
@@ -491,18 +494,19 @@ const opCreateRule = "CreateRule"
 
 // CreateRuleRequest generates a "aws/request.Request" representing the
 // client's request for the CreateRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateRule for usage and error information.
 //
-// See CreateRule for more information on using the CreateRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateRuleRequest method.
 //    req, resp := client.CreateRuleRequest(params)
@@ -648,18 +652,19 @@ const opCreateSizeConstraintSet = "CreateSizeConstraintSet"
 
 // CreateSizeConstraintSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSizeConstraintSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateSizeConstraintSet for usage and error information.
 //
-// See CreateSizeConstraintSet for more information on using the CreateSizeConstraintSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateSizeConstraintSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateSizeConstraintSetRequest method.
 //    req, resp := client.CreateSizeConstraintSetRequest(params)
@@ -796,18 +801,19 @@ const opCreateSqlInjectionMatchSet = "CreateSqlInjectionMatchSet"
 
 // CreateSqlInjectionMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSqlInjectionMatchSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateSqlInjectionMatchSet for usage and error information.
 //
-// See CreateSqlInjectionMatchSet for more information on using the CreateSqlInjectionMatchSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateSqlInjectionMatchSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateSqlInjectionMatchSetRequest method.
 //    req, resp := client.CreateSqlInjectionMatchSetRequest(params)
@@ -940,18 +946,19 @@ const opCreateWebACL = "CreateWebACL"
 
 // CreateWebACLRequest generates a "aws/request.Request" representing the
 // client's request for the CreateWebACL operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateWebACL for usage and error information.
 //
-// See CreateWebACL for more information on using the CreateWebACL
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateWebACL method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateWebACLRequest method.
 //    req, resp := client.CreateWebACLRequest(params)
@@ -1096,18 +1103,19 @@ const opCreateXssMatchSet = "CreateXssMatchSet"
 
 // CreateXssMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateXssMatchSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See CreateXssMatchSet for usage and error information.
 //
-// See CreateXssMatchSet for more information on using the CreateXssMatchSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateXssMatchSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the CreateXssMatchSetRequest method.
 //    req, resp := client.CreateXssMatchSetRequest(params)
@@ -1241,18 +1249,19 @@ const opDeleteByteMatchSet = "DeleteByteMatchSet"
 
 // DeleteByteMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteByteMatchSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteByteMatchSet for usage and error information.
 //
-// See DeleteByteMatchSet for more information on using the DeleteByteMatchSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteByteMatchSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteByteMatchSetRequest method.
 //    req, resp := client.DeleteByteMatchSetRequest(params)
@@ -1368,18 +1377,19 @@ const opDeleteIPSet = "DeleteIPSet"
 
 // DeleteIPSetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteIPSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteIPSet for usage and error information.
 //
-// See DeleteIPSet for more information on using the DeleteIPSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteIPSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteIPSetRequest method.
 //    req, resp := client.DeleteIPSetRequest(params)
@@ -1494,18 +1504,19 @@ const opDeleteRateBasedRule = "DeleteRateBasedRule"
 
 // DeleteRateBasedRuleRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRateBasedRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteRateBasedRule for usage and error information.
 //
-// See DeleteRateBasedRule for more information on using the DeleteRateBasedRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteRateBasedRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteRateBasedRuleRequest method.
 //    req, resp := client.DeleteRateBasedRuleRequest(params)
@@ -1622,18 +1633,19 @@ const opDeleteRule = "DeleteRule"
 
 // DeleteRuleRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteRule for usage and error information.
 //
-// See DeleteRule for more information on using the DeleteRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteRuleRequest method.
 //    req, resp := client.DeleteRuleRequest(params)
@@ -1748,18 +1760,19 @@ const opDeleteSizeConstraintSet = "DeleteSizeConstraintSet"
 
 // DeleteSizeConstraintSetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSizeConstraintSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteSizeConstraintSet for usage and error information.
 //
-// See DeleteSizeConstraintSet for more information on using the DeleteSizeConstraintSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteSizeConstraintSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteSizeConstraintSetRequest method.
 //    req, resp := client.DeleteSizeConstraintSetRequest(params)
@@ -1875,18 +1888,19 @@ const opDeleteSqlInjectionMatchSet = "DeleteSqlInjectionMatchSet"
 
 // DeleteSqlInjectionMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSqlInjectionMatchSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteSqlInjectionMatchSet for usage and error information.
 //
-// See DeleteSqlInjectionMatchSet for more information on using the DeleteSqlInjectionMatchSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteSqlInjectionMatchSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteSqlInjectionMatchSetRequest method.
 //    req, resp := client.DeleteSqlInjectionMatchSetRequest(params)
@@ -2003,18 +2017,19 @@ const opDeleteWebACL = "DeleteWebACL"
 
 // DeleteWebACLRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteWebACL operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteWebACL for usage and error information.
 //
-// See DeleteWebACL for more information on using the DeleteWebACL
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteWebACL method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteWebACLRequest method.
 //    req, resp := client.DeleteWebACLRequest(params)
@@ -2126,18 +2141,19 @@ const opDeleteXssMatchSet = "DeleteXssMatchSet"
 
 // DeleteXssMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteXssMatchSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteXssMatchSet for usage and error information.
 //
-// See DeleteXssMatchSet for more information on using the DeleteXssMatchSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteXssMatchSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteXssMatchSetRequest method.
 //    req, resp := client.DeleteXssMatchSetRequest(params)
@@ -2253,18 +2269,19 @@ const opGetByteMatchSet = "GetByteMatchSet"
 
 // GetByteMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the GetByteMatchSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetByteMatchSet for usage and error information.
 //
-// See GetByteMatchSet for more information on using the GetByteMatchSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetByteMatchSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetByteMatchSetRequest method.
 //    req, resp := client.GetByteMatchSetRequest(params)
@@ -2340,18 +2357,19 @@ const opGetChangeToken = "GetChangeToken"
 
 // GetChangeTokenRequest generates a "aws/request.Request" representing the
 // client's request for the GetChangeToken operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetChangeToken for usage and error information.
 //
-// See GetChangeToken for more information on using the GetChangeToken
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetChangeToken method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetChangeTokenRequest method.
 //    req, resp := client.GetChangeTokenRequest(params)
@@ -2434,18 +2452,19 @@ const opGetChangeTokenStatus = "GetChangeTokenStatus"
 
 // GetChangeTokenStatusRequest generates a "aws/request.Request" representing the
 // client's request for the GetChangeTokenStatus operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetChangeTokenStatus for usage and error information.
 //
-// See GetChangeTokenStatus for more information on using the GetChangeTokenStatus
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetChangeTokenStatus method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetChangeTokenStatusRequest method.
 //    req, resp := client.GetChangeTokenStatusRequest(params)
@@ -2527,18 +2546,19 @@ const opGetIPSet = "GetIPSet"
 
 // GetIPSetRequest generates a "aws/request.Request" representing the
 // client's request for the GetIPSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetIPSet for usage and error information.
 //
-// See GetIPSet for more information on using the GetIPSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetIPSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetIPSetRequest method.
 //    req, resp := client.GetIPSetRequest(params)
@@ -2614,18 +2634,19 @@ const opGetRateBasedRule = "GetRateBasedRule"
 
 // GetRateBasedRuleRequest generates a "aws/request.Request" representing the
 // client's request for the GetRateBasedRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetRateBasedRule for usage and error information.
 //
-// See GetRateBasedRule for more information on using the GetRateBasedRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetRateBasedRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetRateBasedRuleRequest method.
 //    req, resp := client.GetRateBasedRuleRequest(params)
@@ -2702,18 +2723,19 @@ const opGetRateBasedRuleManagedKeys = "GetRateBasedRuleManagedKeys"
 
 // GetRateBasedRuleManagedKeysRequest generates a "aws/request.Request" representing the
 // client's request for the GetRateBasedRuleManagedKeys operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetRateBasedRuleManagedKeys for usage and error information.
 //
-// See GetRateBasedRuleManagedKeys for more information on using the GetRateBasedRuleManagedKeys
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetRateBasedRuleManagedKeys method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetRateBasedRuleManagedKeysRequest method.
 //    req, resp := client.GetRateBasedRuleManagedKeysRequest(params)
@@ -2821,18 +2843,19 @@ const opGetRule = "GetRule"
 
 // GetRuleRequest generates a "aws/request.Request" representing the
 // client's request for the GetRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetRule for usage and error information.
 //
-// See GetRule for more information on using the GetRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetRuleRequest method.
 //    req, resp := client.GetRuleRequest(params)
@@ -2909,18 +2932,19 @@ const opGetSampledRequests = "GetSampledRequests"
 
 // GetSampledRequestsRequest generates a "aws/request.Request" representing the
 // client's request for the GetSampledRequests operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetSampledRequests for usage and error information.
 //
-// See GetSampledRequests for more information on using the GetSampledRequests
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetSampledRequests method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetSampledRequestsRequest method.
 //    req, resp := client.GetSampledRequestsRequest(params)
@@ -3002,18 +3026,19 @@ const opGetSizeConstraintSet = "GetSizeConstraintSet"
 
 // GetSizeConstraintSetRequest generates a "aws/request.Request" representing the
 // client's request for the GetSizeConstraintSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetSizeConstraintSet for usage and error information.
 //
-// See GetSizeConstraintSet for more information on using the GetSizeConstraintSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetSizeConstraintSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetSizeConstraintSetRequest method.
 //    req, resp := client.GetSizeConstraintSetRequest(params)
@@ -3089,18 +3114,19 @@ const opGetSqlInjectionMatchSet = "GetSqlInjectionMatchSet"
 
 // GetSqlInjectionMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the GetSqlInjectionMatchSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetSqlInjectionMatchSet for usage and error information.
 //
-// See GetSqlInjectionMatchSet for more information on using the GetSqlInjectionMatchSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetSqlInjectionMatchSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetSqlInjectionMatchSetRequest method.
 //    req, resp := client.GetSqlInjectionMatchSetRequest(params)
@@ -3176,18 +3202,19 @@ const opGetWebACL = "GetWebACL"
 
 // GetWebACLRequest generates a "aws/request.Request" representing the
 // client's request for the GetWebACL operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetWebACL for usage and error information.
 //
-// See GetWebACL for more information on using the GetWebACL
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetWebACL method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetWebACLRequest method.
 //    req, resp := client.GetWebACLRequest(params)
@@ -3263,18 +3290,19 @@ const opGetXssMatchSet = "GetXssMatchSet"
 
 // GetXssMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the GetXssMatchSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetXssMatchSet for usage and error information.
 //
-// See GetXssMatchSet for more information on using the GetXssMatchSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetXssMatchSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetXssMatchSetRequest method.
 //    req, resp := client.GetXssMatchSetRequest(params)
@@ -3350,18 +3378,19 @@ const opListByteMatchSets = "ListByteMatchSets"
 
 // ListByteMatchSetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListByteMatchSets operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListByteMatchSets for usage and error information.
 //
-// See ListByteMatchSets for more information on using the ListByteMatchSets
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListByteMatchSets method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListByteMatchSetsRequest method.
 //    req, resp := client.ListByteMatchSetsRequest(params)
@@ -3434,18 +3463,19 @@ const opListIPSets = "ListIPSets"
 
 // ListIPSetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListIPSets operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListIPSets for usage and error information.
 //
-// See ListIPSets for more information on using the ListIPSets
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListIPSets method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListIPSetsRequest method.
 //    req, resp := client.ListIPSetsRequest(params)
@@ -3518,18 +3548,19 @@ const opListRateBasedRules = "ListRateBasedRules"
 
 // ListRateBasedRulesRequest generates a "aws/request.Request" representing the
 // client's request for the ListRateBasedRules operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListRateBasedRules for usage and error information.
 //
-// See ListRateBasedRules for more information on using the ListRateBasedRules
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListRateBasedRules method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListRateBasedRulesRequest method.
 //    req, resp := client.ListRateBasedRulesRequest(params)
@@ -3602,18 +3633,19 @@ const opListRules = "ListRules"
 
 // ListRulesRequest generates a "aws/request.Request" representing the
 // client's request for the ListRules operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListRules for usage and error information.
 //
-// See ListRules for more information on using the ListRules
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListRules method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListRulesRequest method.
 //    req, resp := client.ListRulesRequest(params)
@@ -3686,18 +3718,19 @@ const opListSizeConstraintSets = "ListSizeConstraintSets"
 
 // ListSizeConstraintSetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSizeConstraintSets operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListSizeConstraintSets for usage and error information.
 //
-// See ListSizeConstraintSets for more information on using the ListSizeConstraintSets
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListSizeConstraintSets method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListSizeConstraintSetsRequest method.
 //    req, resp := client.ListSizeConstraintSetsRequest(params)
@@ -3770,18 +3803,19 @@ const opListSqlInjectionMatchSets = "ListSqlInjectionMatchSets"
 
 // ListSqlInjectionMatchSetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSqlInjectionMatchSets operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListSqlInjectionMatchSets for usage and error information.
 //
-// See ListSqlInjectionMatchSets for more information on using the ListSqlInjectionMatchSets
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListSqlInjectionMatchSets method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListSqlInjectionMatchSetsRequest method.
 //    req, resp := client.ListSqlInjectionMatchSetsRequest(params)
@@ -3854,18 +3888,19 @@ const opListWebACLs = "ListWebACLs"
 
 // ListWebACLsRequest generates a "aws/request.Request" representing the
 // client's request for the ListWebACLs operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListWebACLs for usage and error information.
 //
-// See ListWebACLs for more information on using the ListWebACLs
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListWebACLs method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListWebACLsRequest method.
 //    req, resp := client.ListWebACLsRequest(params)
@@ -3938,18 +3973,19 @@ const opListXssMatchSets = "ListXssMatchSets"
 
 // ListXssMatchSetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListXssMatchSets operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListXssMatchSets for usage and error information.
 //
-// See ListXssMatchSets for more information on using the ListXssMatchSets
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListXssMatchSets method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListXssMatchSetsRequest method.
 //    req, resp := client.ListXssMatchSetsRequest(params)
@@ -4022,18 +4058,19 @@ const opUpdateByteMatchSet = "UpdateByteMatchSet"
 
 // UpdateByteMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateByteMatchSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateByteMatchSet for usage and error information.
 //
-// See UpdateByteMatchSet for more information on using the UpdateByteMatchSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateByteMatchSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateByteMatchSetRequest method.
 //    req, resp := client.UpdateByteMatchSetRequest(params)
@@ -4221,18 +4258,19 @@ const opUpdateIPSet = "UpdateIPSet"
 
 // UpdateIPSetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateIPSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateIPSet for usage and error information.
 //
-// See UpdateIPSet for more information on using the UpdateIPSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateIPSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateIPSetRequest method.
 //    req, resp := client.UpdateIPSetRequest(params)
@@ -4440,18 +4478,19 @@ const opUpdateRateBasedRule = "UpdateRateBasedRule"
 
 // UpdateRateBasedRuleRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRateBasedRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateRateBasedRule for usage and error information.
 //
-// See UpdateRateBasedRule for more information on using the UpdateRateBasedRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateRateBasedRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateRateBasedRuleRequest method.
 //    req, resp := client.UpdateRateBasedRuleRequest(params)
@@ -4648,18 +4687,19 @@ const opUpdateRule = "UpdateRule"
 
 // UpdateRuleRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRule operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateRule for usage and error information.
 //
-// See UpdateRule for more information on using the UpdateRule
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateRule method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateRuleRequest method.
 //    req, resp := client.UpdateRuleRequest(params)
@@ -4851,18 +4891,19 @@ const opUpdateSizeConstraintSet = "UpdateSizeConstraintSet"
 
 // UpdateSizeConstraintSetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSizeConstraintSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateSizeConstraintSet for usage and error information.
 //
-// See UpdateSizeConstraintSet for more information on using the UpdateSizeConstraintSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateSizeConstraintSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateSizeConstraintSetRequest method.
 //    req, resp := client.UpdateSizeConstraintSetRequest(params)
@@ -5060,18 +5101,19 @@ const opUpdateSqlInjectionMatchSet = "UpdateSqlInjectionMatchSet"
 
 // UpdateSqlInjectionMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSqlInjectionMatchSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateSqlInjectionMatchSet for usage and error information.
 //
-// See UpdateSqlInjectionMatchSet for more information on using the UpdateSqlInjectionMatchSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateSqlInjectionMatchSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateSqlInjectionMatchSetRequest method.
 //    req, resp := client.UpdateSqlInjectionMatchSetRequest(params)
@@ -5254,18 +5296,19 @@ const opUpdateWebACL = "UpdateWebACL"
 
 // UpdateWebACLRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateWebACL operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateWebACL for usage and error information.
 //
-// See UpdateWebACL for more information on using the UpdateWebACL
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateWebACL method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateWebACLRequest method.
 //    req, resp := client.UpdateWebACLRequest(params)
@@ -5472,18 +5515,19 @@ const opUpdateXssMatchSet = "UpdateXssMatchSet"
 
 // UpdateXssMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateXssMatchSet operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See UpdateXssMatchSet for usage and error information.
 //
-// See UpdateXssMatchSet for more information on using the UpdateXssMatchSet
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateXssMatchSet method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the UpdateXssMatchSetRequest method.
 //    req, resp := client.UpdateXssMatchSetRequest(params)

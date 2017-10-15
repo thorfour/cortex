@@ -3,7 +3,7 @@ package backoff
 import (
 	"time"
 
-	log "github.com/sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 )
 
 type backoff struct {

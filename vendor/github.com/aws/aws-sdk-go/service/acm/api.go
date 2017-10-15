@@ -17,18 +17,19 @@ const opAddTagsToCertificate = "AddTagsToCertificate"
 
 // AddTagsToCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the AddTagsToCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See AddTagsToCertificate for usage and error information.
 //
-// See AddTagsToCertificate for more information on using the AddTagsToCertificate
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the AddTagsToCertificate method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the AddTagsToCertificateRequest method.
 //    req, resp := client.AddTagsToCertificateRequest(params)
@@ -125,18 +126,19 @@ const opDeleteCertificate = "DeleteCertificate"
 
 // DeleteCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DeleteCertificate for usage and error information.
 //
-// See DeleteCertificate for more information on using the DeleteCertificate
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteCertificate method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DeleteCertificateRequest method.
 //    req, resp := client.DeleteCertificateRequest(params)
@@ -222,18 +224,19 @@ const opDescribeCertificate = "DescribeCertificate"
 
 // DescribeCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See DescribeCertificate for usage and error information.
 //
-// See DescribeCertificate for more information on using the DescribeCertificate
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeCertificate method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the DescribeCertificateRequest method.
 //    req, resp := client.DescribeCertificateRequest(params)
@@ -305,18 +308,19 @@ const opGetCertificate = "GetCertificate"
 
 // GetCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the GetCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See GetCertificate for usage and error information.
 //
-// See GetCertificate for more information on using the GetCertificate
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetCertificate method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the GetCertificateRequest method.
 //    req, resp := client.GetCertificateRequest(params)
@@ -400,18 +404,19 @@ const opImportCertificate = "ImportCertificate"
 
 // ImportCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the ImportCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ImportCertificate for usage and error information.
 //
-// See ImportCertificate for more information on using the ImportCertificate
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ImportCertificate method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ImportCertificateRequest method.
 //    req, resp := client.ImportCertificateRequest(params)
@@ -512,18 +517,19 @@ const opListCertificates = "ListCertificates"
 
 // ListCertificatesRequest generates a "aws/request.Request" representing the
 // client's request for the ListCertificates operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListCertificates for usage and error information.
 //
-// See ListCertificates for more information on using the ListCertificates
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListCertificates method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListCertificatesRequest method.
 //    req, resp := client.ListCertificatesRequest(params)
@@ -644,18 +650,19 @@ const opListTagsForCertificate = "ListTagsForCertificate"
 
 // ListTagsForCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the ListTagsForCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ListTagsForCertificate for usage and error information.
 //
-// See ListTagsForCertificate for more information on using the ListTagsForCertificate
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListTagsForCertificate method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ListTagsForCertificateRequest method.
 //    req, resp := client.ListTagsForCertificateRequest(params)
@@ -730,18 +737,19 @@ const opRemoveTagsFromCertificate = "RemoveTagsFromCertificate"
 
 // RemoveTagsFromCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveTagsFromCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See RemoveTagsFromCertificate for usage and error information.
 //
-// See RemoveTagsFromCertificate for more information on using the RemoveTagsFromCertificate
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RemoveTagsFromCertificate method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the RemoveTagsFromCertificateRequest method.
 //    req, resp := client.RemoveTagsFromCertificateRequest(params)
@@ -826,18 +834,19 @@ const opRequestCertificate = "RequestCertificate"
 
 // RequestCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the RequestCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See RequestCertificate for usage and error information.
 //
-// See RequestCertificate for more information on using the RequestCertificate
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RequestCertificate method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the RequestCertificateRequest method.
 //    req, resp := client.RequestCertificateRequest(params)
@@ -918,18 +927,19 @@ const opResendValidationEmail = "ResendValidationEmail"
 
 // ResendValidationEmailRequest generates a "aws/request.Request" representing the
 // client's request for the ResendValidationEmail operation. The "output" return
-// value will be populated with the request's response once the request complets
-// successfuly.
+// value can be used to capture response data after the request's "Send" method
+// is called.
 //
-// Use "Send" method on the returned Request to send the API call to the service.
-// the "output" return value is not valid until after Send returns without error.
+// See ResendValidationEmail for usage and error information.
 //
-// See ResendValidationEmail for more information on using the ResendValidationEmail
-// API call, and error handling.
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ResendValidationEmail method directly
+// instead.
 //
-// This method is useful when you want to inject custom logic or configuration
-// into the SDK's request lifecycle. Such as custom headers, or retry logic.
-//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
 //
 //    // Example sending a request using the ResendValidationEmailRequest method.
 //    req, resp := client.ResendValidationEmailRequest(params)

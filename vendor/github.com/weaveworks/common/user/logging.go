@@ -3,7 +3,7 @@ package user
 import (
 	"golang.org/x/net/context"
 
-	log "github.com/sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 )
 
 // LogFields returns user and org information from the context as log fields.

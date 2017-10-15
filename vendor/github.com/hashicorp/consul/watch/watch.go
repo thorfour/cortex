@@ -1,7 +1,6 @@
 package watch
 
 import (
-	"context"
 	"fmt"
 	"io"
 	"sync"
@@ -9,17 +8,17 @@ import (
 	consulapi "github.com/hashicorp/consul/api"
 )
 
-// Plan is the parsed version of a watch specification. A watch provides
+// WatchPlan is the parsed version of a watch specification. A watch provides
 // the details of a query, which generates a view into the Consul data store.
 // This view is watched for changes and a handler is invoked to take any
 // appropriate actions.
-type Plan struct {
+type WatchPlan struct {
 	Datacenter string
 	Token      string
 	Type       string
 	Exempt     map[string]interface{}
 
-	Watcher   WatcherFunc
+	Func      WatchFunc
 	Handler   HandlerFunc
 	LogOutput io.Writer
 
@@ -28,27 +27,26 @@ type Plan struct {
 	lastIndex  uint64
 	lastResult interface{}
 
-	stop       bool
-	stopCh     chan struct{}
-	stopLock   sync.Mutex
-	cancelFunc context.CancelFunc
+	stop     bool
+	stopCh   chan struct{}
+	stopLock sync.Mutex
 }
 
-// WatcherFunc is used to watch for a diff
-type WatcherFunc func(*Plan) (uint64, interface{}, error)
+// WatchFunc is used to watch for a diff
+type WatchFunc func(*WatchPlan) (uint64, interface{}, error)
 
 // HandlerFunc is used to handle new data
 type HandlerFunc func(uint64, interface{})
 
 // Parse takes a watch query and compiles it into a WatchPlan or an error
-func Parse(params map[string]interface{}) (*Plan, error) {
+func Parse(params map[string]interface{}) (*WatchPlan, error) {
 	return ParseExempt(params, nil)
 }
 
 // ParseExempt takes a watch query and compiles it into a WatchPlan or an error
 // Any exempt parameters are stored in the Exempt map
-func ParseExempt(params map[string]interface{}, exempt []string) (*Plan, error) {
-	plan := &Plan{
+func ParseExempt(params map[string]interface{}, exempt []string) (*WatchPlan, error) {
+	plan := &WatchPlan{
 		stopCh: make(chan struct{}),
 	}
 
@@ -79,7 +77,7 @@ func ParseExempt(params map[string]interface{}, exempt []string) (*Plan, error) 
 	if err != nil {
 		return nil, err
 	}
-	plan.Watcher = fn
+	plan.Func = fn
 
 	// Remove the exempt parameters
 	if len(exempt) > 0 {

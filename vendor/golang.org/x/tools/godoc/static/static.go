@@ -445,7 +445,7 @@ var Files = map[string]string{
 				<div class="buttons">
 					<a class="run" title="Run this code [shift-enter]">Run</a>
 					<a class="fmt" title="Format this code">Format</a>
-					{{if not $.GoogleCN}}
+					{{if $.Share}}
 					<a class="share" title="Share this code">Share</a>
 					{{end}}
 				</div>
@@ -496,13 +496,11 @@ var Files = map[string]string{
 <a href="/pkg/">Packages</a>
 <a href="/project/">The Project</a>
 <a href="/help/">Help</a>
-{{if not .GoogleCN}}
 <a href="/blog/">Blog</a>
-{{end}}
 {{if .Playground}}
 <a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
 {{end}}
-<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
 </div>
 </form>
 
@@ -521,7 +519,7 @@ func main() {
 	<div class="buttons">
 		<a class="run" title="Run this code [shift-enter]">Run</a>
 		<a class="fmt" title="Format this code">Format</a>
-		{{if not $.GoogleCN}}
+		{{if $.Share}}
 		<a class="share" title="Share this code">Share</a>
 		{{end}}
 	</div>
@@ -531,21 +529,11 @@ func main() {
 <div id="page"{{if .Title}} class="wide"{{end}}>
 <div class="container">
 
-{{if or .Title .SrcPath}}
-  <h1>
-    {{html .Title}}
-    {{html .SrcPath | srcBreadcrumb}}
-  </h1>
+{{with .Title}}
+  <h1>{{html .}}</h1>
 {{end}}
-
 {{with .Subtitle}}
   <h2>{{html .}}</h2>
-{{end}}
-
-{{with .SrcPath}}
-  <h2>
-    Documentation: {{html . | srcToPkgLink}}
-  </h2>
 {{end}}
 
 {{/* The Table of Contents is automatically inserted in this <div>.
@@ -561,7 +549,7 @@ Except as <a href="https://developers.google.com/site-policies#restrictions">not
 the content of this page is licensed under the
 Creative Commons Attribution 3.0 License,
 and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
-<a href="/doc/tos.html">Terms of Service</a> |
+<a href="/doc/tos.html">Terms of Service</a> | 
 <a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
 </div>
 
@@ -591,6 +579,7 @@ and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
 /* A little code to ease navigation of these documents.
  *
  * On window load we:
+ *  + Bind search box hint placeholder show/hide events (bindSearchEvents)
  *  + Generate a table of contents (generateTOC)
  *  + Bind foldable sections (bindToggles)
  *  + Bind links to foldable sections (bindToggleLinks)
@@ -611,6 +600,34 @@ $(function() {
     return false;
   });
 });
+
+function bindSearchEvents() {
+
+  var search = $('#search');
+  if (search.length === 0) {
+    return; // no search box
+  }
+
+  function clearInactive() {
+    if (search.is('.inactive')) {
+      search.val('');
+      search.removeClass('inactive');
+    }
+  }
+
+  function restoreInactive() {
+    if (search.val() !== '') {
+      return;
+    }
+    search.val(search.attr('placeholder'));
+    search.addClass('inactive');
+  }
+
+  search.on('focus', clearInactive);
+  search.on('blur', restoreInactive);
+
+  restoreInactive();
+}
 
 /* Generates a table of contents: looks for h2 and h3 elements and generates
  * links. "Decorates" the element with id=="nav" with this table of contents.
@@ -766,7 +783,7 @@ function setupInlinePlayground() {
 			code.on('keyup', resize);
 			code.keyup(); // resize now.
 		};
-
+		
 		// If example already visible, set up playground now.
 		if ($(el).is(':visible')) {
 			setup();
@@ -900,7 +917,7 @@ function addPermalinks() {
       // Already attached.
       return;
     }
-    parent.append(" ").append($("<a class='permalink' title='permalink' aria-label='permalink'>&#xb6;</a>").attr("href", "#" + id));
+    parent.append(" ").append($("<a class='permalink'>&#xb6;</a>").attr("href", "#" + id));
   }
 
   $("#page .container").find("h2[id], h3[id]").each(function() {
@@ -916,6 +933,7 @@ function addPermalinks() {
 }
 
 $(document).ready(function() {
+  bindSearchEvents();
   generateTOC();
   addPermalinks();
   bindToggles(".toggle");
@@ -1712,7 +1730,7 @@ function cgAddChild(tree, ul, cgn) {
 
 		{{if $.Examples}}
 		<div id="pkg-examples">
-			<h3>Examples</h3>
+			<h4>Examples</h4>
 			<dl>
 			{{range $.Examples}}
 			<dd><a class="exampleLink" href="#example_{{.Name}}">{{example_name .Name}}</a></dd>
@@ -1722,7 +1740,7 @@ function cgAddChild(tree, ul, cgn) {
 		{{end}}
 
 		{{with .Filenames}}
-			<h3>Package files</h3>
+			<h4>Package files</h4>
 			<p>
 			<span style="font-size:90%">
 			{{range .}}
@@ -1789,7 +1807,7 @@ function cgAddChild(tree, ul, cgn) {
 			{{/* Name is a string - no need for FSet */}}
 			{{$name_html := html .Name}}
 			<h2 id="{{$name_html}}">func <a href="{{posLink_url $ .Decl}}">{{$name_html}}</a>
-				<a class="permalink" title="permalink" aria-label="permalink" href="#{{$name_html}}">&#xb6;</a>
+				<a class="permalink" href="#{{$name_html}}">&#xb6;</a>
 			</h2>
 			<pre>{{node_html $ .Decl true}}</pre>
 			{{comment_html .Doc}}
@@ -1801,7 +1819,7 @@ function cgAddChild(tree, ul, cgn) {
 			{{$tname := .Name}}
 			{{$tname_html := html .Name}}
 			<h2 id="{{$tname_html}}">type <a href="{{posLink_url $ .Decl}}">{{$tname_html}}</a>
-				<a class="permalink" title="permalink" aria-label="permalink" href="#{{$tname_html}}">&#xb6;</a>
+				<a class="permalink" href="#{{$tname_html}}">&#xb6;</a>
 			</h2>
 			{{comment_html .Doc}}
 			<pre>{{node_html $ .Decl true}}</pre>
@@ -1823,7 +1841,7 @@ function cgAddChild(tree, ul, cgn) {
 			{{range .Funcs}}
 				{{$name_html := html .Name}}
 				<h3 id="{{$name_html}}">func <a href="{{posLink_url $ .Decl}}">{{$name_html}}</a>
-					<a class="permalink" title="permalink" aria-label="permalink" href="#{{$name_html}}">&#xb6;</a>
+					<a class="permalink" href="#{{$name_html}}">&#xb6;</a>
 				</h3>
 				<pre>{{node_html $ .Decl true}}</pre>
 				{{comment_html .Doc}}
@@ -1834,7 +1852,7 @@ function cgAddChild(tree, ul, cgn) {
 			{{range .Methods}}
 				{{$name_html := html .Name}}
 				<h3 id="{{$tname_html}}.{{$name_html}}">func ({{html .Recv}}) <a href="{{posLink_url $ .Decl}}">{{$name_html}}</a>
-					<a class="permalink" title="permalink" aria-label="permalink" href="#{{$tname_html}}.{{$name_html}}">&#xb6;</a>
+					<a class="permalink" href="#{{$tname_html}}.{{$name_html}}">&#xb6;</a>
 				</h3>
 				<pre>{{node_html $ .Decl true}}</pre>
 				{{comment_html .Doc}}
@@ -1878,7 +1896,7 @@ function cgAddChild(tree, ul, cgn) {
 			</dl>
 		</div>
 		<h2 id="stdlib">Standard library</h2>
-		<img alt="" class="gopher" src="/doc/gopher/pkg.png"/>
+		<img class="gopher" src="/doc/gopher/pkg.png"/>
 	{{end}}
 
 
@@ -2925,16 +2943,24 @@ body {
 a,
 .exampleHeading .text {
 	color: #375EAB;
-}
-a,
-.exampleHeading .text:hover {
-	text-decoration: underline;
-	-webkit-text-decoration: skip;
-	text-decoration-skip: ink;
+	text-decoration: none;
 }
 a:hover,
-.exampleHeading .text {
+.exampleHeading .text:hover {
+	text-decoration: underline;
+}
+.article a {
+	text-decoration: underline;
+}
+.article .title a {
 	text-decoration: none;
+}
+
+.permalink {
+	display: none;
+}
+:hover > .permalink {
+	display: inline;
 }
 
 p, li {
@@ -2969,9 +2995,6 @@ h4,
 h1 {
 	font-size: 28px;
 	line-height: 1;
-}
-h1 .text-muted {
-	color:#777;
 }
 h2 {
 	font-size: 20px;
@@ -3013,9 +3036,6 @@ div#nav table td {
 }
 
 
-#pkg-index h3 {
-	font-size: 16px;
-}
 .pkg-dir {
 	padding: 0 10px;
 }
@@ -3082,7 +3102,7 @@ div#footer {
 }
 
 div#menu > a,
-input#search,
+div#menu > input,
 div#learn .buttons a,
 div.play .buttons a,
 div#blog .read a,
@@ -3098,7 +3118,7 @@ div#blog .read a,
 }
 div#playground .buttons a,
 div#menu > a,
-input#search,
+div#menu > input,
 #menu-button {
 	border: 1px solid #375EAB;
 }
@@ -3141,50 +3161,16 @@ div#menu > a,
 	margin: 10px 2px;
 	padding: 10px;
 }
-::-webkit-input-placeholder {
-	color: #7f7f7f;
-	opacity: 1;
-}
-::placeholder {
-	color: #7f7f7f;
-	opacity: 1;
-}
-#menu .search-box {
-	display: inline-flex;
+div#menu > input {
+	position: relative;
+	top: 1px;
 	width: 140px;
-}
-input#search {
 	background: white;
 	color: #222;
 	box-sizing: border-box;
-	-webkit-appearance: none;
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
-	border-right: 0;
-	margin-right: 0;
-	flex-grow: 1;
-	max-width: 100%;
-	min-width: 90px;
 }
-input#search:-moz-ui-invalid {
-	box-shadow: unset;
-}
-input#search + button {
-	display: inline;
-	font-size: 1em;
-	background-color: #375EAB;
-	color: white;
-	border: 1px solid #375EAB;
-	border-top-right-radius: 5px;
-	border-bottom-right-radius: 5px;
-	margin-left: 0;
-	cursor: pointer;
-}
-input#search + button span {
-	display: flex;
-}
-input#search + button svg {
-	fill: white
+div#menu > input.inactive {
+	color: #999;
 }
 
 #menu-button {
@@ -3611,7 +3597,7 @@ a.error {
 		font-size: 14px;
 	}
 
-	input#search {
+	div#menu > input {
 		font-size: 14px;
 	}
 }
@@ -3659,14 +3645,14 @@ a.error {
 		float: left;
 	}
 
-	div#menu > a {
+	div#menu > a,
+	div#menu > input {
 		display: block;
 		margin-left: 0;
 		margin-right: 0;
 	}
 
-	#menu .search-box {
-		display: flex;
+	div#menu > input {
 		width: 100%;
 	}
 

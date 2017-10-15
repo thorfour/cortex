@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 )
 
 // URL returns a function that sanitizes a URL string. It lets underspecified

@@ -9,8 +9,8 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-func TestHTTPToContext(t *testing.T) {
-	reqFunc := HTTPToContext()
+func TestToHTTPContext(t *testing.T) {
+	reqFunc := ToHTTPContext()
 
 	// When the header doesn't exist
 	ctx := reqFunc(context.Background(), &http.Request{})
@@ -38,8 +38,8 @@ func TestHTTPToContext(t *testing.T) {
 	}
 }
 
-func TestContextToHTTP(t *testing.T) {
-	reqFunc := ContextToHTTP()
+func TestFromHTTPContext(t *testing.T) {
+	reqFunc := FromHTTPContext()
 
 	// No JWT Token is passed in the context
 	ctx := context.Background()
@@ -64,9 +64,9 @@ func TestContextToHTTP(t *testing.T) {
 	}
 }
 
-func TestGRPCToContext(t *testing.T) {
+func TestToGRPCContext(t *testing.T) {
 	md := metadata.MD{}
-	reqFunc := GRPCToContext()
+	reqFunc := ToGRPCContext()
 
 	// No Authorization header is passed
 	ctx := reqFunc(context.Background(), md)
@@ -96,8 +96,8 @@ func TestGRPCToContext(t *testing.T) {
 	}
 }
 
-func TestContextToGRPC(t *testing.T) {
-	reqFunc := ContextToGRPC()
+func TestFromGRPCContext(t *testing.T) {
+	reqFunc := FromGRPCContext()
 
 	// No JWT Token is passed in the context
 	ctx := context.Background()

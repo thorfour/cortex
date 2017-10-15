@@ -4,15 +4,16 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/hashicorp/consul/agent"
 	consulapi "github.com/hashicorp/consul/api"
+	"github.com/hashicorp/consul/command/agent"
+	"github.com/hashicorp/consul/command/base"
 	"github.com/mitchellh/cli"
 )
 
 // KeyringCommand is a Command implementation that handles querying, installing,
 // and removing gossip encryption keys from a keyring.
 type KeyringCommand struct {
-	BaseCommand
+	base.Command
 }
 
 func (c *KeyringCommand) Run(args []string) int {
@@ -20,7 +21,7 @@ func (c *KeyringCommand) Run(args []string) int {
 	var listKeys bool
 	var relay int
 
-	f := c.BaseCommand.NewFlagSet(c)
+	f := c.Command.NewFlagSet(c)
 
 	f.StringVar(&installKey, "install", "",
 		"Install a new encryption key. This will broadcast the new key to "+
@@ -39,22 +40,22 @@ func (c *KeyringCommand) Run(args []string) int {
 			"to the operation through this many randomly-chosen other nodes in the "+
 			"cluster. The maximum allowed value is 5.")
 
-	if err := c.BaseCommand.Parse(args); err != nil {
+	if err := c.Command.Parse(args); err != nil {
 		return 1
 	}
 
-	c.UI = &cli.PrefixedUi{
+	c.Ui = &cli.PrefixedUi{
 		OutputPrefix: "",
 		InfoPrefix:   "==> ",
 		ErrorPrefix:  "",
-		Ui:           c.UI,
+		Ui:           c.Ui,
 	}
 
 	// Only accept a single argument
 	found := listKeys
 	for _, arg := range []string{installKey, useKey, removeKey} {
 		if found && len(arg) > 0 {
-			c.UI.Error("Only a single action is allowed")
+			c.Ui.Error("Only a single action is allowed")
 			return 1
 		}
 		found = found || len(arg) > 0
@@ -62,29 +63,29 @@ func (c *KeyringCommand) Run(args []string) int {
 
 	// Fail fast if no actionable args were passed
 	if !found {
-		c.UI.Error(c.Help())
+		c.Ui.Error(c.Help())
 		return 1
 	}
 
 	// Validate the relay factor
 	relayFactor, err := agent.ParseRelayFactor(relay)
 	if err != nil {
-		c.UI.Error(fmt.Sprintf("Error parsing relay factor: %s", err))
+		c.Ui.Error(fmt.Sprintf("Error parsing relay factor: %s", err))
 		return 1
 	}
 
 	// All other operations will require a client connection
-	client, err := c.BaseCommand.HTTPClient()
+	client, err := c.Command.HTTPClient()
 	if err != nil {
-		c.UI.Error(fmt.Sprintf("Error connecting to Consul agent: %s", err))
+		c.Ui.Error(fmt.Sprintf("Error connecting to Consul agent: %s", err))
 		return 1
 	}
 
 	if listKeys {
-		c.UI.Info("Gathering installed encryption keys...")
+		c.Ui.Info("Gathering installed encryption keys...")
 		responses, err := client.Operator().KeyringList(&consulapi.QueryOptions{RelayFactor: relayFactor})
 		if err != nil {
-			c.UI.Error(fmt.Sprintf("error: %s", err))
+			c.Ui.Error(fmt.Sprintf("error: %s", err))
 			return 1
 		}
 		c.handleList(responses)
@@ -93,30 +94,30 @@ func (c *KeyringCommand) Run(args []string) int {
 
 	opts := &consulapi.WriteOptions{RelayFactor: relayFactor}
 	if installKey != "" {
-		c.UI.Info("Installing new gossip encryption key...")
+		c.Ui.Info("Installing new gossip encryption key...")
 		err := client.Operator().KeyringInstall(installKey, opts)
 		if err != nil {
-			c.UI.Error(fmt.Sprintf("error: %s", err))
+			c.Ui.Error(fmt.Sprintf("error: %s", err))
 			return 1
 		}
 		return 0
 	}
 
 	if useKey != "" {
-		c.UI.Info("Changing primary gossip encryption key...")
+		c.Ui.Info("Changing primary gossip encryption key...")
 		err := client.Operator().KeyringUse(useKey, opts)
 		if err != nil {
-			c.UI.Error(fmt.Sprintf("error: %s", err))
+			c.Ui.Error(fmt.Sprintf("error: %s", err))
 			return 1
 		}
 		return 0
 	}
 
 	if removeKey != "" {
-		c.UI.Info("Removing gossip encryption key...")
+		c.Ui.Info("Removing gossip encryption key...")
 		err := client.Operator().KeyringRemove(removeKey, opts)
 		if err != nil {
-			c.UI.Error(fmt.Sprintf("error: %s", err))
+			c.Ui.Error(fmt.Sprintf("error: %s", err))
 			return 1
 		}
 		return 0
@@ -129,17 +130,14 @@ func (c *KeyringCommand) Run(args []string) int {
 func (c *KeyringCommand) handleList(responses []*consulapi.KeyringResponse) {
 	for _, response := range responses {
 		pool := response.Datacenter + " (LAN)"
-		if response.Segment != "" {
-			pool += fmt.Sprintf(" [%s]", response.Segment)
-		}
 		if response.WAN {
 			pool = "WAN"
 		}
 
-		c.UI.Output("")
-		c.UI.Output(pool + ":")
+		c.Ui.Output("")
+		c.Ui.Output(pool + ":")
 		for key, num := range response.Keys {
-			c.UI.Output(fmt.Sprintf("  %s [%d/%d]", key, num, response.NumNodes))
+			c.Ui.Output(fmt.Sprintf("  %s [%d/%d]", key, num, response.NumNodes))
 		}
 	}
 }
@@ -161,7 +159,7 @@ Usage: consul keyring [options]
   are no errors. If any node fails to reply or reports failure, the exit code
   will be 1.
 
-` + c.BaseCommand.Help()
+` + c.Command.Help()
 
 	return strings.TrimSpace(helpText)
 }
