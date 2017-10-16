@@ -1,6 +1,7 @@
 package alertmanager
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"html/template"
@@ -19,7 +20,6 @@ import (
 	"github.com/weaveworks/common/instrument"
 	"github.com/weaveworks/common/user"
 	"github.com/weaveworks/mesh"
-	"golang.org/x/net/context"
 
 	"github.com/weaveworks/cortex/pkg/configs"
 	configs_client "github.com/weaveworks/cortex/pkg/configs/client"

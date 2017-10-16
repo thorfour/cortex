@@ -43,10 +43,16 @@
   version = "v1.11.0"
 
 [[projects]]
-  name = "github.com/Sirupsen/logrus"
+  branch = "master"
+  name = "github.com/alecthomas/template"
+  packages = [".","parse"]
+  revision = "a0175ee3bccc567396460bf5acd36800cb10c49c"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/alecthomas/units"
   packages = ["."]
-  revision = "ba1b36c82c5e05c4f912a88eab0dcd91a171688f"
-  version = "v0.11.5"
+  revision = "2efee857e7cfd4f3d0138cc3cbb1b4966962b93a"
 
 [[projects]]
   name = "github.com/apache/thrift"
@@ -224,7 +230,7 @@
 
 [[projects]]
   name = "github.com/gogo/protobuf"
-  packages = ["gogoproto","proto","protoc-gen-gogo/descriptor","sortkeys"]
+  packages = ["gogoproto","proto","protoc-gen-gogo/descriptor","sortkeys","types"]
   revision = "100ba4e885062801d56799d78530b73b178a78f3"
   version = "v0.4"
 
@@ -427,6 +433,12 @@
   revision = "6a197d5ea61168f2ac821de2b7f011b250904900"
 
 [[projects]]
+  name = "github.com/oklog/oklog"
+  packages = ["pkg/group"]
+  revision = "fca58330910eb7fe6267788eddf879b1d6811176"
+  version = "v0.2.2"
+
+[[projects]]
   name = "github.com/oklog/ulid"
   packages = ["."]
   revision = "d311cb43c92434ec4072dfbbda3400741d0a6337"
@@ -482,8 +494,8 @@
 
 [[projects]]
   name = "github.com/prometheus/alertmanager"
-  packages = ["api","config","dispatch","inhibit","nflog","nflog/nflogpb","notify","provider","provider/mem","silence","silence/silencepb","template","template/internal/deftmpl","types","ui"]
-  revision = "0ecc59076ca6b4cbb63252fa7720a3d89d1c81d3"
+  packages = ["api","config","dispatch","inhibit","nflog","nflog/nflogpb","notify","pkg/parse","provider","provider/mem","silence","silence/silencepb","template","template/internal/deftmpl","types","ui"]
+  revision = "4a8e71069177280d0317ccd80a8201a06f2d8139"
 
 [[projects]]
   name = "github.com/prometheus/client_golang"
@@ -500,7 +512,7 @@
 [[projects]]
   name = "github.com/prometheus/common"
   packages = ["expfmt","internal/bitbucket.org/ww/goautoneg","log","model","route","version"]
-  revision = "49fee292b27bfff7f354ee0f64e1bc4850462edf"
+  revision = "1bab55dd05dbff384524a6a1c99006d9eb5f139b"
 
 [[projects]]
   branch = "master"
@@ -545,6 +557,12 @@
   revision = "2f561e34ecb6206fcad82f0c5842379188d8db40"
 
 [[projects]]
+  name = "github.com/sirupsen/logrus"
+  packages = ["."]
+  revision = "f006c2ac4710855cf0f916dd6b77acf6b048dc6e"
+  version = "v1.0.3"
+
+[[projects]]
   branch = "master"
   name = "github.com/spf13/pflag"
   packages = ["."]
@@ -584,13 +602,13 @@
   branch = "master"
   name = "github.com/weaveworks/billing-client"
   packages = ["."]
-  revision = "88bfaf9272c1fb3bb4fafa967304ee6d6ac96e9e"
+  revision = "be0d55e547b147ea1817f037cab9458bf7fc7850"
 
 [[projects]]
   branch = "master"
   name = "github.com/weaveworks/common"
   packages = ["aws","errors","httpgrpc","httpgrpc/server","instrument","logging","mflag","mflagext","middleware","mtime","server","signals","test","user"]
-  revision = "b811bc96d43d51edbae6693e7d1b0a367114595b"
+  revision = "3605c1d8b321342414b00d1f2153ad23aee9f1b2"
 
 [[projects]]
   name = "github.com/weaveworks/mesh"
@@ -600,13 +618,13 @@
 [[projects]]
   name = "github.com/weaveworks/promrus"
   packages = ["."]
-  revision = "2864c50798f22ea4ceaaad3dd35c8c6c1e05daee"
-  version = "v1.1.0-legacy"
+  revision = "0599d764e054d4e983bb120e30759179fafe3942"
+  version = "v1.2.0"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["curve25519","nacl/box","nacl/secretbox","poly1305","salsa20/salsa"]
+  packages = ["curve25519","nacl/box","nacl/secretbox","poly1305","salsa20/salsa","ssh/terminal"]
   revision = "c7af5bf2638a1164f2eb5467c39c6cffbd13a02e"
 
 [[projects]]
@@ -676,6 +694,12 @@
   version = "v1.3.0"
 
 [[projects]]
+  name = "gopkg.in/alecthomas/kingpin.v2"
+  packages = ["."]
+  revision = "1087e65c9441605df944fb12c33f0fe7072d18ca"
+  version = "v2.2.5"
+
+[[projects]]
   name = "gopkg.in/fsnotify.v1"
   packages = ["."]
   revision = "629574ca2a5df945712d3079857300b5e4da0236"
@@ -706,6 +730,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "848c7d8a493a4aadc24a1cbab37ad65ed5ba4f19b8f5d77196a6a48dc0ca1235"
+  inputs-digest = "aa9ab3e95374979b1389fd25befd2d5ebb5de0dbe968e77565126ef3c097deeb"
   solver-name = "gps-cdcl"
   solver-version = 1

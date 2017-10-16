@@ -4,7 +4,7 @@
 
 [[constraint]]
   name = "github.com/prometheus/alertmanager"
-  revision = "0ecc59076ca6b4cbb63252fa7720a3d89d1c81d3"
+  revision = "4a8e71069177280d0317ccd80a8201a06f2d8139"
 
 [[constraint]]
   name = "github.com/prometheus/prometheus"
@@ -32,7 +32,7 @@
 
 [[override]]
   name = "github.com/prometheus/common"
-  revision = "49fee292b27bfff7f354ee0f64e1bc4850462edf"
+  revision = "1bab55dd05dbff384524a6a1c99006d9eb5f139b"
 
 [[override]]
   name = "github.com/weaveworks/mesh"

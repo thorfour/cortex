@@ -10,7 +10,6 @@ import (
 	"github.com/prometheus/prometheus/config"
 	"github.com/prometheus/prometheus/promql"
 	"github.com/prometheus/prometheus/web/api/v1"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
 	"github.com/weaveworks/common/middleware"
@@ -129,9 +128,7 @@ func main() {
 		func() config.Config { return config.Config{} },
 		func(f http.HandlerFunc) http.HandlerFunc { return f },
 	)
-	promRouter := route.New(func(r *http.Request) (context.Context, error) {
-		return r.Context(), nil
-	}).WithPrefix("/api/prom/api/v1")
+	promRouter := route.New().WithPrefix("/api/prom/api/v1")
 	api.Register(promRouter)
 
 	activeMiddleware := middleware.AuthenticateUser

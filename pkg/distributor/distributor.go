@@ -11,7 +11,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	old_ctx "golang.org/x/net/context"
 	"golang.org/x/time/rate"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -300,7 +299,7 @@ func (d *Distributor) Push(ctx context.Context, req *client.WriteRequest) (*clie
 	}
 
 	var ingesters [][]*ring.IngesterDesc
-	if err := instrument.TimeRequestHistogram(ctx, "Distributor.Push[ring-lookup]", nil, func(ctx old_ctx.Context) error {
+	if err := instrument.TimeRequestHistogram(ctx, "Distributor.Push[ring-lookup]", nil, func(context.Context) error {
 		var err error
 		ingesters, err = d.ring.BatchGet(keys, d.cfg.ReplicationFactor, ring.Write)
 		if err != nil {
@@ -419,7 +418,7 @@ func (d *Distributor) sendSamplesErr(ctx context.Context, ingester *ring.Ingeste
 		})
 	}
 
-	err = instrument.TimeRequestHistogram(ctx, "Distributor.sendSamples", d.sendDuration, func(ctx old_ctx.Context) error {
+	err = instrument.TimeRequestHistogram(ctx, "Distributor.sendSamples", d.sendDuration, func(ctx context.Context) error {
 		_, err := c.Push(ctx, req)
 		return err
 	})
@@ -433,7 +432,7 @@ func (d *Distributor) sendSamplesErr(ctx context.Context, ingester *ring.Ingeste
 // Query implements Querier.
 func (d *Distributor) Query(ctx context.Context, from, to model.Time, matchers ...*labels.Matcher) (model.Matrix, error) {
 	var matrix model.Matrix
-	err := instrument.TimeRequestHistogram(ctx, "Distributor.Query", d.queryDuration, func(ctx old_ctx.Context) error {
+	err := instrument.TimeRequestHistogram(ctx, "Distributor.Query", d.queryDuration, func(ctx context.Context) error {
 		userID, err := user.ExtractOrgID(ctx)
 		if err != nil {
 			return err

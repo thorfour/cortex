@@ -4,7 +4,6 @@ import (
 	"flag"
 	"net/http"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -84,10 +83,9 @@ func main() {
 		querier.DummyTargetRetriever{},
 		querier.DummyAlertmanagerRetriever{},
 		func() config.Config { return config.Config{} },
+		func(f http.HandlerFunc) http.HandlerFunc { return f },
 	)
-	promRouter := route.New(func(r *http.Request) (context.Context, error) {
-		return r.Context(), nil
-	}).WithPrefix("/api/prom/api/v1")
+	promRouter := route.New().WithPrefix("/api/prom/api/v1")
 	api.Register(promRouter)
 
 	subrouter := server.HTTP.PathPrefix("/api/prom").Subrouter()
