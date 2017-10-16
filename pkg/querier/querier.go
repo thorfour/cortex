@@ -236,7 +236,6 @@ func (mq mergeQuerier) selectSamplesMatrix(matchers ...*labels.Matcher) (model.M
 		}(q)
 	}
 
-	// TODO(prom2): implement.
 	mergedMatrix, err := mergeMatrices(incomingMatrices, incomingErrors, len(mq.queriers))
 	if err != nil {
 		util.WithContext(mq.ctx).Errorf("Error in mergeQuerier.selectSamples: %+v", err)
