@@ -9,6 +9,7 @@ import (
 	"sync"
 	"time"
 
+	// Needed for gRPC compatibility.
 	old_ctx "golang.org/x/net/context"
 
 	"github.com/prometheus/client_golang/prometheus"
