@@ -21,12 +21,12 @@ type ChunkStore interface {
 
 // NewEngine creates a new promql.Engine for cortex.
 func NewEngine(distributor Querier, chunkStore ChunkStore) *promql.Engine {
-	queryable := NewQueryable(distributor, chunkStore)
+	queryable := NewQueryable(distributor, chunkStore, false)
 	return promql.NewEngine(queryable, nil)
 }
 
 // NewQueryable creates a new Queryable for cortex.
-func NewQueryable(distributor Querier, chunkStore ChunkStore) MergeQueryable {
+func NewQueryable(distributor Querier, chunkStore ChunkStore, mo bool) MergeQueryable {
 	return MergeQueryable{
 		queriers: []Querier{
 			distributor,
@@ -34,6 +34,7 @@ func NewQueryable(distributor Querier, chunkStore ChunkStore) MergeQueryable {
 				store: chunkStore,
 			},
 		},
+		metadataOnly: mo,
 	}
 }
 
@@ -109,10 +110,11 @@ type MergeQueryable struct {
 
 func (q MergeQueryable) Querier(ctx context.Context, mint, maxt int64) (storage.Querier, error) {
 	return mergeQuerier{
-		ctx:      ctx,
-		queriers: q.queriers,
-		mint:     mint,
-		maxt:     maxt,
+		ctx:          ctx,
+		queriers:     q.queriers,
+		mint:         mint,
+		maxt:         maxt,
+		metadataOnly: q.metadataOnly,
 	}, nil
 }
 

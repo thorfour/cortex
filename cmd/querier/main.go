@@ -75,11 +75,13 @@ func main() {
 	}
 	defer chunkStore.Stop()
 
-	queryable := querier.NewQueryable(dist, chunkStore)
-	engine := promql.NewEngine(queryable, nil)
+	sampleQueryable := querier.NewQueryable(dist, chunkStore, false)
+	metadataQueryable := querier.NewQueryable(dist, chunkStore, true)
+
+	engine := promql.NewEngine(sampleQueryable, nil)
 	api := v1.NewAPI(
 		engine,
-		queryable,
+		metadataQueryable,
 		querier.DummyTargetRetriever{},
 		querier.DummyAlertmanagerRetriever{},
 		func() config.Config { return config.Config{} },
@@ -90,7 +92,7 @@ func main() {
 
 	subrouter := server.HTTP.PathPrefix("/api/prom").Subrouter()
 	subrouter.PathPrefix("/api/v1").Handler(middleware.AuthenticateUser.Wrap(promRouter))
-	subrouter.Path("/read").Handler(middleware.AuthenticateUser.Wrap(http.HandlerFunc(queryable.RemoteReadHandler)))
+	subrouter.Path("/read").Handler(middleware.AuthenticateUser.Wrap(http.HandlerFunc(sampleQueryable.RemoteReadHandler)))
 	subrouter.Path("/validate_expr").Handler(middleware.AuthenticateUser.Wrap(http.HandlerFunc(dist.ValidateExprHandler)))
 	subrouter.Path("/user_stats").Handler(middleware.AuthenticateUser.Wrap(http.HandlerFunc(dist.UserStatsHandler)))
 

@@ -115,9 +115,8 @@ func (c *concreteSeriesIterator) Err() error {
 func metricsToSeriesSet(ms []metric.Metric) storage.SeriesSet {
 	series := make([]storage.Series, 0, len(ms))
 	for _, m := range ms {
-		labels := make(labels.Labels, 0, len(m.Metric))
 		series = append(series, &concreteSeries{
-			labels:  labels,
+			labels:  metricToLabels(m.Metric),
 			samples: nil,
 		})
 	}
@@ -129,13 +128,23 @@ func metricsToSeriesSet(ms []metric.Metric) storage.SeriesSet {
 func matrixToSeriesSet(m model.Matrix) storage.SeriesSet {
 	series := make([]storage.Series, 0, len(m))
 	for _, ss := range m {
-		labels := make(labels.Labels, 0, len(ss.Metric))
 		series = append(series, &concreteSeries{
-			labels:  labels,
+			labels:  metricToLabels(ss.Metric),
 			samples: ss.Values,
 		})
 	}
 	return &concreteSeriesSet{
 		series: series,
 	}
+}
+
+func metricToLabels(m model.Metric) labels.Labels {
+	ls := make(labels.Labels, 0, len(m))
+	for k, v := range m {
+		ls = append(ls, labels.Label{
+			Name:  string(k),
+			Value: string(v),
+		})
+	}
+	return ls
 }
