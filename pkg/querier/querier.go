@@ -38,6 +38,7 @@ func NewQueryable(distributor Querier, chunkStore ChunkStore, mo bool) MergeQuer
 	}
 }
 
+// A Querier allows querying an underlying storage for time series samples or metadata.
 type Querier interface {
 	Query(ctx context.Context, from, to model.Time, matchers ...*labels.Matcher) (model.Matrix, error)
 	MetricsForLabelMatchers(ctx context.Context, from, through model.Time, matchers ...*labels.Matcher) ([]metric.Metric, error)
@@ -103,11 +104,14 @@ func mergeMatrices(matrices chan model.Matrix, errors chan error, n int) (model.
 	return matrix, nil
 }
 
+// A MergeQueryable is a storage.Queryable that produces a storage.Querier which merges
+// results from multiple underlying Queriers.
 type MergeQueryable struct {
 	queriers     []Querier
 	metadataOnly bool
 }
 
+// Querier implements storage.Queryable.
 func (q MergeQueryable) Querier(ctx context.Context, mint, maxt int64) (storage.Querier, error) {
 	return mergeQuerier{
 		ctx:          ctx,
