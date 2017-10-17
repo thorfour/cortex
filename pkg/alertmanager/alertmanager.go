@@ -122,7 +122,7 @@ func New(cfg *Config) (*Alertmanager, error) {
 			return am.dispatcher.Groups(matchers)
 		},
 		marker.Status,
-		nil, // TODO(prom2): Expose mesh router information?
+		nil, // Passing a nil mesh router since we don't show mesh router information in Cortex anyway.
 	)
 
 	am.router = route.New()
