@@ -26,7 +26,10 @@ func TestRemoteReadHandler(t *testing.T) {
 					{
 						Metric: model.Metric{"foo": "bar"},
 						Values: []model.SamplePair{
-							{0, 0}, {1, 1}, {2, 2}, {3, 3},
+							{Timestamp: 0, Value: 0},
+							{Timestamp: 1, Value: 1},
+							{Timestamp: 2, Value: 2},
+							{Timestamp: 3, Value: 3},
 						},
 					},
 				},
@@ -63,10 +66,16 @@ func TestRemoteReadHandler(t *testing.T) {
 				Timeseries: []client.TimeSeries{
 					{
 						Labels: []client.LabelPair{
-							{wire.Bytes([]byte("foo")), wire.Bytes([]byte("bar"))},
+							{
+								Name:  wire.Bytes([]byte("foo")),
+								Value: wire.Bytes([]byte("bar")),
+							},
 						},
 						Samples: []client.Sample{
-							{0, 0}, {1, 1}, {2, 2}, {3, 3},
+							{Value: 0, TimestampMs: 0},
+							{Value: 1, TimestampMs: 1},
+							{Value: 2, TimestampMs: 2},
+							{Value: 3, TimestampMs: 3},
 						},
 					},
 				},
