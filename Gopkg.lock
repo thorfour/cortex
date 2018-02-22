@@ -830,7 +830,6 @@
   revision = "be0d55e547b147ea1817f037cab9458bf7fc7850"
 
 [[projects]]
-  branch = "master"
   name = "github.com/weaveworks/common"
   packages = [
     "aws",
@@ -1188,6 +1187,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "bb0be077b34422946e76365d4b249752738b1ca3b93b86049d9b410d2731546f"
+  inputs-digest = "ae7b356569aa4b7b2128f2beac1a186d96af72c05e61f0bc03e7730278c0f68c"
   solver-name = "gps-cdcl"
   solver-version = 1
