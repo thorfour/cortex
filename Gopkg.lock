@@ -830,6 +830,7 @@
   revision = "be0d55e547b147ea1817f037cab9458bf7fc7850"
 
 [[projects]]
+  branch = "master"
   name = "github.com/weaveworks/common"
   packages = [
     "aws",
@@ -848,7 +849,7 @@
     "tracing",
     "user"
   ]
-  revision = "bf7fd2fdfaa72bc4bf23b057af82aa3c0dbdc40c"
+  revision = "5a97a1460a103f4facd7e5563f6b375287e79c36"
 
 [[projects]]
   name = "github.com/weaveworks/mesh"
