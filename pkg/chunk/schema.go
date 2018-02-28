@@ -142,6 +142,14 @@ func v8Schema(cfg SchemaConfig) Schema {
 	}
 }
 
+// v9 schema uses a timeseries index: much less data in indexes but queries take an extra indirection
+func v9Schema(cfg SchemaConfig) Schema {
+	return schema{
+		cfg.dailyBuckets,
+		v9Entries{},
+	}
+}
+
 // schema implements Schema given a bucketing function and and set of range key callbacks
 type schema struct {
 	buckets func(from, through model.Time, userID string) []Bucket
@@ -576,6 +584,75 @@ func (v8Entries) GetReadQueries(bucket Bucket) ([]IndexQuery, error) {
 		{
 			TableName: bucket.tableName,
 			HashValue: bucket.hashKey,
+		},
+	}, nil
+}
+
+// v9Entries uses a timeseries index: much less data in indexes but queries take an extra indirection
+type v9Entries struct{}
+
+func (entries v9Entries) GetWriteEntries(bucket Bucket, metricName model.LabelValue, labels model.Metric, chunkID string) ([]IndexEntry, error) {
+	indexEntries, err := entries.v6Entries.GetWriteEntries(bucket, metricName, labels, chunkID)
+	if err != nil {
+		return nil, err
+	}
+
+	seriesID := metricSeriesID(labels)
+	seriesBytes, err := json.Marshal(labels)
+	if err != nil {
+		return nil, err
+	}
+
+	// Add IndexEntry for series with userID:bigBucket HashValue
+	indexEntries = append(indexEntries, IndexEntry{
+		TableName:  bucket.tableName,
+		HashValue:  bucket.hashKey,
+		RangeValue: encodeRangeKey([]byte(seriesID), nil, nil, seriesRangeKeyV1),
+		Value:      seriesBytes,
+	})
+
+	return indexEntries, nil
+}
+
+func (v9Entries) GetReadQueries(bucket Bucket) ([]IndexQuery, error) {
+	return []IndexQuery{
+		{
+			TableName: bucket.tableName,
+			HashValue: bucket.hashKey,
+		},
+	}, nil
+}
+
+func (v9Entries) GetReadMetricQueries(bucket Bucket, metricName model.LabelValue) ([]IndexQuery, error) {
+	encodedFromBytes := encodeTime(bucket.from)
+	return []IndexQuery{
+		{
+			TableName:       bucket.tableName,
+			HashValue:       bucket.hashKey + ":" + string(metricName),
+			RangeValueStart: encodeRangeKey(encodedFromBytes),
+		},
+	}, nil
+}
+
+func (v9Entries) GetReadMetricLabelQueries(bucket Bucket, metricName model.LabelValue, labelName model.LabelName) ([]IndexQuery, error) {
+	encodedFromBytes := encodeTime(bucket.from)
+	return []IndexQuery{
+		{
+			TableName:       bucket.tableName,
+			HashValue:       fmt.Sprintf("%s:%s:%s", bucket.hashKey, metricName, labelName),
+			RangeValueStart: encodeRangeKey(encodedFromBytes),
+		},
+	}, nil
+}
+
+func (v9Entries) GetReadMetricLabelValueQueries(bucket Bucket, metricName model.LabelValue, labelName model.LabelName, labelValue model.LabelValue) ([]IndexQuery, error) {
+	encodedFromBytes := encodeTime(bucket.from)
+	return []IndexQuery{
+		{
+			TableName:       bucket.tableName,
+			HashValue:       fmt.Sprintf("%s:%s:%s", bucket.hashKey, metricName, labelName),
+			RangeValueStart: encodeRangeKey(encodedFromBytes),
+			ValueEqual:      []byte(labelValue),
 		},
 	}, nil
 }
