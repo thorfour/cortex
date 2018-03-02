@@ -19,6 +19,7 @@ var (
 	chunkTimeRangeKeyV5  = []byte{'5'}
 	metricNameRangeKeyV1 = []byte{'6'}
 	seriesRangeKeyV1     = []byte{'7'}
+	chunkIDKeyV9         = []byte{'8'}
 )
 
 // Errors
@@ -592,26 +593,55 @@ func (v8Entries) GetReadQueries(bucket Bucket) ([]IndexQuery, error) {
 type v9Entries struct{}
 
 func (entries v9Entries) GetWriteEntries(bucket Bucket, metricName model.LabelValue, labels model.Metric, chunkID string) ([]IndexEntry, error) {
-	indexEntries, err := entries.v6Entries.GetWriteEntries(bucket, metricName, labels, chunkID)
-	if err != nil {
-		return nil, err
-	}
-
+	chunkIDBytes := []byte(chunkID)
+	encodedThroughBytes := encodeTime(bucket.through)
 	seriesID := metricSeriesID(labels)
 	seriesBytes, err := json.Marshal(labels)
 	if err != nil {
 		return nil, err
 	}
 
-	// Add IndexEntry for series with userID:bigBucket HashValue
-	indexEntries = append(indexEntries, IndexEntry{
+	// userid:day:series_id -> chunk_id -> chunk
+	entries := []IndexEntry{
+		{
+			TableName:  bucket.tableName,
+			HashValue:  bucket.hashKey + ":" + string(seriesID),
+			RangeValue: encodeRangeKey(chunkIDBytes, chunkIDKeyV9),
+			// TODO: -> chunk?
+		},
+	}
+
+	// userid:day:metric_name -> series id -> label set
+	entries := append(entries, IndexEntry{
+		{
+			TableName:  bucket.tableName,
+			HashValue:  bucket.hashKey + ":" + string(metricName),
+			RangeValue: encodeRangeKey(encodedThroughBytes, nil, chunkIDBytes, chunkTimeRangeKeyV3),
+		},
+	})
+
+	// userid:day:metric_name:label_name -> #(label_value) : series_id -> label_set
+	for key, value := range labels {
+		if key == model.MetricNameLabel {
+			continue
+		}
+		entries = append(entries, IndexEntry{
+			TableName:  bucket.tableName,
+			HashValue:  fmt.Sprintf("%s:%s:%s", bucket.hashKey, metricName, key),
+			RangeValue: encodeRangeKey(encodedThroughBytes, nil, chunkIDBytes, chunkTimeRangeKeyV5),
+			Value:      []byte(value),
+		})
+	}
+
+	// userid:day -> series id -> label set
+	entries = append(entries, IndexEntry{
 		TableName:  bucket.tableName,
 		HashValue:  bucket.hashKey,
 		RangeValue: encodeRangeKey([]byte(seriesID), nil, nil, seriesRangeKeyV1),
 		Value:      seriesBytes,
 	})
 
-	return indexEntries, nil
+	return entries, nil
 }
 
 func (v9Entries) GetReadQueries(bucket Bucket) ([]IndexQuery, error) {
