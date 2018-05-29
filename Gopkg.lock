@@ -678,7 +678,6 @@
     "expfmt",
     "internal/bitbucket.org/ww/goautoneg",
     "model",
-    "promlog",
     "route",
     "version"
   ]
@@ -1190,6 +1189,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "fc2b611011b916790e0e1f112a7e0359692b3963b08ca30fbdfc34c37278246c"
+  inputs-digest = "dfbcc50df522b353f27b1af1328cc6389e305dd0bdf23e8ea4200d7e9bca9d2b"
   solver-name = "gps-cdcl"
   solver-version = 1
