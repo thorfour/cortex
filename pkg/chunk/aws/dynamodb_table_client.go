@@ -12,6 +12,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbiface"
 	"github.com/go-kit/kit/log/level"
 	"github.com/pkg/errors"
+	promApi "github.com/prometheus/client_golang/api"
+	promV1 "github.com/prometheus/client_golang/api/prometheus/v1"
 	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/time/rate"
 
@@ -43,6 +45,7 @@ type dynamoTableClient struct {
 	ApplicationAutoScaling applicationautoscalingiface.ApplicationAutoScalingAPI
 	limiter                *rate.Limiter
 	backoffConfig          util.BackoffConfig
+	promAPI                promV1.API
 }
 
 // NewDynamoDBTableClient makes a new DynamoTableClient.
@@ -61,11 +64,21 @@ func NewDynamoDBTableClient(cfg DynamoDBConfig) (chunk.TableClient, error) {
 		applicationAutoScaling = applicationautoscaling.New(session)
 	}
 
+	var promAPI promV1.API
+	if cfg.MetricsURL != "" {
+		client, err := promApi.NewClient(promApi.Config{Address: cfg.MetricsURL})
+		if err != nil {
+			return nil, err
+		}
+		promAPI = promV1.NewAPI(client)
+	}
+
 	return dynamoTableClient{
 		DynamoDB:               dynamoDB,
 		ApplicationAutoScaling: applicationAutoScaling,
 		limiter:                rate.NewLimiter(rate.Limit(cfg.APILimit), 1),
 		backoffConfig:          cfg.backoffConfig,
+		promAPI:                promAPI,
 	}, nil
 }
 
@@ -164,7 +177,7 @@ func (d dynamoTableClient) CreateTable(ctx context.Context, desc chunk.TableDesc
 		return errors.Wrapf(err, "creating table %s", desc.Name)
 	}
 
-	if desc.WriteScale.Enabled {
+	if desc.WriteScale.Enabled && d.ApplicationAutoScaling != nil {
 		err := d.enableAutoScaling(ctx, desc)
 		if err != nil {
 			return errors.Wrapf(err, "enabling autoscaling on table %s", desc.Name)
@@ -315,6 +328,10 @@ func (d dynamoTableClient) DescribeTable(ctx context.Context, name string) (desc
 }
 
 func (d dynamoTableClient) UpdateTable(ctx context.Context, current, expected chunk.TableDesc) error {
+	if expected.WriteScale.Enabled && d.promAPI != nil {
+		return d.metricsAutoScale(ctx, current, expected)
+	}
+
 	var err error
 	if !current.WriteScale.Enabled {
 		if expected.WriteScale.Enabled {
