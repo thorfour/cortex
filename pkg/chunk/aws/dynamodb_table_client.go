@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbiface"
 	"github.com/go-kit/kit/log/level"
+	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/time/rate"
 
@@ -160,13 +161,13 @@ func (d dynamoTableClient) CreateTable(ctx context.Context, desc chunk.TableDesc
 			return nil
 		})
 	}); err != nil {
-		return err
+		return errors.Wrapf(err, "creating table %s", desc.Name)
 	}
 
 	if desc.WriteScale.Enabled {
 		err := d.enableAutoScaling(ctx, desc)
 		if err != nil {
-			return err
+			return errors.Wrapf(err, "enabling autoscaling on table %s", desc.Name)
 		}
 	}
 
@@ -214,7 +215,7 @@ func (d dynamoTableClient) DescribeTable(ctx context.Context, name string) (desc
 		})
 	})
 	if err != nil {
-		return
+		return desc, false, errors.Wrapf(err, "describing table %s", name)
 	}
 
 	err = d.backoffAndRetry(ctx, func(ctx context.Context) error {
@@ -232,6 +233,9 @@ func (d dynamoTableClient) DescribeTable(ctx context.Context, name string) (desc
 			return err
 		})
 	})
+	if err != nil {
+		return desc, false, errors.Wrapf(err, "getting tags for table %s", name)
+	}
 
 	if d.ApplicationAutoScaling != nil {
 		err = d.backoffAndRetry(ctx, func(ctx context.Context) error {
@@ -266,6 +270,9 @@ func (d dynamoTableClient) DescribeTable(ctx context.Context, name string) (desc
 				}
 			})
 		})
+		if err != nil {
+			return desc, false, errors.Wrapf(err, "getting scalable targets for table %s", name)
+		}
 
 		err = d.backoffAndRetry(ctx, func(ctx context.Context) error {
 			return instrument.TimeRequestHistogram(ctx, "ApplicationAutoScaling.DescribeScalingPoliciesWithContext", applicationAutoScalingRequestDuration, func(ctx context.Context) error {
@@ -300,6 +307,9 @@ func (d dynamoTableClient) DescribeTable(ctx context.Context, name string) (desc
 				}
 			})
 		})
+		if err != nil {
+			return desc, false, errors.Wrapf(err, "getting scaling policies for table %s", name)
+		}
 	}
 	return
 }
@@ -318,7 +328,7 @@ func (d dynamoTableClient) UpdateTable(ctx context.Context, current, expected ch
 		}
 	}
 	if err != nil {
-		return err
+		return errors.Wrapf(err, "setting autoscaling for table %s", expected.Name)
 	}
 
 	if current.ProvisionedRead != expected.ProvisionedRead || current.ProvisionedWrite != expected.ProvisionedWrite {
@@ -334,7 +344,7 @@ func (d dynamoTableClient) UpdateTable(ctx context.Context, current, expected ch
 				return err
 			})
 		}); err != nil {
-			return err
+			return errors.Wrapf(err, "setting provisioned throughput for table %s", expected.Name)
 		}
 	}
 
@@ -354,7 +364,7 @@ func (d dynamoTableClient) UpdateTable(ctx context.Context, current, expected ch
 				return nil
 			})
 		}); err != nil {
-			return err
+			return errors.Wrapf(err, "finding ARN for table %s", expected.Name)
 		}
 
 		return d.backoffAndRetry(ctx, func(ctx context.Context) error {
@@ -363,7 +373,7 @@ func (d dynamoTableClient) UpdateTable(ctx context.Context, current, expected ch
 					ResourceArn: tableARN,
 					Tags:        chunkTagsToDynamoDB(expected.Tags),
 				})
-				return err
+				return errors.Wrapf(err, "setting tags on table %s", expected.Name)
 			})
 		})
 	}
