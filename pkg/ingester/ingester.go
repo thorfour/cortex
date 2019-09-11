@@ -21,6 +21,10 @@ import (
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/prometheus/prometheus/tsdb"
 	lbls "github.com/prometheus/prometheus/tsdb/labels"
+	"github.com/thanos-io/thanos/pkg/block/metadata"
+	"github.com/thanos-io/thanos/pkg/objstore"
+	"github.com/thanos-io/thanos/pkg/runutil"
+	"github.com/thanos-io/thanos/pkg/shipper"
 
 	cortex_chunk "github.com/cortexproject/cortex/pkg/chunk"
 	"github.com/cortexproject/cortex/pkg/ingester/client"
@@ -175,8 +179,10 @@ type Ingester struct {
 	preFlushUserSeries func()
 
 	// Prometheus 2.x features TODO WIP
-	v2  bool                // indicates that the v2 paths of prometheus is to be used
-	dbs map[string]*tsdb.DB // tsdb sharded by userID
+	v2     bool                        // indicates that the v2 paths of prometheus is to be used
+	ships  map[string]*shipper.Shipper // shipper per database
+	dbs    map[string]*tsdb.DB         // tsdb sharded by userID
+	bucket objstore.Bucket
 }
 
 // ChunkStore is the interface we need to store chunks
@@ -203,7 +209,13 @@ func New(cfg Config, clientConfig client.Config, limits *validation.Overrides, c
 		quit:        make(chan struct{}),
 		flushQueues: make([]*util.PriorityQueue, cfg.ConcurrentFlushes, cfg.ConcurrentFlushes),
 		v2:          cfg.V2,
+		ships:       make(map[string]*shipper.Shipper),
 		dbs:         make(map[string]*tsdb.DB),
+		bucket:      nil, // TODO create s3 object store
+	}
+
+	if i.v2 { // v2 doesn't start the flush queue
+		return i, nil
 	}
 
 	var err error
@@ -309,8 +321,10 @@ func (i *Ingester) v2Push(ctx old_ctx.Context, req *client.WriteRequest) (*clien
 
 	db, ok := i.dbs[userID]
 	if !ok {
-		// TODO create a new database for the user
-		db, err = tsdb.Open(filepath.Join("tsdb", userID), util.Logger, nil, &tsdb.Options{
+		userDir := filepath.Join("tsdb", userID)
+
+		// Create a new user database
+		db, err = tsdb.Open(userDir, util.Logger, nil, &tsdb.Options{
 			RetentionDuration: 1 * 24 * 60 * 60 * 1000, // 1 day in milliseconds
 			BlockRanges:       tsdb.ExponentialBlockRanges(2*60*60*1000, 5, 3),
 		})
@@ -318,6 +332,15 @@ func (i *Ingester) v2Push(ctx old_ctx.Context, req *client.WriteRequest) (*clien
 			return nil, err
 		}
 
+		// Create a new shipper for this database
+		s := shipper.New(util.Logger, nil, userDir, i.bucket, nil, metadata.ReceiveSource)
+		return runutil.Repeat(30*time.Second, ctx.Done(), func() error {
+			if uploaded, err := s.Sync(ctx); err != nil {
+				level.Warn(util.Logger).Log("err", err, "uploaded", uploaded)
+			}
+		})
+
+		i.ships[userID] = s
 		i.dbs[userID] = db
 	}
 
