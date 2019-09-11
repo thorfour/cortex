@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -18,6 +19,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/pkg/labels"
+	"github.com/prometheus/prometheus/tsdb"
+	lbls "github.com/prometheus/prometheus/tsdb/labels"
 
 	cortex_chunk "github.com/cortexproject/cortex/pkg/chunk"
 	"github.com/cortexproject/cortex/pkg/ingester/client"
@@ -120,6 +123,9 @@ type Config struct {
 
 	RateUpdatePeriod time.Duration
 
+	// Use V2 tsdb block storage
+	V2 bool
+
 	// For testing, you can override the address and ID of this ingester.
 	ingesterClientFactory func(addr string, cfg client.Config) (client.HealthAndIngesterClient, error)
 }
@@ -138,6 +144,7 @@ func (cfg *Config) RegisterFlags(f *flag.FlagSet) {
 	f.BoolVar(&cfg.SpreadFlushes, "ingester.spread-flushes", false, "If true, spread series flushes across the whole period of MaxChunkAge")
 	f.IntVar(&cfg.ConcurrentFlushes, "ingester.concurrent-flushes", 50, "Number of concurrent goroutines flushing to dynamodb.")
 	f.DurationVar(&cfg.RateUpdatePeriod, "ingester.rate-update-period", 15*time.Second, "Period with which to update the per-user ingestion rates.")
+	f.BoolVar(&cfg.V2, "ingester.v2", false, "If true, use v2 block storage for metrics")
 }
 
 // Ingester deals with "in flight" chunks.  Based on Prometheus 1.x
@@ -166,6 +173,10 @@ type Ingester struct {
 
 	// Hook for injecting behaviour from tests.
 	preFlushUserSeries func()
+
+	// Prometheus 2.x features TODO WIP
+	v2  bool                // indicates that the v2 paths of prometheus is to be used
+	dbs map[string]*tsdb.DB // tsdb sharded by userID
 }
 
 // ChunkStore is the interface we need to store chunks
@@ -191,6 +202,8 @@ func New(cfg Config, clientConfig client.Config, limits *validation.Overrides, c
 
 		quit:        make(chan struct{}),
 		flushQueues: make([]*util.PriorityQueue, cfg.ConcurrentFlushes, cfg.ConcurrentFlushes),
+		v2:          cfg.V2,
+		dbs:         make(map[string]*tsdb.DB),
 	}
 
 	var err error
@@ -253,6 +266,10 @@ func (i *Ingester) StopIncomingRequests() {
 
 // Push implements client.IngesterServer
 func (i *Ingester) Push(ctx old_ctx.Context, req *client.WriteRequest) (*client.WriteResponse, error) {
+	if i.v2 {
+		return i.v2Push(ctx, req)
+	}
+
 	userID, err := user.ExtractOrgID(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("no user id")
@@ -281,6 +298,49 @@ func (i *Ingester) Push(ctx old_ctx.Context, req *client.WriteRequest) (*client.
 	client.ReuseSlice(req.Timeseries)
 
 	return &client.WriteResponse{}, lastPartialErr
+}
+
+// v2Push is the Push function for v2 of ingester
+func (i *Ingester) v2Push(ctx old_ctx.Context, req *client.WriteRequest) (*client.WriteResponse, error) {
+	userID, err := user.ExtractOrgID(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("no user id")
+	}
+
+	db, ok := i.dbs[userID]
+	if !ok {
+		// TODO create a new database for the user
+		db, err = tsdb.Open(filepath.Join("tsdb", userID), util.Logger, nil, &tsdb.Options{
+			RetentionDuration: 1 * 24 * 60 * 60 * 1000, // 1 day in milliseconds
+			BlockRanges:       tsdb.ExponentialBlockRanges(2*60*60*1000, 5, 3),
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		i.dbs[userID] = db
+	}
+
+	app := db.Appender()
+	for _, ts := range req.Timeseries {
+		for _, s := range ts.Samples {
+			lset := make(lbls.Labels, len(ts.Labels))
+			for i := range ts.Labels {
+				lset[i] = lbls.Label{
+					Name:  ts.Labels[i].Name,
+					Value: ts.Labels[i].Value,
+				}
+			}
+			if _, err := app.Add(lset, s.TimestampMs, s.Value); err != nil {
+				return nil, err
+			}
+		}
+	}
+	if err := app.Commit(); err != nil {
+		return nil, err
+	}
+
+	return &client.WriteResponse{}, nil
 }
 
 func (i *Ingester) append(ctx context.Context, userID string, labels labelPairs, timestamp model.Time, value model.SampleValue, source client.WriteRequest_SourceEnum) error {
