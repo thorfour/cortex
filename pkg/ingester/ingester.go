@@ -218,14 +218,14 @@ func New(cfg Config, clientConfig client.Config, limits *validation.Overrides, c
 		bucket:      s3.NewBucketWithConfig(util.Logger, s3Cfg, "cortex"),
 	}
 
-	if i.v2 { // v2 doesn't start the flush queue
-		return i, nil
-	}
-
 	var err error
 	i.lifecycler, err = ring.NewLifecycler(cfg.LifecyclerConfig, i, "ingester")
 	if err != nil {
 		return nil, err
+	}
+
+	if i.v2 { // v2 doesn't start the flush queue
+		return i, nil
 	}
 
 	i.flushQueuesDone.Add(cfg.ConcurrentFlushes)
