@@ -338,10 +338,11 @@ func (i *Ingester) v2Push(ctx old_ctx.Context, req *client.WriteRequest) (*clien
 
 		// Create a new shipper for this database
 		s := shipper.New(util.Logger, nil, userDir, i.bucket, nil, metadata.ReceiveSource)
-		return runutil.Repeat(30*time.Second, ctx.Done(), func() error {
+		go runutil.Repeat(30*time.Second, ctx.Done(), func() error {
 			if uploaded, err := s.Sync(ctx); err != nil {
 				level.Warn(util.Logger).Log("err", err, "uploaded", uploaded)
 			}
+			return nil
 		})
 
 		i.ships[userID] = s
