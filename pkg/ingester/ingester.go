@@ -23,6 +23,7 @@ import (
 	lbls "github.com/prometheus/prometheus/tsdb/labels"
 	"github.com/thanos-io/thanos/pkg/block/metadata"
 	"github.com/thanos-io/thanos/pkg/objstore"
+	"github.com/thanos-io/thanos/pkg/objstore/s3"
 	"github.com/thanos-io/thanos/pkg/runutil"
 	"github.com/thanos-io/thanos/pkg/shipper"
 
@@ -196,6 +197,9 @@ func New(cfg Config, clientConfig client.Config, limits *validation.Overrides, c
 		cfg.ingesterClientFactory = client.MakeIngesterClient
 	}
 
+	// TODO parse this from config file/flags
+	s3Cfg := s3.Config{}
+
 	i := &Ingester{
 		cfg:          cfg,
 		clientConfig: clientConfig,
@@ -211,7 +215,7 @@ func New(cfg Config, clientConfig client.Config, limits *validation.Overrides, c
 		v2:          cfg.V2,
 		ships:       make(map[string]*shipper.Shipper),
 		dbs:         make(map[string]*tsdb.DB),
-		bucket:      nil, // TODO create s3 object store
+		bucket:      s3.NewBucketWithConfig(util.Logger, s3Cfg, "cortex"),
 	}
 
 	if i.v2 { // v2 doesn't start the flush queue
