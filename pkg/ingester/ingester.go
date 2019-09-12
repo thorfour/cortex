@@ -333,10 +333,10 @@ func (i *Ingester) v2Push(ctx old_ctx.Context, req *client.WriteRequest) (*clien
 
 	db, ok := i.dbs[userID]
 	if !ok {
-		userDir := filepath.Join("tsdb", userID)
+		udir := userDir(userID)
 
 		// Create a new user database
-		db, err = tsdb.Open(userDir, util.Logger, nil, &tsdb.Options{
+		db, err = tsdb.Open(udir, util.Logger, nil, &tsdb.Options{
 			RetentionDuration: 1 * 24 * 60 * 60 * 1000, // 1 day in milliseconds
 			BlockRanges:       []int64{10 * 60 * 1000}, // 10m blocks
 		})
@@ -351,7 +351,7 @@ func (i *Ingester) v2Push(ctx old_ctx.Context, req *client.WriteRequest) (*clien
 				Value: userID,
 			},
 		}
-		s := shipper.New(util.Logger, nil, userDir, i.bucket, func() lbls.Labels { return l }, metadata.ReceiveSource)
+		s := shipper.New(util.Logger, nil, udir, i.bucket, func() lbls.Labels { return l }, metadata.ReceiveSource)
 		stopc := make(chan struct{})
 		i.ships[userID] = stopc
 		go runutil.Repeat(30*time.Second, stopc, func() error {
@@ -451,6 +451,10 @@ func (i *Ingester) append(ctx context.Context, userID string, labels labelPairs,
 
 // Query implements service.IngesterServer
 func (i *Ingester) Query(ctx old_ctx.Context, req *client.QueryRequest) (*client.QueryResponse, error) {
+	if i.v2 {
+		return i.v2Query(ctx, req)
+	}
+
 	userID, err := user.ExtractOrgID(ctx)
 	if err != nil {
 		return nil, err
@@ -506,6 +510,83 @@ func (i *Ingester) Query(ctx old_ctx.Context, req *client.QueryRequest) (*client
 	i.metrics.queriedSeries.Observe(float64(numSeries))
 	i.metrics.queriedSamples.Observe(float64(numSamples))
 	return result, err
+}
+
+func (i *Ingester) v2Query(ctx old_ctx.Context, req *client.QueryRequest) (*client.QueryResponse, error) {
+	userID, err := user.ExtractOrgID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	from, through, matchers, err := client.FromQueryRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	i.metrics.queries.Inc()
+
+	udir := userDir(userID)
+	db, err := tsdb.OpenDBReadOnly(udir, util.Logger)
+	if err != nil {
+		return nil, err
+	}
+
+	// TODO can only support one querier at a time
+	q, err := db.Querier(int64(from), int64(through))
+	if err != nil {
+		return nil, err
+	}
+
+	// FIXME since two different versions of the labels package is being used, converting matchers must be done
+	var converted []lbls.Matcher
+	for _, m := range matchers {
+		switch m.Type {
+		case labels.MatchEqual:
+			converted = append(converted, lbls.NewEqualMatcher(m.Name, m.Value))
+		case labels.MatchNotEqual:
+			converted = append(converted, lbls.Not(lbls.NewEqualMatcher(m.Name, m.Value)))
+		case labels.MatchRegexp:
+			rm, err := lbls.NewRegexpMatcher(m.Name, m.Value)
+			if err != nil {
+				return nil, err
+			}
+			converted = append(converted, rm)
+		case labels.MatchNotRegexp:
+			rm, err := lbls.NewRegexpMatcher(m.Name, m.Value)
+			if err != nil {
+				return nil, err
+			}
+			converted = append(converted, lbls.Not(rm))
+		}
+	}
+	ss, err := q.Select(converted...)
+	if err != nil {
+		return nil, err
+	}
+
+	result := &client.QueryResponse{}
+	for ss.Next() {
+		series := ss.At()
+
+		// FIXME convert labels to LabelAdapter
+		var adapters []client.LabelAdapter
+		for _, l := range series.Labels() {
+			adapters = append(adapters, client.LabelAdapter(l))
+		}
+		ts := client.TimeSeries{
+			Labels: adapters,
+		}
+
+		it := series.Iterator()
+		for it.Next() {
+			t, v := it.At()
+			ts.Samples = append(ts.Samples, client.Sample{v, t})
+		}
+
+		result.Timeseries = append(result.Timeseries, ts)
+	}
+
+	return result, ss.Err()
 }
 
 // QueryStream implements service.IngesterServer
@@ -723,3 +804,5 @@ func (i *Ingester) ReadinessHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Not ready: "+err.Error(), http.StatusServiceUnavailable)
 	}
 }
+
+func userDir(userID string) string { return filepath.Join("tsdb", userID) }
