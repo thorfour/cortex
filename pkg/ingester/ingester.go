@@ -338,7 +338,7 @@ func (i *Ingester) v2Push(ctx old_ctx.Context, req *client.WriteRequest) (*clien
 		// Create a new user database
 		db, err = tsdb.Open(userDir, util.Logger, nil, &tsdb.Options{
 			RetentionDuration: 1 * 24 * 60 * 60 * 1000, // 1 day in milliseconds
-			BlockRanges:       tsdb.ExponentialBlockRanges(2*60*60*1000, 5, 3),
+			BlockRanges:       []int64{10 * 60 * 1000}, // 10m blocks
 		})
 		if err != nil {
 			return nil, err
