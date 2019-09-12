@@ -530,12 +530,14 @@ func (i *Ingester) v2Query(ctx old_ctx.Context, req *client.QueryRequest) (*clie
 	if err != nil {
 		return nil, err
 	}
+	defer db.Close()
 
 	// TODO can only support one querier at a time
 	q, err := db.Querier(int64(from), int64(through))
 	if err != nil {
 		return nil, err
 	}
+	defer q.Close()
 
 	// FIXME since two different versions of the labels package is being used, converting matchers must be done
 	var converted []lbls.Matcher
