@@ -180,9 +180,9 @@ type Ingester struct {
 	preFlushUserSeries func()
 
 	// Prometheus 2.x features TODO WIP
-	v2     bool                        // indicates that the v2 paths of prometheus is to be used
-	ships  map[string]*shipper.Shipper // shipper per database
-	dbs    map[string]*tsdb.DB         // tsdb sharded by userID
+	v2     bool                     // indicates that the v2 paths of prometheus is to be used
+	ships  map[string]chan struct{} // close channel for shipper per database
+	dbs    map[string]*tsdb.DB      // tsdb sharded by userID
 	bucket objstore.Bucket
 }
 
@@ -198,7 +198,15 @@ func New(cfg Config, clientConfig client.Config, limits *validation.Overrides, c
 	}
 
 	// TODO parse this from config file/flags
-	s3Cfg := s3.Config{}
+	var bkt *s3.Bucket
+	if cfg.V2 {
+		s3Cfg := s3.Config{}
+		var err error
+		bkt, err = s3.NewBucketWithConfig(util.Logger, s3Cfg, "cortex")
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	i := &Ingester{
 		cfg:          cfg,
@@ -213,9 +221,9 @@ func New(cfg Config, clientConfig client.Config, limits *validation.Overrides, c
 		quit:        make(chan struct{}),
 		flushQueues: make([]*util.PriorityQueue, cfg.ConcurrentFlushes, cfg.ConcurrentFlushes),
 		v2:          cfg.V2,
-		ships:       make(map[string]*shipper.Shipper),
+		ships:       make(map[string]chan struct{}),
 		dbs:         make(map[string]*tsdb.DB),
-		bucket:      s3.NewBucketWithConfig(util.Logger, s3Cfg, "cortex"),
+		bucket:      bkt,
 	}
 
 	var err error
@@ -338,14 +346,15 @@ func (i *Ingester) v2Push(ctx old_ctx.Context, req *client.WriteRequest) (*clien
 
 		// Create a new shipper for this database
 		s := shipper.New(util.Logger, nil, userDir, i.bucket, nil, metadata.ReceiveSource)
-		go runutil.Repeat(30*time.Second, ctx.Done(), func() error {
-			if uploaded, err := s.Sync(ctx); err != nil {
+		stopc := make(chan struct{})
+		i.ships[userID] = stopc
+		go runutil.Repeat(30*time.Second, stopc, func() error {
+			if uploaded, err := s.Sync(context.Background()); err != nil {
 				level.Warn(util.Logger).Log("err", err, "uploaded", uploaded)
 			}
 			return nil
 		})
 
-		i.ships[userID] = s
 		i.dbs[userID] = db
 	}
 
