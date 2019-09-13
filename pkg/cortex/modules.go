@@ -193,7 +193,14 @@ func (t *Cortex) initQuerier(cfg *Config) (err error) {
 		return
 	}
 
-	queryable, engine := querier.New(cfg.Querier, t.distributor, t.store)
+	var store querier.ChunkStore
+	if t.Ingester.V2 {
+		store = querier.NewBlockQuerier()
+	} else {
+		store = t.store
+	}
+
+	queryable, engine := querier.New(cfg.Querier, t.distributor, store)
 	api := v1.NewAPI(
 		engine,
 		queryable,
