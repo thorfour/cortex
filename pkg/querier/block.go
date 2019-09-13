@@ -2,6 +2,7 @@ package querier
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cortexproject/cortex/pkg/chunk"
 	"github.com/prometheus/common/model"
@@ -25,5 +26,5 @@ func NewBlockQuerier() *BlockQuerier {
 
 // Get implements the ChunkStore interface. It makes a block query and converts the response into chunks
 func (b *BlockQuerier) Get(ctx context.Context, userID string, from, through model.Time, mathcer ...*labels.Matcher) ([]chunk.Chunk, error) {
-	return nil, fmt.Error("Unimplemented")
+	return nil, fmt.Errorf("Unimplemented")
 }

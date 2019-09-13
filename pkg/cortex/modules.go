@@ -194,7 +194,7 @@ func (t *Cortex) initQuerier(cfg *Config) (err error) {
 	}
 
 	var store querier.ChunkStore
-	if t.Ingester.V2 {
+	if cfg.Ingester.V2 {
 		store = querier.NewBlockQuerier()
 	} else {
 		store = t.store
