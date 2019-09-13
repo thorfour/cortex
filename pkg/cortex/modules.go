@@ -12,6 +12,7 @@ import (
 	"github.com/prometheus/common/route"
 	"github.com/prometheus/prometheus/config"
 	v1 "github.com/prometheus/prometheus/web/api/v1"
+	"github.com/thanos-io/thanos/pkg/objstore/s3"
 	httpgrpc_server "github.com/weaveworks/common/httpgrpc/server"
 	"github.com/weaveworks/common/middleware"
 	"github.com/weaveworks/common/server"
@@ -195,7 +196,16 @@ func (t *Cortex) initQuerier(cfg *Config) (err error) {
 
 	var store querier.ChunkStore
 	if cfg.Ingester.V2 {
-		store = querier.NewBlockQuerier()
+		s3cfg := s3.Config{
+			Bucket:    cfg.Ingester.SpacesBucket,
+			Endpoint:  cfg.Ingester.SpacesEndpoint,
+			AccessKey: cfg.Ingester.SpacesKey,
+			SecretKey: cfg.Ingester.SpacesSecret,
+		}
+		store, err = querier.NewBlockQuerier(s3cfg)
+		if err != nil {
+			return err
+		}
 	} else {
 		store = t.store
 	}
