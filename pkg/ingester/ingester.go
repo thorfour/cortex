@@ -351,7 +351,7 @@ func (i *Ingester) v2Push(ctx old_ctx.Context, req *client.WriteRequest) (*clien
 				Value: userID,
 			},
 		}
-		s := shipper.New(util.Logger, nil, udir, i.bucket, func() lbls.Labels { return l }, metadata.ReceiveSource)
+		s := shipper.New(util.Logger, nil, udir, &Bucket{userID, i.bucket}, func() lbls.Labels { return l }, metadata.ReceiveSource)
 		stopc := make(chan struct{})
 		i.ships[userID] = stopc
 		go runutil.Repeat(30*time.Second, stopc, func() error {
