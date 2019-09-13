@@ -129,7 +129,11 @@ type Config struct {
 	RateUpdatePeriod time.Duration
 
 	// Use V2 tsdb block storage
-	V2 bool
+	V2             bool
+	SpacesKey      string
+	SpacesSecret   string
+	SpacesBucket   string
+	SpacesEndpoint string
 
 	// For testing, you can override the address and ID of this ingester.
 	ingesterClientFactory func(addr string, cfg client.Config) (client.HealthAndIngesterClient, error)
@@ -149,7 +153,13 @@ func (cfg *Config) RegisterFlags(f *flag.FlagSet) {
 	f.BoolVar(&cfg.SpreadFlushes, "ingester.spread-flushes", false, "If true, spread series flushes across the whole period of MaxChunkAge")
 	f.IntVar(&cfg.ConcurrentFlushes, "ingester.concurrent-flushes", 50, "Number of concurrent goroutines flushing to dynamodb.")
 	f.DurationVar(&cfg.RateUpdatePeriod, "ingester.rate-update-period", 15*time.Second, "Period with which to update the per-user ingestion rates.")
+
+	// V2
 	f.BoolVar(&cfg.V2, "ingester.v2", false, "If true, use v2 block storage for metrics")
+	f.StringVar(&cfg.SpacesKey, "ingester.v2.key", "", "Spaces skey")
+	f.StringVar(&cfg.SpacesSecret, "ingester.v2.secret", "", "Spaces secret")
+	f.StringVar(&cfg.SpacesBucket, "ingester.v2.bucket", "", "spaces bucket")
+	f.StringVar(&cfg.SpacesEndpoint, "ingester.v2.endpoint", "", "spaces endpoint")
 }
 
 // Ingester deals with "in flight" chunks.  Based on Prometheus 1.x
@@ -197,10 +207,14 @@ func New(cfg Config, clientConfig client.Config, limits *validation.Overrides, c
 		cfg.ingesterClientFactory = client.MakeIngesterClient
 	}
 
-	// TODO parse this from config file/flags
 	var bkt *s3.Bucket
 	if cfg.V2 {
-		s3Cfg := s3.Config{}
+		s3Cfg := s3.Config{
+			Bucket:    cfg.SpacesBucket,
+			Endpoint:  cfg.SpacesEndpoint,
+			AccessKey: cfg.SpacesKey,
+			SecretKey: cfg.SpacesSecret,
+		}
 		var err error
 		bkt, err = s3.NewBucketWithConfig(util.Logger, s3Cfg, "cortex")
 		if err != nil {
