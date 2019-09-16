@@ -2,7 +2,6 @@ package querier
 
 import (
 	"context"
-	"fmt"
 	"net"
 	"time"
 
@@ -24,7 +23,7 @@ import (
 // BlockQuerier is a querier of thanos blocks
 type BlockQuerier struct {
 	store  storepb.StoreServer
-	Client storepb.Store_SeriesClient
+	Client storepb.StoreClient
 }
 
 // NewBlockQuerier returns a client to query a s3 block store
@@ -62,24 +61,31 @@ func NewBlockQuerier(s3cfg s3.Config) (*BlockQuerier, error) {
 		return nil
 	})
 
-	// TODO start the sever? InProcessServerBuilder
+	// FIXME Starting a GRPC server is gross
 	s := grpc.NewServer()
 	storepb.RegisterStoreServer(s, store)
 
-	l, err := net.Listen("tcp", "8080")
+	l, err := net.Listen("tcp", "")
 	if err != nil {
 		return nil, errors.Wrap(err, "listen failed")
 	}
 	go s.Serve(l)
 
+	cc, err := grpc.Dial(l.Addr().String())
+	if err != nil {
+		return nil, errors.Wrap(err, "dial failed")
+	}
+
 	return &BlockQuerier{
 		store:  store,
-		Client: nil, // TODO create a local client to the server
+		Client: storepb.NewStoreClient(cc),
 	}, nil
 }
 
 // Get implements the ChunkStore interface. It makes a block query and converts the response into chunks
 func (b *BlockQuerier) Get(ctx context.Context, userID string, from, through model.Time, matchers ...*labels.Matcher) ([]chunk.Chunk, error) {
+
+	// TODO userID needs to be prefixed
 
 	// Convert matchers to LabelMatcher
 	var converted []storepb.LabelMatcher
@@ -103,6 +109,5 @@ func (b *BlockQuerier) Get(ctx context.Context, userID string, from, through mod
 		})
 	}
 
-	var stream storepb.Store_SeriesClient
-	return nil, fmt.Errorf("Unimplemented")
+	b.Client.Series(ctx, nil)
 }
