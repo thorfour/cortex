@@ -4,12 +4,15 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/alecthomas/units"
 	"github.com/cortexproject/cortex/pkg/chunk"
 	"github.com/cortexproject/cortex/pkg/util"
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/thanos-io/thanos/pkg/objstore/s3"
 	"github.com/thanos-io/thanos/pkg/query"
+	"github.com/thanos-io/thanos/pkg/store"
+	storecache "github.com/thanos-io/thanos/pkg/store/cache"
 	"github.com/thanos-io/thanos/pkg/store/storepb"
 )
 
@@ -27,7 +30,23 @@ func NewBlockQuerier(s3cfg s3.Config) (*BlockQuerier, error) {
 	}
 	b := &BlockQuerier{}
 
-	b.qcreator = query.NewQueryableCreator(util.Logger, bkt, "")
+	indexCacheSizeBytes := uint64(250 * units.Mebibyte)
+	maxItemSizeBytes := indexCacheSizeBytes / 2
+
+	indexCache, err := storecache.NewIndexCache(util.Logger, nil, storecache.Opts{
+		MaxSizeBytes:     indexCacheSizeBytes,
+		MaxItemSizeBytes: maxItemSizeBytes,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	store, err := store.NewBucketStore(util.Logger, nil, bkt, "cache", indexCache, uint64(2*units.Gibibyte), 0, 20, false, 20, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	b.proxy = store
 
 	return b, nil
 }
