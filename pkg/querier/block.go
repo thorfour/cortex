@@ -3,23 +3,28 @@ package querier
 import (
 	"context"
 	"fmt"
+	"net"
+	"time"
 
 	"github.com/alecthomas/units"
 	"github.com/cortexproject/cortex/pkg/chunk"
 	"github.com/cortexproject/cortex/pkg/util"
+	"github.com/go-kit/kit/log/level"
+	"github.com/pkg/errors"
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/pkg/labels"
 	"github.com/thanos-io/thanos/pkg/objstore/s3"
-	"github.com/thanos-io/thanos/pkg/query"
+	"github.com/thanos-io/thanos/pkg/runutil"
 	"github.com/thanos-io/thanos/pkg/store"
 	storecache "github.com/thanos-io/thanos/pkg/store/cache"
 	"github.com/thanos-io/thanos/pkg/store/storepb"
+	"google.golang.org/grpc"
 )
 
 // BlockQuerier is a querier of thanos blocks
 type BlockQuerier struct {
-	proxy    storepb.StoreServer
-	qcreator query.QueryableCreator
+	store  storepb.StoreServer
+	Client storepb.Store_SeriesClient
 }
 
 // NewBlockQuerier returns a client to query a s3 block store
@@ -28,8 +33,6 @@ func NewBlockQuerier(s3cfg s3.Config) (*BlockQuerier, error) {
 	if err != nil {
 		return nil, err
 	}
-	b := &BlockQuerier{}
-
 	indexCacheSizeBytes := uint64(250 * units.Mebibyte)
 	maxItemSizeBytes := indexCacheSizeBytes / 2
 
@@ -46,12 +49,60 @@ func NewBlockQuerier(s3cfg s3.Config) (*BlockQuerier, error) {
 		return nil, err
 	}
 
-	b.proxy = store
+	if err := store.InitialSync(context.Background()); err != nil {
+		return nil, errors.Wrap(err, "bucket store sync failed")
+	}
+	level.Info(util.Logger).Log("msg", "bucket store ready")
 
-	return b, nil
+	stopc := make(chan struct{})
+	go runutil.Repeat(30*time.Second, stopc, func() error {
+		if err := store.SyncBlocks(context.Background()); err != nil {
+			level.Warn(util.Logger).Log("msg", "block sync failed", "err", err)
+		}
+		return nil
+	})
+
+	// TODO start the sever? InProcessServerBuilder
+	s := grpc.NewServer()
+	storepb.RegisterStoreServer(s, store)
+
+	l, err := net.Listen("tcp", "8080")
+	if err != nil {
+		return nil, errors.Wrap(err, "listen failed")
+	}
+	go s.Serve(l)
+
+	return &BlockQuerier{
+		store:  store,
+		Client: nil, // TODO create a local client to the server
+	}, nil
 }
 
 // Get implements the ChunkStore interface. It makes a block query and converts the response into chunks
-func (b *BlockQuerier) Get(ctx context.Context, userID string, from, through model.Time, mathcer ...*labels.Matcher) ([]chunk.Chunk, error) {
+func (b *BlockQuerier) Get(ctx context.Context, userID string, from, through model.Time, matchers ...*labels.Matcher) ([]chunk.Chunk, error) {
+
+	// Convert matchers to LabelMatcher
+	var converted []storepb.LabelMatcher
+	for _, m := range matchers {
+		var t storepb.LabelMatcher_Type
+		switch m.Type {
+		case labels.MatchEqual:
+			t = storepb.LabelMatcher_EQ
+		case labels.MatchNotEqual:
+			t = storepb.LabelMatcher_NEQ
+		case labels.MatchRegexp:
+			t = storepb.LabelMatcher_RE
+		case labels.MatchNotRegexp:
+			t = storepb.LabelMatcher_NRE
+		}
+
+		converted = append(converted, storepb.LabelMatcher{
+			Type:  t,
+			Name:  m.Name,
+			Value: m.Value,
+		})
+	}
+
+	var stream storepb.Store_SeriesClient
 	return nil, fmt.Errorf("Unimplemented")
 }
