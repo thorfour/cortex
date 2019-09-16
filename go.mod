@@ -8,6 +8,7 @@ require (
 	github.com/Azure/go-autorest v11.5.1+incompatible // indirect
 	github.com/Masterminds/squirrel v0.0.0-20161115235646-20f192218cf5
 	github.com/NYTimes/gziphandler v1.1.1
+	github.com/alecthomas/units v0.0.0-20190717042225-c3de453c63f4
 	github.com/aws/aws-sdk-go v1.23.12
 	github.com/bitly/go-hostpool v0.0.0-20171023180738-a3a6125de932 // indirect
 	github.com/blang/semver v3.5.0+incompatible
