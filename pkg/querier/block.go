@@ -2,6 +2,7 @@ package querier
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"time"
 
@@ -109,5 +110,7 @@ func (b *BlockQuerier) Get(ctx context.Context, userID string, from, through mod
 		})
 	}
 
-	b.Client.Series(ctx, nil)
+	//b.Client.Series(ctx, nil)
+
+	return nil, fmt.Errorf("unimplemented")
 }
