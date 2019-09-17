@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/cortexproject/cortex/pkg/chunk"
+	"github.com/cortexproject/cortex/pkg/chunk/encoding"
 	"github.com/cortexproject/cortex/pkg/ingester/client"
 	"github.com/cortexproject/cortex/pkg/util"
 	"github.com/go-kit/kit/log/level"
@@ -16,7 +17,6 @@ import (
 	"github.com/thanos-io/thanos/pkg/objstore/s3"
 	"github.com/thanos-io/thanos/pkg/runutil"
 	"github.com/thanos-io/thanos/pkg/store/storepb"
-	"github.com/thorfour/cortex/pkg/chunk/encoding"
 )
 
 // BlockQuerier is a querier of thanos blocks
@@ -105,7 +105,13 @@ func (b *BlockQuerier) Get(ctx context.Context, userID string, from, through mod
 
 func seriesToChunks(userID string, series *storepb.Series) []chunk.Chunk {
 
-	labels := labels.Labels(series.Labels)
+	var lbls labels.Labels
+	for i := range series.Labels {
+		lbls = append(lbls, labels.Label{
+			Name:  series.Labels[i].Name,
+			Value: series.Labels[i].Value,
+		})
+	}
 
 	var chunks []chunk.Chunk
 	for _, c := range series.Chunks {
@@ -122,7 +128,7 @@ func seriesToChunks(userID string, series *storepb.Series) []chunk.Chunk {
 			ts, v := it.At()
 			_, err := ch.Add(model.SamplePair{ // TODO handle overflow chunks
 				Timestamp: model.Time(ts),
-				Value:     v,
+				Value:     model.SampleValue(v),
 			})
 			if err != nil {
 				level.Warn(util.Logger).Log("msg", "failed adding sample to chunk", "err", err)
@@ -130,7 +136,7 @@ func seriesToChunks(userID string, series *storepb.Series) []chunk.Chunk {
 			}
 		}
 
-		chunks = append(chunks, chunk.NewChunk(userID, client.Fingerprint(labels), labels, ch, model.Time(c.MinTime), model.Time(c.MaxTime)))
+		chunks = append(chunks, chunk.NewChunk(userID, client.Fingerprint(lbls), lbls, ch, model.Time(c.MinTime), model.Time(c.MaxTime)))
 	}
 	return chunks
 }

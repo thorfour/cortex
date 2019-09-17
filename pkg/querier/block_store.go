@@ -109,7 +109,7 @@ func (u *UserStore) SyncStores(ctx context.Context) error {
 		}
 		go serv.Serve(l)
 
-		cc, err := grpc.Dial(l.Addr().String())
+		cc, err := grpc.Dial(l.Addr().String(), grpc.WithInsecure())
 		if err != nil {
 			return err
 		}
