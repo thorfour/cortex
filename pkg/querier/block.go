@@ -3,90 +3,57 @@ package querier
 import (
 	"context"
 	"fmt"
-	"net"
+	"io"
 	"time"
 
-	"github.com/alecthomas/units"
 	"github.com/cortexproject/cortex/pkg/chunk"
+	"github.com/cortexproject/cortex/pkg/ingester/client"
 	"github.com/cortexproject/cortex/pkg/util"
 	"github.com/go-kit/kit/log/level"
-	"github.com/pkg/errors"
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/pkg/labels"
+	"github.com/prometheus/prometheus/tsdb/chunkenc"
 	"github.com/thanos-io/thanos/pkg/objstore/s3"
 	"github.com/thanos-io/thanos/pkg/runutil"
-	"github.com/thanos-io/thanos/pkg/store"
-	storecache "github.com/thanos-io/thanos/pkg/store/cache"
 	"github.com/thanos-io/thanos/pkg/store/storepb"
-	"google.golang.org/grpc"
+	"github.com/thorfour/cortex/pkg/chunk/encoding"
 )
 
 // BlockQuerier is a querier of thanos blocks
 type BlockQuerier struct {
-	store  storepb.StoreServer
-	Client storepb.StoreClient
+	us *UserStore
 }
 
 // NewBlockQuerier returns a client to query a s3 block store
 func NewBlockQuerier(s3cfg s3.Config) (*BlockQuerier, error) {
-	bkt, err := s3.NewBucketWithConfig(util.Logger, s3cfg, "cortex")
+
+	us, err := NewUserStore(util.Logger, s3cfg)
 	if err != nil {
 		return nil, err
 	}
-	indexCacheSizeBytes := uint64(250 * units.Mebibyte)
-	maxItemSizeBytes := indexCacheSizeBytes / 2
-
-	indexCache, err := storecache.NewIndexCache(util.Logger, nil, storecache.Opts{
-		MaxSizeBytes:     indexCacheSizeBytes,
-		MaxItemSizeBytes: maxItemSizeBytes,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	store, err := store.NewBucketStore(util.Logger, nil, bkt, "cache", indexCache, uint64(2*units.Gibibyte), 0, 20, false, 20, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := store.InitialSync(context.Background()); err != nil {
-		return nil, errors.Wrap(err, "bucket store sync failed")
-	}
-	level.Info(util.Logger).Log("msg", "bucket store ready")
 
 	stopc := make(chan struct{})
 	go runutil.Repeat(30*time.Second, stopc, func() error {
-		if err := store.SyncBlocks(context.Background()); err != nil {
-			level.Warn(util.Logger).Log("msg", "block sync failed", "err", err)
+		// FIXME some jitter between calls to syncblocks underneath is probably ideal
+		if err := us.SyncStores(context.Background()); err != nil {
+			level.Warn(util.Logger).Log("msg", "sync stores failed", "err", err)
 		}
 		return nil
 	})
 
-	// FIXME Starting a GRPC server is gross
-	s := grpc.NewServer()
-	storepb.RegisterStoreServer(s, store)
-
-	l, err := net.Listen("tcp", "")
-	if err != nil {
-		return nil, errors.Wrap(err, "listen failed")
-	}
-	go s.Serve(l)
-
-	cc, err := grpc.Dial(l.Addr().String())
-	if err != nil {
-		return nil, errors.Wrap(err, "dial failed")
-	}
-
 	return &BlockQuerier{
-		store:  store,
-		Client: storepb.NewStoreClient(cc),
+		us: us,
 	}, nil
 }
 
 // Get implements the ChunkStore interface. It makes a block query and converts the response into chunks
 func (b *BlockQuerier) Get(ctx context.Context, userID string, from, through model.Time, matchers ...*labels.Matcher) ([]chunk.Chunk, error) {
 
-	// TODO userID needs to be prefixed
+	// lookup the user client
+	client, ok := b.us.clients[userID]
+	if !ok {
+		return nil, fmt.Errorf("user not found")
+	}
 
 	// Convert matchers to LabelMatcher
 	var converted []storepb.LabelMatcher
@@ -110,7 +77,60 @@ func (b *BlockQuerier) Get(ctx context.Context, userID string, from, through mod
 		})
 	}
 
-	//b.Client.Series(ctx, nil)
+	seriesClient, err := client.Series(ctx, &storepb.SeriesRequest{
+		MinTime:  int64(from),
+		MaxTime:  int64(through),
+		Matchers: converted,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, fmt.Errorf("unimplemented")
+	var chunks []chunk.Chunk
+	for {
+		resp, err := seriesClient.Recv()
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			return nil, err
+		}
+
+		chunks = append(chunks, seriesToChunks(userID, resp.GetSeries())...)
+	}
+
+	// TODO sort chunks
+	return chunks, nil
+}
+
+func seriesToChunks(userID string, series *storepb.Series) []chunk.Chunk {
+
+	labels := labels.Labels(series.Labels)
+
+	var chunks []chunk.Chunk
+	for _, c := range series.Chunks {
+		ch := encoding.New()
+
+		enc, err := chunkenc.FromData(chunkenc.Encoding(c.Raw.Type), c.Raw.Data)
+		if err != nil {
+			level.Warn(util.Logger).Log("msg", "failed to converted raw encoding to chunk", "err", err)
+			continue
+		}
+
+		it := enc.Iterator(nil)
+		for it.Next() {
+			ts, v := it.At()
+			_, err := ch.Add(model.SamplePair{ // TODO handle overflow chunks
+				Timestamp: model.Time(ts),
+				Value:     v,
+			})
+			if err != nil {
+				level.Warn(util.Logger).Log("msg", "failed adding sample to chunk", "err", err)
+				continue
+			}
+		}
+
+		chunks = append(chunks, chunk.NewChunk(userID, client.Fingerprint(labels), labels, ch, model.Time(c.MinTime), model.Time(c.MaxTime)))
+	}
+	return chunks
 }
