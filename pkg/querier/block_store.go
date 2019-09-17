@@ -36,10 +36,11 @@ func NewUserStore(logger log.Logger, s3cfg s3.Config) (*UserStore, error) {
 	}
 
 	return &UserStore{
-		logger: logger,
-		cfg:    s3cfg,
-		bucket: bkt,
-		stores: make(map[string]*store.BucketStore),
+		logger:  logger,
+		cfg:     s3cfg,
+		bucket:  bkt,
+		stores:  make(map[string]*store.BucketStore),
+		clients: make(map[string]storepb.StoreClient),
 	}, nil
 }
 
