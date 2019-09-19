@@ -136,7 +136,9 @@ func seriesToChunks(userID string, series *storepb.Series) []chunk.Chunk {
 			}
 		}
 
-		chunks = append(chunks, chunk.NewChunk(userID, client.Fingerprint(lbls), lbls, ch, model.Time(c.MinTime), model.Time(c.MaxTime)))
+		if ch.Len() > 0 {
+			chunks = append(chunks, chunk.NewChunk(userID, client.Fingerprint(lbls), lbls, ch, model.Time(c.MinTime), model.Time(c.MaxTime)))
+		}
 	}
 	return chunks
 }
