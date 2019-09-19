@@ -6,9 +6,11 @@ import (
 	"net"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/alecthomas/units"
 	"github.com/cortexproject/cortex/pkg/ingester"
+	"github.com/cortexproject/cortex/pkg/util"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"github.com/thanos-io/thanos/pkg/model"
@@ -52,6 +54,7 @@ func NewUserStore(logger log.Logger, s3cfg s3.Config) (*UserStore, error) {
 
 // SyncStores iterates over the s3 bucket creating user bucket stores
 func (u *UserStore) SyncStores(ctx context.Context) error {
+	startTS := time.Now()
 	wg := &sync.WaitGroup{}
 
 	mint, maxt := &model.TimeOrDurationValue{}, &model.TimeOrDurationValue{}
@@ -137,6 +140,8 @@ func (u *UserStore) SyncStores(ctx context.Context) error {
 	})
 
 	wg.Wait()
+
+	level.Info(util.Logger).Log("msg", "SyncStores finished", "time", time.Since(startTS))
 
 	return err
 }

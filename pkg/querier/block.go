@@ -99,7 +99,7 @@ func (b *BlockQuerier) Get(ctx context.Context, userID string, from, through mod
 		chunks = append(chunks, seriesToChunks(userID, resp.GetSeries())...)
 	}
 
-	// TODO sort chunks
+	// TODO sort chunks?
 	return chunks, nil
 }
 
@@ -126,13 +126,19 @@ func seriesToChunks(userID string, series *storepb.Series) []chunk.Chunk {
 		it := enc.Iterator(nil)
 		for it.Next() {
 			ts, v := it.At()
-			_, err := ch.Add(model.SamplePair{ // TODO handle overflow chunks
+			overflow, err := ch.Add(model.SamplePair{
 				Timestamp: model.Time(ts),
 				Value:     model.SampleValue(v),
 			})
 			if err != nil {
 				level.Warn(util.Logger).Log("msg", "failed adding sample to chunk", "err", err)
 				continue
+			}
+
+			ch = overflow[0]
+			if len(overflow) > 1 {
+				chunks = append(chunks, chunk.NewChunk(userID, client.Fingerprint(lbls), lbls, overflow[0], model.Time(c.MinTime), model.Time(c.MaxTime)))
+				ch = overflow[1]
 			}
 		}
 
