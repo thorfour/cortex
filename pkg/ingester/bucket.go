@@ -3,6 +3,7 @@ package ingester
 import (
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/thanos-io/thanos/pkg/objstore"
 	"golang.org/x/net/context"
@@ -37,7 +38,18 @@ func (b *Bucket) Name() string { return b.Bucket.Name() }
 // Iter calls f for each entry in the given directory (not recursive.). The argument to f is the full
 // object name including the prefix of the inspected directory.
 func (b *Bucket) Iter(ctx context.Context, dir string, f func(string) error) error {
-	return b.Bucket.Iter(ctx, b.fullName(dir), f)
+	return b.Bucket.Iter(ctx, b.fullName(dir), func(s string) error {
+		/*
+			Block names will come in the form of 'userID/ulid/'
+			The iterator function is expecting names in the form of ulid/
+		*/
+		names := strings.SplitAfter(s, "/")
+		if len(names) < 2 {
+			return nil
+		}
+
+		return f(names[1])
+	})
 }
 
 // Get returns a reader for the given object name.
