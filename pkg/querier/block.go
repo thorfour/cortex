@@ -117,9 +117,9 @@ func seriesToChunks(userID string, series *storepb.Series) []chunk.Chunk {
 	for _, c := range series.Chunks {
 		ch := encoding.New()
 
-		enc, err := chunkenc.FromData(chunkenc.Encoding(c.Raw.Type), c.Raw.Data)
+		enc, err := chunkenc.FromData(chunkenc.EncXOR, c.Raw.Data)
 		if err != nil {
-			level.Warn(util.Logger).Log("msg", "failed to converted raw encoding to chunk", "err", err)
+			level.Warn(util.Logger).Log("msg", "failed to convert raw encoding to chunk", "err", err)
 			continue
 		}
 
