@@ -11,6 +11,7 @@ import (
 	"github.com/cortexproject/cortex/pkg/ingester"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
+	"github.com/thanos-io/thanos/pkg/model"
 	"github.com/thanos-io/thanos/pkg/objstore"
 	"github.com/thanos-io/thanos/pkg/objstore/s3"
 	"github.com/thanos-io/thanos/pkg/store"
@@ -52,6 +53,11 @@ func NewUserStore(logger log.Logger, s3cfg s3.Config) (*UserStore, error) {
 // SyncStores iterates over the s3 bucket creating user bucket stores
 func (u *UserStore) SyncStores(ctx context.Context) error {
 	wg := &sync.WaitGroup{}
+
+	mint, maxt := &model.TimeOrDurationValue{}, &model.TimeOrDurationValue{}
+	mint.Set("0000-01-01T00:00:00Z")
+	maxt.Set("9999-12-31T23:59:59Z")
+
 	err := u.bucket.Iter(ctx, "", func(s string) error {
 		user := strings.TrimSuffix(s, "/")
 
@@ -81,7 +87,6 @@ func (u *UserStore) SyncStores(ctx context.Context) error {
 		if err != nil {
 			return err
 		}
-
 		bs, err := store.NewBucketStore(u.logger,
 			nil,
 			userBkt,
@@ -92,7 +97,10 @@ func (u *UserStore) SyncStores(ctx context.Context) error {
 			20,
 			false,
 			20,
-			nil,
+			&store.FilterConfig{
+				MinTime: *mint,
+				MaxTime: *maxt,
+			},
 		)
 		if err != nil {
 			return err
