@@ -539,12 +539,10 @@ func (i *Ingester) v2Query(ctx old_ctx.Context, req *client.QueryRequest) (*clie
 
 	i.metrics.queries.Inc()
 
-	udir := userDir(userID)
-	db, err := tsdb.OpenDBReadOnly(udir, util.Logger)
-	if err != nil {
-		return nil, err
+	db, ok := i.dbs[userID]
+	if !ok {
+		return nil, fmt.Errorf("failed to find user db")
 	}
-	defer db.Close()
 
 	// TODO can only support one querier at a time
 	q, err := db.Querier(int64(from), int64(through))
