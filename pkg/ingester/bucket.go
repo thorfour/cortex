@@ -40,15 +40,10 @@ func (b *Bucket) Name() string { return b.Bucket.Name() }
 func (b *Bucket) Iter(ctx context.Context, dir string, f func(string) error) error {
 	return b.Bucket.Iter(ctx, b.fullName(dir), func(s string) error {
 		/*
-			Block names will come in the form of 'userID/ulid/'
-			The iterator function is expecting names in the form of ulid/
+			Since all objects are prefixed with the userID we need to strip the userID
+			upon passing to the processing function
 		*/
-		names := strings.SplitAfter(s, "/")
-		if len(names) < 2 {
-			return nil
-		}
-
-		return f(names[1])
+		return f(strings.Join(strings.Split(s, "/")[1:], "/"))
 	})
 }
 
