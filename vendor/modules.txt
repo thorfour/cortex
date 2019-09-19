@@ -486,18 +486,17 @@ github.com/thanos-io/thanos/pkg/block/metadata
 github.com/thanos-io/thanos/pkg/objstore
 github.com/thanos-io/thanos/pkg/runutil
 github.com/thanos-io/thanos/pkg/shipper
-github.com/thanos-io/thanos/pkg/query
+github.com/thanos-io/thanos/pkg/model
 github.com/thanos-io/thanos/pkg/store
 github.com/thanos-io/thanos/pkg/store/cache
 github.com/thanos-io/thanos/pkg/store/storepb
 github.com/thanos-io/thanos/pkg/block
 github.com/thanos-io/thanos/pkg/compact/downsample
 github.com/thanos-io/thanos/pkg/component
-github.com/thanos-io/thanos/pkg/tracing
 github.com/thanos-io/thanos/pkg/extprom
-github.com/thanos-io/thanos/pkg/model
 github.com/thanos-io/thanos/pkg/pool
 github.com/thanos-io/thanos/pkg/strutil
+github.com/thanos-io/thanos/pkg/tracing
 # github.com/tinylib/msgp v0.0.0-20161221055906-38a6f61a768d
 github.com/tinylib/msgp/msgp
 # github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5
