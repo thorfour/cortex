@@ -67,7 +67,7 @@ func (u *UserStore) SyncStores(ctx context.Context) error {
 			if err := s.SyncStores(ctx); err != nil {
 				level.Warn(u.logger).Log("msg", "SyncStores failed", "user", userID)
 			}
-		}()
+		}(user)
 	}
 
 	wg.Wait()
@@ -89,7 +89,7 @@ func (u *UserStore) InitialSync(ctx context.Context) error {
 			if err := s.InitialSync(ctx); err != nil {
 				level.Warn(u.logger).Log("msg", "initial sync failed", "user", userID)
 			}
-		}()
+		}(user)
 	}
 
 	wg.Wait()
