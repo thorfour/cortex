@@ -64,8 +64,8 @@ func (u *UserStore) SyncStores(ctx context.Context) error {
 	for user, s := range u.stores {
 		go func(userID string) {
 			defer wg.Done()
-			if err := s.SyncStore(ctx); err != nil {
-				level.Warn(u.logger).Log("msg", "SyncStores failed", "user", userID)
+			if err := s.SyncBlocks(ctx); err != nil {
+				level.Warn(u.logger).Log("msg", "SyncBlocks failed", "user", userID)
 			}
 		}(user)
 	}
