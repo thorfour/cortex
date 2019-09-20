@@ -72,6 +72,8 @@ func (u *UserStore) SyncStores(ctx context.Context) error {
 
 	wg.Wait()
 	level.Info(util.Logger).Log("msg", "SyncStores finished", "time", time.Since(startTS))
+
+	return nil
 }
 
 // InitialSync iteratIs over the s3 bucket creating user bucket stores, calling InitialSync on each of them.
@@ -94,6 +96,8 @@ func (u *UserStore) InitialSync(ctx context.Context) error {
 
 	wg.Wait()
 	level.Info(util.Logger).Log("msg", "InitialSync finished", "time", time.Since(startTS))
+
+	return nil
 }
 
 func (u *UserStore) userStoreSync(ctx context.Context) error {
