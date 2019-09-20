@@ -32,6 +32,10 @@ func NewBlockQuerier(s3cfg s3.Config) (*BlockQuerier, error) {
 		return nil, err
 	}
 
+	if err := us.InitialSync(context.Background()); err != nil {
+		level.Warn(util.Logger).Log("msg", "Initial sync failed", "err", err)
+	}
+
 	stopc := make(chan struct{})
 	go runutil.Repeat(30*time.Second, stopc, func() error {
 		// FIXME some jitter between calls to syncblocks underneath is probably ideal
