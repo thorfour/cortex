@@ -101,8 +101,6 @@ func (u *UserStore) InitialSync(ctx context.Context) error {
 }
 
 func (u *UserStore) userStoreSync(ctx context.Context) error {
-	startTS := time.Now()
-
 	mint, maxt := &model.TimeOrDurationValue{}, &model.TimeOrDurationValue{}
 	mint.Set("0000-01-01T00:00:00Z")
 	maxt.Set("9999-12-31T23:59:59Z")
