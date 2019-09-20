@@ -55,7 +55,49 @@ func NewUserStore(logger log.Logger, s3cfg s3.Config) (*UserStore, error) {
 // SyncStores iterates over the s3 bucket creating user bucket stores
 func (u *UserStore) SyncStores(ctx context.Context) error {
 	startTS := time.Now()
+	if err := u.userStoreSync(ctx); err != nil {
+		return err
+	}
+
 	wg := &sync.WaitGroup{}
+	wg.Add(len(u.stores))
+	for user, s := range u.stores {
+		go func(userID string) {
+			defer wg.Done()
+			if err := s.SyncStores(ctx); err != nil {
+				level.Warn(u.logger).Log("msg", "SyncStores failed", "user", userID)
+			}
+		}()
+	}
+
+	wg.Wait()
+	level.Info(util.Logger).Log("msg", "SyncStores finished", "time", time.Since(startTS))
+}
+
+// InitialSync iteratIs over the s3 bucket creating user bucket stores, calling InitialSync on each of them.
+func (u *UserStore) InitialSync(ctx context.Context) error {
+	startTS := time.Now()
+	if err := u.userStoreSync(ctx); err != nil {
+		return err
+	}
+
+	wg := &sync.WaitGroup{}
+	wg.Add(len(u.stores))
+	for user, s := range u.stores {
+		go func(userID string) {
+			defer wg.Done()
+			if err := s.InitialSync(ctx); err != nil {
+				level.Warn(u.logger).Log("msg", "initial sync failed", "user", userID)
+			}
+		}()
+	}
+
+	wg.Wait()
+	level.Info(util.Logger).Log("msg", "InitialSync finished", "time", time.Since(startTS))
+}
+
+func (u *UserStore) userStoreSync(ctx context.Context) error {
+	startTS := time.Now()
 
 	mint, maxt := &model.TimeOrDurationValue{}, &model.TimeOrDurationValue{}
 	mint.Set("0000-01-01T00:00:00Z")
@@ -127,21 +169,6 @@ func (u *UserStore) SyncStores(ctx context.Context) error {
 		}
 
 		u.clients[user] = storepb.NewStoreClient(cc)
-
-		wg.Add(1)
-		go func(userID string) {
-			defer wg.Done()
-			if err := bs.SyncBlocks(ctx); err != nil {
-				level.Warn(u.logger).Log("msg", "sync blocks failed", "user", userID)
-			}
-		}(user)
-
 		return nil
 	})
-
-	wg.Wait()
-
-	level.Info(util.Logger).Log("msg", "SyncStores finished", "time", time.Since(startTS))
-
-	return err
 }
