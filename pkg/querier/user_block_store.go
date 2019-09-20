@@ -175,4 +175,6 @@ func (u *UserStore) userStoreSync(ctx context.Context) error {
 		u.clients[user] = storepb.NewStoreClient(cc)
 		return nil
 	})
+
+	return err
 }
